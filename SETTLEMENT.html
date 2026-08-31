@@ -1,0 +1,1161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DAN — 02 Settlement</title>
+
+<style>
+:root{
+  --cream:#f4eadc;
+  --ink:#ece8df;
+  --muted:#c7c3ba;
+  --orange:#d58b5c;
+  --teal:#8eb8b9;
+  --deep:#17242d;
+  --panel:#1d2c35;
+  --line:rgba(255,255,255,.14);
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:#17242d;color:var(--ink);font-family:"Aptos","Segoe UI Variable Text","Segoe UI","Helvetica Neue",Arial,sans-serif}
+body{overflow-x:hidden}
+.topbar{
+ position:sticky;top:0;z-index:50;height:68px;display:flex;align-items:center;justify-content:center;
+ background:rgba(240,229,215,.96);color:#554940;border-bottom:1px solid rgba(91,71,58,.13)
+}
+.brand{position:absolute;left:26px;font-weight:800;letter-spacing:.11em;font-size:15px}
+.nav{display:flex;gap:22px;align-items:center}
+.nav a{font-size:12px;font-weight:700;color:#6c5f55;text-decoration:none;white-space:nowrap}
+.nav a.active{color:#b65e38}
+.page{padding:38px 4vw 70px;background:
+ radial-gradient(circle at 14% 10%,rgba(213,139,92,.13),transparent 25%),
+ linear-gradient(180deg,#1b2932 0%,#15232c 100%)}
+.section-heading{display:grid;grid-template-columns:1.3fr .7fr;gap:42px;align-items:end;margin-bottom:26px}
+.eyebrow{
+ margin:0 0 10px;
+ font-family:"Aptos Display","Segoe UI Variable Display","Segoe UI",sans-serif;
+ font-size:18px!important;font-weight:800!important;letter-spacing:.07em!important;color:#d8a17d!important;
+ text-transform:uppercase
+}
+.section-heading h2{
+ margin:0;
+ font-family:"Aptos Display","Segoe UI Variable Display","Segoe UI",sans-serif;
+ font-size:34px!important;line-height:1.12;font-weight:720;letter-spacing:-.01em;color:#fff6eb
+}
+.section-heading .narrow{font-size:17px!important;line-height:1.62;color:#d4cec5;max-width:520px;margin:0}
+.city-viewer{
+ position:relative;min-height:650px;overflow:hidden;border-radius:22px;border:1px solid rgba(255,255,255,.16);
+ background:#0f171d;box-shadow:0 28px 70px rgba(0,0,0,.26)
+}
+.city-view-image{width:100%;height:650px;object-fit:cover;display:block;filter:saturate(.85) contrast(1.03)}
+.city-vignette{position:absolute;inset:0;background:
+ linear-gradient(90deg,rgba(9,16,21,.72) 0%,rgba(9,16,21,.10) 28%,rgba(9,16,21,.04) 72%,rgba(9,16,21,.48) 100%),
+ linear-gradient(180deg,rgba(7,12,16,.35),transparent 25%,transparent 72%,rgba(7,12,16,.66))}
+.scanlines{display:none}
+.viewer-title{position:absolute;z-index:5;left:28px;top:25px;max-width:620px}
+.viewer-title>span{
+ display:inline-block;font-family:"Aptos Display","Segoe UI Variable Display","Segoe UI",sans-serif;
+ font-size:20px!important;font-weight:850;letter-spacing:.075em;color:#ffe8d6;
+ padding:10px 14px;border-radius:999px;background:rgba(19,31,39,.72);border:1px solid rgba(255,229,210,.25)
+}
+.viewer-title h3{
+ margin:14px 0 0;font-family:"Aptos Display","Segoe UI Variable Display","Segoe UI",sans-serif;
+ font-size:28px!important;font-weight:680;line-height:1.15;color:white;text-shadow:0 3px 20px rgba(0,0,0,.45)
+}
+.viewer-meta{position:absolute;z-index:5;left:28px;bottom:25px;max-width:540px;background:rgba(12,21,27,.78);padding:12px 15px;border-radius:12px;border:1px solid rgba(255,255,255,.13)}
+.viewer-meta span{font-size:12px!important;letter-spacing:.08em;color:#dca27b}
+.viewer-meta p{font-size:15px!important;line-height:1.45;margin:5px 0 0;color:#eee9e2}
+.view-tabs{position:absolute;z-index:6;right:24px;top:24px;display:flex;gap:7px}
+.view-tabs button{
+ border:1px solid rgba(255,255,255,.22);background:rgba(13,23,29,.70);color:#eee7de;
+ border-radius:999px;padding:10px 14px;font-size:12px;font-weight:750;letter-spacing:.05em;cursor:pointer
+}
+.view-tabs button.active{background:#e2a079;color:#182229;border-color:#f0b894}
+.settlement-node{
+ position:absolute;z-index:8;transform:translate(-50%,-50%);
+ background:none;border:0;padding:0;cursor:pointer;color:white;text-align:left
+}
+.node-dot{
+ position:relative;display:block;width:34px;height:34px;border-radius:50%;
+ background:radial-gradient(circle at 35% 30%,#fff7e9 0 8%,#efb17f 10% 24%,#c4693f 27% 52%,#5a2b20 70% 100%);
+ border:2px solid rgba(255,240,224,.88);
+ box-shadow:0 0 0 7px rgba(213,139,92,.14),0 0 24px rgba(227,151,102,.58),inset 0 0 7px rgba(255,255,255,.35)
+}
+.node-dot:before{
+ content:"";position:absolute;left:50%;top:50%;width:48px;height:18px;border:1px solid rgba(163,205,210,.72);
+ border-radius:50%;transform:translate(-50%,-50%) rotate(-18deg);box-shadow:0 0 9px rgba(142,184,185,.27)
+}
+.node-dot:after{
+ content:"";position:absolute;left:50%;top:50%;width:5px;height:5px;border-radius:50%;background:#fff8eb;transform:translate(-50%,-50%)
+}
+.node-label{
+ position:absolute;left:42px;top:3px;
+ font-family:"Aptos Display","Segoe UI Variable Display","Segoe UI",sans-serif!important;
+ font-size:15px!important;font-weight:850!important;letter-spacing:.075em!important;color:#fff7ed!important;
+ text-shadow:0 2px 10px rgba(0,0,0,.9);white-space:nowrap;
+ background:rgba(11,20,26,.72);padding:6px 9px;border-radius:8px;border:1px solid rgba(255,255,255,.15)
+}
+.settlement-node:hover .node-dot,.settlement-node.open .node-dot{box-shadow:0 0 0 9px rgba(142,184,185,.18),0 0 32px rgba(142,184,185,.75),inset 0 0 7px rgba(255,255,255,.35)}
+.settlement-node:hover .node-label,.settlement-node.open .node-label{background:#f0d1b9;color:#24323b!important;text-shadow:none;border-color:#f5dfcf}
+.node-tip{
+ display:none;position:absolute;left:42px;top:40px;width:260px;padding:13px 14px;border-radius:12px;
+ background:rgba(245,235,221,.97);color:#40362f;border:1px solid rgba(116,84,65,.18);box-shadow:0 16px 36px rgba(0,0,0,.25);
+ font-size:14px;line-height:1.42
+}
+.settlement-node.open .node-tip,.settlement-node:hover .node-tip{display:block}
+.node-tip b{display:block;font-size:13px;letter-spacing:.07em;color:#a85d39;margin-bottom:5px}
+.node-tip em{display:block;font-style:normal;font-size:11px;font-weight:800;letter-spacing:.08em;color:#397078;margin-top:8px}
+.system-strip{
+ margin-top:24px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px
+}
+.system-strip article{
+ overflow:hidden;border-radius:15px;background:#21313b;border:1px solid rgba(255,255,255,.13);min-height:155px;display:grid;grid-template-columns:135px 1fr
+}
+.system-strip img{width:135px;height:100%;object-fit:cover}
+.system-strip article>div{padding:16px}
+.system-strip span{font-family:"Aptos Display","Segoe UI Variable Display","Segoe UI",sans-serif!important;font-size:15px!important;font-weight:850!important;letter-spacing:.07em!important;color:#e9b28e!important}
+.system-strip p{font-size:15px!important;line-height:1.48;color:#d6d0c8;margin:8px 0 0}
+@media(max-width:1000px){
+ .nav{gap:10px}.nav a span{display:none}
+ .section-heading{grid-template-columns:1fr}.city-viewer,.city-view-image{height:600px;min-height:600px}
+ .system-strip{grid-template-columns:1fr 1fr}
+ .node-label{font-size:13px!important}
+}
+</style>
+
+
+
+
+
+<style>
+/* Mission 02 V5 — settlement design only; research moved to Mission 03 */
+.settlement-systems{margin-top:34px;padding:30px;border-radius:22px;background:linear-gradient(135deg,#efe3d4,#e5d8c8);color:#443b34;border:1px solid rgba(105,78,61,.13)}
+.systems-heading{display:grid;grid-template-columns:.55fr 1.45fr;gap:30px;align-items:end;margin-bottom:20px}
+.systems-heading>p,.sequence-copy>p{margin:0;font-size:14px;font-weight:900;letter-spacing:.10em;color:#b7613e}
+.systems-heading h3,.sequence-copy h3{margin:0;font-family:"Aptos Display","Segoe UI Variable Display","Segoe UI",sans-serif;font-size:27px;line-height:1.2;color:#403832}
+.systems-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.systems-grid article{min-height:180px;padding:17px;border-radius:16px;background:rgba(255,250,243,.72);border:1px solid rgba(105,78,61,.12);position:relative;overflow:hidden}
+.systems-grid article:after{content:"";position:absolute;width:70px;height:70px;border-radius:50%;right:-24px;top:-24px;border:1px solid rgba(73,123,128,.18);box-shadow:0 0 0 11px rgba(73,123,128,.04)}
+.systems-grid span{display:block;font-size:11px;font-weight:900;letter-spacing:.08em;color:#4d8185;margin-bottom:15px}
+.systems-grid b{display:block;font-size:15px;letter-spacing:.055em;color:#a95b3a;margin-bottom:8px}
+.systems-grid p{margin:0;font-size:15px!important;line-height:1.48!important;color:#62584f!important}
+.build-sequence{margin-top:20px;padding:28px;border-radius:22px;background:linear-gradient(135deg,#20343f,#294752);color:#eee8df;border:1px solid rgba(255,255,255,.1)}
+.sequence-copy{display:grid;grid-template-columns:.45fr .7fr 1fr;gap:20px;align-items:center;margin-bottom:24px}
+.sequence-copy>p{color:#e4a077}.sequence-copy h3{color:#fff3e7;font-size:25px}.sequence-copy>span{font-size:15px;line-height:1.5;color:#d4dddd}
+.sequence-track{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;position:relative}
+.sequence-track:before{content:"";position:absolute;left:4%;right:4%;top:22px;height:1px;background:linear-gradient(90deg,#df9c72,#79aeb2)}
+.sequence-track div{position:relative;padding-top:48px;text-align:center}
+.sequence-track i{position:absolute;top:5px;left:50%;transform:translateX(-50%);width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#e0a078;color:#22353e;font-style:normal;font-size:10px;font-weight:900;border:4px solid #294752;z-index:2}
+.sequence-track b{display:block;font-size:11px;letter-spacing:.06em;color:#f3c4a5;margin-bottom:6px}
+.sequence-track span{font-size:12px;line-height:1.35;color:#d7dddd}
+@media(max-width:1000px){.systems-grid{grid-template-columns:1fr 1fr}.sequence-track{grid-template-columns:repeat(4,1fr)}.sequence-track:before{display:none}}
+</style>
+
+
+<style>
+/* V6 — categorized 3D Modeling Library */
+.model-library{margin-top:20px;padding:30px;border-radius:22px;background:linear-gradient(145deg,#172a35,#243f49);color:#f2ebe3;border:1px solid rgba(255,255,255,.10)}
+.library-head{display:grid;grid-template-columns:1.15fr .85fr;gap:34px;align-items:end;margin-bottom:22px}
+.library-head p{margin:0 0 7px;font-size:14px;font-weight:900;letter-spacing:.11em;color:#e5a176}
+.library-head h3{margin:0;font-family:"Aptos Display","Segoe UI Variable Display","Segoe UI",sans-serif;font-size:28px;line-height:1.18;color:#fff3e7}
+.library-note{font-size:15px;line-height:1.55;color:#ccd8d8}
+.model-filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.model-filters button{border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.055);color:#cfd9d8;padding:9px 12px;border-radius:999px;font-size:11px;font-weight:850;letter-spacing:.07em;cursor:pointer}
+.model-filters button.active{background:#e3a077;color:#20323b;border-color:#e3a077}
+.model-filters small{margin-left:4px;font-size:9px}
+.model-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.model-card{padding:0;text-align:left;border:1px solid rgba(255,255,255,.10);border-radius:15px;overflow:hidden;background:rgba(255,255,255,.055);color:inherit;cursor:pointer}
+.model-card[hidden]{display:none}
+.model-thumb{height:145px;background:#d9d3cb;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.model-thumb img{width:100%;height:100%;object-fit:cover}
+.model-info{padding:13px 14px 15px}
+.model-info>span{display:block;font-size:9px;font-weight:900;letter-spacing:.10em;color:#83b5b8;margin-bottom:6px}
+.model-info b{display:block;font-size:15px;line-height:1.25;color:#f6eee5;margin-bottom:5px}
+.model-info p{margin:0 0 11px!important;font-size:12px!important;line-height:1.35!important;color:#bfcaca!important}
+.model-info em{font-style:normal;font-size:9px;font-weight:900;letter-spacing:.08em;color:#e5a176}
+.model-viewer{display:none;position:fixed;inset:0;z-index:300;background:rgba(12,20,25,.94);padding:28px;place-items:center}
+.model-viewer.open{display:grid}
+.viewer-shell{position:relative;width:min(1120px,94vw);max-height:90vh;display:grid;grid-template-columns:1.55fr .65fr;background:#eee4d7;border-radius:22px;overflow:hidden;box-shadow:0 30px 100px rgba(0,0,0,.45)}
+.viewer-image{min-height:580px;background:#cfc9c1;display:flex;align-items:center;justify-content:center}
+.viewer-image img{width:100%;height:100%;max-height:78vh;object-fit:contain}
+.viewer-copy{padding:44px 30px;display:flex;flex-direction:column;justify-content:center;color:#453c35}
+.viewer-copy>span{font-size:12px;font-weight:900;letter-spacing:.11em;color:#b8613e}
+.viewer-copy h3{font-size:28px;margin:10px 0;color:#403832}
+.viewer-copy p{font-size:16px;line-height:1.55;color:#665c54}
+.viewer-copy small{margin-top:20px;color:#4d8185;font-weight:850;letter-spacing:.08em}
+.viewer-close{position:absolute;right:15px;top:14px;z-index:3;width:40px;height:40px;border-radius:50%;border:1px solid rgba(70,55,45,.18);background:#f8efe4;color:#574b42;font-size:25px;cursor:pointer}
+@media(max-width:1050px){.model-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:760px){.library-head{grid-template-columns:1fr}.model-grid{grid-template-columns:1fr 1fr}.viewer-shell{grid-template-columns:1fr}.viewer-image{min-height:300px}}
+</style>
+
+
+<style>
+/* V7 — discoverability + interaction fixes */
+html{scroll-behavior:auto!important}
+.mission-jumpbar{
+  position:sticky;top:68px;z-index:35;
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
+  padding:11px 5vw;background:rgba(25,40,49,.97);border-bottom:1px solid rgba(255,255,255,.09);
+  color:#eee8df
+}
+.jump-intro{display:flex;align-items:baseline;gap:10px;white-space:nowrap}
+.jump-intro span{font-size:10px;font-weight:900;letter-spacing:.11em;color:#e3a077}
+.jump-intro b{font-size:14px;letter-spacing:.02em}
+.mission-jumpbar nav{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}
+.mission-jumpbar a{
+  display:flex;align-items:center;gap:6px;text-decoration:none;color:#d6dddd;
+  font-size:10px;font-weight:850;letter-spacing:.055em;
+  padding:7px 9px;border-radius:999px;border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.045)
+}
+.mission-jumpbar a i{
+  width:19px;height:19px;border-radius:50%;display:grid;place-items:center;
+  font-style:normal;font-size:8px;background:#e2a078;color:#22343d;font-weight:900
+}
+
+/* The original city image was visually dominating the whole mission.
+   Keep it important, but make the next sections visible sooner. */
+.city-viewer{
+  min-height:0!important;height:min(54vh,520px)!important;
+  max-height:520px!important
+}
+.city-view-image{
+  height:100%!important;object-fit:cover!important
+}
+.viewer-title{max-width:540px}
+.viewer-title h3{font-size:25px!important;line-height:1.18!important}
+.viewer-meta{max-width:520px}
+.view-tabs{top:18px!important;right:18px!important}
+.view-tabs button{font-size:11px!important;padding:8px 10px!important}
+
+.continue-cue{
+  margin:14px 0 20px;padding:14px 18px;border-radius:16px;
+  display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:18px;
+  background:linear-gradient(90deg,#f3e8da,#e9ddcf);
+  border:1px solid rgba(105,78,61,.13);color:#4b4139
+}
+.continue-cue span{font-size:10px;font-weight:900;letter-spacing:.1em;color:#4d8185}
+.continue-cue b{font-size:15px;font-weight:700}
+.continue-cue a{
+  text-decoration:none;font-size:11px;font-weight:900;letter-spacing:.08em;
+  color:#fff3e7;background:#b8623f;padding:9px 12px;border-radius:999px
+}
+
+#systems,#library,#build{scroll-margin-top:126px}
+#city{scroll-margin-top:126px}
+
+/* Make category tabs unmistakably interactive */
+.model-filters button{
+  position:relative;z-index:2;cursor:pointer!important;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.02)
+}
+.model-filters button:hover{background:rgba(255,255,255,.11)}
+.model-filters button.active{background:#e3a077!important;color:#20323b!important}
+
+.model-card{cursor:pointer!important}
+.model-card:hover{background:rgba(255,255,255,.09)}
+
+@media(max-width:900px){
+  .mission-jumpbar{position:relative;top:auto;display:block;padding:12px 18px}
+  .mission-jumpbar nav{justify-content:flex-start;margin-top:10px}
+  .city-viewer{height:460px!important}
+  .continue-cue{grid-template-columns:1fr}
+}
+</style>
+
+
+<style>
+/* V9 — smaller opening city view */
+.city-viewer{
+  height:min(42vh,400px)!important;
+  max-height:400px!important;
+  min-height:340px!important;
+}
+.city-view-image{
+  height:100%!important;
+  object-fit:cover!important;
+}
+@media(max-width:900px){
+  .city-viewer{
+    height:360px!important;
+    min-height:320px!important;
+    max-height:360px!important;
+  }
+}
+</style>
+
+
+<style>
+/* V10 — complete city model on the left; six system cards on the right */
+.settlement-overview-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1.05fr) minmax(390px,.95fr);
+  gap:16px;
+  align-items:stretch;
+  margin-top:20px;
+}
+.overview-left,.overview-right{min-width:0}
+.overview-left .city-viewer{
+  height:440px!important;
+  min-height:440px!important;
+  max-height:440px!important;
+  margin:0!important;
+  background:linear-gradient(145deg,#172832,#233c46)!important;
+}
+.overview-left .city-view-image{
+  width:100%!important;
+  height:100%!important;
+  object-fit:contain!important;
+  object-position:center center!important;
+  background:#d8d2ca!important;
+}
+/* Keep labels readable without hiding the full model */
+.overview-left .city-vignette{
+  background:linear-gradient(180deg,rgba(12,22,28,.42) 0%,transparent 27%,transparent 65%,rgba(12,22,28,.56) 100%)!important;
+}
+.overview-left .viewer-title{
+  top:18px!important;left:20px!important;max-width:62%!important;
+}
+.overview-left .viewer-title h3{font-size:20px!important;line-height:1.2!important}
+.overview-left .viewer-title>span{font-size:11px!important}
+.overview-left .viewer-meta{
+  left:20px!important;bottom:16px!important;max-width:68%!important;
+}
+.overview-left .viewer-meta p{font-size:12px!important;line-height:1.35!important}
+.overview-left .view-tabs{
+  top:16px!important;right:16px!important;
+  display:grid!important;grid-template-columns:1fr 1fr!important;gap:5px!important;
+}
+.overview-left .view-tabs button{font-size:9px!important;padding:7px 8px!important}
+
+.overview-right{
+  padding:18px;
+  border-radius:20px;
+  background:linear-gradient(145deg,#eee3d5,#e5d8c9);
+  border:1px solid rgba(105,78,61,.13);
+  color:#443b34;
+}
+.overview-right-head{
+  display:flex;justify-content:space-between;align-items:baseline;gap:15px;
+  margin-bottom:12px;padding:0 2px 10px;border-bottom:1px solid rgba(91,70,56,.13)
+}
+.overview-right-head span{font-size:10px;font-weight:900;letter-spacing:.10em;color:#b8613e}
+.overview-right-head b{font-size:14px;color:#4b4139}
+
+.overview-right .system-strip{
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  gap:9px!important;
+  margin:0!important;
+}
+.overview-right .system-strip article{
+  min-width:0!important;
+  min-height:112px!important;
+  padding:9px!important;
+  display:grid!important;
+  grid-template-columns:64px 1fr!important;
+  gap:9px!important;
+  align-items:center!important;
+  border-radius:13px!important;
+  background:rgba(255,250,243,.78)!important;
+  border:1px solid rgba(105,78,61,.11)!important;
+  box-shadow:none!important;
+}
+.overview-right .system-strip article img{
+  width:64px!important;height:78px!important;
+  object-fit:cover!important;border-radius:9px!important;
+}
+.overview-right .system-strip article span{
+  font-size:10px!important;font-weight:900!important;letter-spacing:.07em!important;
+  color:#a95b3a!important;
+}
+.overview-right .system-strip article p{
+  margin:4px 0 0!important;
+  font-size:11px!important;line-height:1.32!important;color:#62584f!important;
+}
+
+/* The overview itself now shows the next content sooner. */
+.continue-cue{margin-top:14px!important}
+
+@media(max-width:1050px){
+  .settlement-overview-grid{grid-template-columns:1fr}
+  .overview-left .city-viewer{height:420px!important;min-height:420px!important}
+  .overview-right .system-strip{grid-template-columns:repeat(3,1fr)!important}
+  .overview-right .system-strip article{grid-template-columns:58px 1fr!important}
+}
+@media(max-width:720px){
+  .overview-left .city-viewer{height:360px!important;min-height:360px!important}
+  .overview-right .system-strip{grid-template-columns:1fr 1fr!important}
+}
+</style>
+
+
+<style>
+/* V11 — improve readability of the six settlement-system cards */
+.overview-right .system-strip article p{
+  font-size:14px!important;
+  line-height:1.42!important;
+  color:#514941!important;
+  margin-top:6px!important;
+}
+.overview-right .system-strip article span{
+  font-size:11px!important;
+  line-height:1.25!important;
+}
+.overview-right .system-strip article{
+  min-height:126px!important;
+  padding:11px!important;
+  grid-template-columns:68px 1fr!important;
+  gap:11px!important;
+}
+.overview-right .system-strip article img{
+  width:68px!important;
+  height:86px!important;
+}
+</style>
+
+
+<style>
+/* V12 — align the two main panels and tighten the six system cards */
+.settlement-overview-grid{
+  align-items:stretch!important;
+}
+.overview-left,
+.overview-right{
+  height:440px!important;
+  min-height:440px!important;
+  max-height:440px!important;
+}
+.overview-left .city-viewer{
+  height:100%!important;
+  min-height:0!important;
+  max-height:none!important;
+}
+.overview-right{
+  display:flex!important;
+  flex-direction:column!important;
+  padding:14px!important;
+  overflow:hidden!important;
+}
+.overview-right-head{
+  flex:0 0 auto!important;
+  margin-bottom:8px!important;
+  padding:0 1px 8px!important;
+}
+.overview-right .system-strip{
+  flex:1 1 auto!important;
+  min-height:0!important;
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  grid-template-rows:repeat(3,1fr)!important;
+  gap:7px!important;
+}
+.overview-right .system-strip article{
+  min-height:0!important;
+  height:auto!important;
+  padding:8px 9px!important;
+  grid-template-columns:58px 1fr!important;
+  gap:9px!important;
+  align-items:center!important;
+}
+.overview-right .system-strip article img{
+  width:58px!important;
+  height:72px!important;
+  object-fit:cover!important;
+}
+.overview-right .system-strip article span{
+  font-size:11px!important;
+  line-height:1.15!important;
+  margin:0!important;
+}
+.overview-right .system-strip article p{
+  font-size:13.5px!important;
+  line-height:1.30!important;
+  margin:4px 0 0!important;
+}
+@media(max-width:1050px){
+  .overview-left,.overview-right{
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+  }
+  .overview-left .city-viewer{height:420px!important}
+  .overview-right .system-strip{grid-template-rows:none!important}
+}
+</style>
+
+<style>
+/* unified-shell compatibility */
+html{scroll-behavior:auto!important}
+body{margin-top:0!important}
+header.topbar, header.top-nav, .topbar, .top-nav {display:none!important}
+</style><style>
+html{scroll-behavior:auto!important}
+header.topbar,header.top-nav,.topbar,.top-nav{display:none!important}
+</style>
+<style id="v22-responsive">
+/* V22 responsive safeguards — desktop appearance preserved */
+html{box-sizing:border-box;-webkit-text-size-adjust:100%}
+*,*:before,*:after{box-sizing:inherit}
+html,body{max-width:100%;overflow-x:hidden}
+img,video,svg,canvas{max-width:100%;height:auto}
+table{max-width:100%}
+pre,code{white-space:pre-wrap;overflow-wrap:anywhere}
+@media (max-width:1100px){
+  main,.page,.wrap,.shell,.content,.container{
+    width:min(100% - 32px,1200px)!important;
+    max-width:100%!important;
+    margin-left:auto!important;margin-right:auto!important;
+  }
+  h1{font-size:clamp(30px,4.5vw,42px)!important}
+  h2{font-size:clamp(23px,3.2vw,31px)!important}
+}
+@media (max-width:760px){
+  main,.page,.wrap,.shell,.content,.container{
+    width:calc(100% - 24px)!important;
+  }
+  body{font-size:16px!important}
+  h1{font-size:clamp(27px,8vw,36px)!important;line-height:1.08!important}
+  h2{font-size:clamp(21px,6vw,28px)!important}
+  p{overflow-wrap:anywhere}
+  .grid,.cards,.card-grid,.module-grid,.district-grid,.archive-grid,
+  .research-grid,.life-grid,.achievement-grid,.philosophy-source-grid{
+    grid-template-columns:1fr!important;
+  }
+}
+</style>
+
+<style id="v25-mission-label">
+p.eyebrow,
+p.eyebrow.mono{
+  font-family:"Aptos","Segoe UI Variable Text","Segoe UI","Helvetica Neue",Arial,sans-serif!important;
+  font-size:13px!important;
+  line-height:1.25!important;
+  font-weight:850!important;
+  letter-spacing:.12em!important;
+  text-transform:uppercase!important;
+}
+</style>
+<style id="v26-settlement-label-fix">
+.unified-mission-02 span{
+ font-family:"Aptos","Segoe UI Variable Text","Segoe UI","Helvetica Neue",Arial,sans-serif!important;
+ font-size:13px!important;line-height:1.25!important;font-weight:850!important;
+ letter-spacing:.12em!important;text-transform:uppercase!important;
+}
+</style><style id="v32-settlement-top-spacing">
+/* Remove the unnecessary blank band above Mission 02 content. */
+body > main, main, .page, .wrap, .shell, .content{
+  margin-top:0!important;
+  padding-top:0!important;
+}
+.mission-jumpbar{
+  margin-top:0!important;
+  top:0!important;
+}
+</style><style id="v34-settlement-tagline-two-lines">
+.mission-jumpbar .jump-note{
+  max-width:650px!important;
+  line-height:1.45!important;
+}
+</style>
+<style id="v35-humanity-settlement">
+.human-city{margin:0;padding:clamp(42px,6vw,76px) 6vw;display:grid;grid-template-columns:.55fr 1.35fr 1fr;gap:clamp(24px,4vw,58px);align-items:start;background:#edf1ed;border-top:1px solid rgba(55,76,72,.12);border-bottom:1px solid rgba(55,76,72,.12);color:#273b3d}
+.human-city-kicker{font-size:12px;font-weight:900;letter-spacing:.14em;color:#a75d40}
+.human-city-copy h3{margin:0 0 14px;font-size:clamp(25px,2.2vw,34px);line-height:1.08}.human-city-copy p{margin:0;font-size:17px;line-height:1.72;color:#4b5c5c}
+.human-city-steps{display:grid;gap:13px}.human-city-steps div{padding:13px 0;border-bottom:1px solid rgba(55,76,72,.16)}.human-city-steps b{display:block;font-size:12px;letter-spacing:.12em;color:#a75d40;margin-bottom:5px}.human-city-steps span{font-size:15px;color:#4b5c5c}
+@media(max-width:850px){.human-city{grid-template-columns:1fr}.human-city-copy p{font-size:16px}}
+</style>
+
+<style id="v36-settlement-layout-refine">
+/* Keep the top description on one clean line on desktop. */
+.mission-jumpbar .jump-note{
+  max-width:none!important;
+  width:auto!important;
+  white-space:nowrap!important;
+  font-size:13px!important;
+  line-height:1.3!important;
+}
+/* Tighter, more intentional human-centered section. */
+.human-city{
+  padding:30px 6vw!important;
+  grid-template-columns:.48fr 1.48fr .95fr!important;
+  gap:clamp(22px,3vw,42px)!important;
+  align-items:center!important;
+}
+.human-city-kicker{
+  font-size:17px!important;
+  line-height:1.2!important;
+  font-weight:950!important;
+  letter-spacing:.10em!important;
+}
+.human-city-copy h3{
+  margin:0 0 9px!important;
+  font-size:27px!important;
+}
+.human-city-copy p{
+  font-size:16px!important;
+  line-height:1.58!important;
+}
+.human-city-steps{gap:5px!important}
+.human-city-steps div{padding:8px 0!important}
+.human-city-steps b{margin-bottom:3px!important}
+@media(max-width:1100px){
+  .mission-jumpbar .jump-note{white-space:normal!important}
+}
+@media(max-width:850px){
+  .human-city{grid-template-columns:1fr!important;padding:28px 6vw!important}
+}
+</style>
+
+<style id="v37-settlement-top-copy-refined">
+/* Bring the top explanatory sentence leftward so it reads as part of the header,
+   rather than being crowded into the far-right corner. */
+.mission-jumpbar{
+  grid-template-columns:auto minmax(360px,1fr) auto!important;
+  column-gap:clamp(24px,3.2vw,52px)!important;
+}
+.mission-jumpbar .jump-note{
+  justify-self:start!important;
+  text-align:left!important;
+  margin-left:clamp(8px,1.4vw,22px)!important;
+  margin-right:auto!important;
+  max-width:none!important;
+  width:auto!important;
+  white-space:nowrap!important;
+}
+
+/* Keep this section lead on one complete line on desktop. */
+.hero .lead,
+.hero p.lead,
+.hero-copy .lead,
+.intro .lead{
+  max-width:none!important;
+}
+.hero .lead:has(+ *),
+.hero p.lead{
+  white-space:nowrap!important;
+}
+
+@media(max-width:1180px){
+  .mission-jumpbar .jump-note{
+    white-space:normal!important;
+    margin-left:0!important;
+  }
+  .hero .lead,
+  .hero p.lead,
+  .hero-copy .lead,
+  .intro .lead{
+    white-space:normal!important;
+  }
+}
+</style>
+
+<style id="v38-settlement-copy-position-fixed">
+/* ACTUAL top description: move it left by giving the copy column more width. */
+.settlement-section .section-heading{
+  grid-template-columns:minmax(360px,.82fr) minmax(620px,1.18fr)!important;
+  gap:24px!important;
+  align-items:end!important;
+}
+.settlement-section .section-heading .narrow{
+  max-width:none!important;
+  width:100%!important;
+  margin:0!important;
+  justify-self:start!important;
+  text-align:left!important;
+}
+
+/* ACTUAL city-viewer headline: keep the complete sentence on one line. */
+.overview-left .viewer-title{
+  left:28px!important;
+  right:24px!important;
+  max-width:none!important;
+  width:auto!important;
+}
+.overview-left .viewer-title h3{
+  max-width:none!important;
+  width:auto!important;
+  white-space:nowrap!important;
+  font-size:20px!important;
+  line-height:1.2!important;
+  letter-spacing:-.01em!important;
+}
+
+@media(max-width:1180px){
+  .settlement-section .section-heading{
+    grid-template-columns:1fr!important;
+    gap:12px!important;
+  }
+  .overview-left .viewer-title h3{
+    white-space:normal!important;
+  }
+}
+</style>
+
+<style id="v46-settlement-human-city-refine">
+/* A CITY FOR PEOPLE: match the rounded-panel language used elsewhere on Mission 02,
+   while tightening vertical rhythm and reducing empty space. */
+.human-city{
+  margin:22px 2.8vw 26px!important;
+  padding:22px 28px!important;
+  border:1px solid rgba(55,76,72,.14)!important;
+  border-radius:22px!important;
+  background:
+    linear-gradient(135deg,rgba(248,244,237,.96),rgba(229,237,232,.96))!important;
+  box-shadow:0 10px 28px rgba(57,76,71,.07)!important;
+  grid-template-columns:.42fr 1.42fr .92fr!important;
+  gap:clamp(18px,2.4vw,34px)!important;
+  align-items:center!important;
+}
+.human-city-kicker{
+  font-size:16px!important;
+  line-height:1.15!important;
+}
+.human-city-copy h3{
+  margin:0 0 7px!important;
+  font-size:25px!important;
+  line-height:1.08!important;
+}
+.human-city-copy p{
+  font-size:15.5px!important;
+  line-height:1.48!important;
+}
+.human-city-steps{
+  gap:0!important;
+}
+.human-city-steps div{
+  padding:7px 0!important;
+}
+.human-city-steps div:last-child{
+  border-bottom:0!important;
+}
+.human-city-steps b{
+  margin-bottom:2px!important;
+}
+.human-city-steps span{
+  font-size:14px!important;
+}
+@media(max-width:850px){
+  .human-city{
+    margin:18px 16px 22px!important;
+    padding:22px!important;
+    grid-template-columns:1fr!important;
+  }
+}
+</style>
+
+
+<style id="v62-page-responsive-safety">
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html,body{width:100%;max-width:100%;overflow-x:hidden}
+img,svg,video,canvas{max-width:100%}
+.page,.wrap,.section,.hero,.intro{min-width:0}
+p,h1,h2,h3,h4,b,strong,span{overflow-wrap:break-word}
+@media(max-width:900px){
+  .page,.wrap{
+    width:100%!important;
+    max-width:none!important;
+    margin:0!important;
+    padding-left:18px!important;
+    padding-right:18px!important;
+  }
+  .hero{
+    grid-template-columns:1fr!important;
+    gap:18px!important;
+    padding:23px 22px!important;
+    border-radius:18px!important;
+  }
+  .section-heading,.section-head,.intro,
+  .human-city,.settlement-overview-grid,.systems-grid,
+  .principle-grid,.philosophy-source-grid,.life-grid,
+  .districts,.build-legend{
+    grid-template-columns:1fr!important;
+  }
+  .section-heading,.section-head,.intro{
+    gap:12px!important;
+    align-items:start!important;
+  }
+}
+@media(max-width:600px){
+  .page,.wrap{
+    padding-left:14px!important;
+    padding-right:14px!important;
+  }
+  .hero{padding:20px 18px!important;border-radius:16px!important}
+  h1{font-size:clamp(27px,8vw,34px)!important;line-height:1.08!important}
+  h2{font-size:clamp(21px,6.2vw,27px)!important}
+  h3{line-height:1.22!important}
+  p,.lead{line-height:1.55!important}
+}
+</style>
+
+
+<style id="v62-settlement-mobile">
+@media(max-width:900px){
+ .settlement-overview-grid,.systems-grid,.model-grid{grid-template-columns:1fr!important}
+ .human-city{display:grid!important;grid-template-columns:1fr!important;margin:18px 0!important;padding:20px!important}
+ .viewer-title{position:relative!important;left:auto!important;right:auto!important;top:auto!important;margin:0 0 12px!important}
+ .viewer-title h3{white-space:normal!important}
+ .city-viewer,.model-viewer{min-height:0!important}
+ .view-tabs,.model-filters{overflow-x:auto!important;white-space:nowrap!important}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">DAN</div>
+  <nav class="nav">
+    <a href="#"><span>01</span> QUESTIONS</a>
+    <a class="active" href="#"><span>02</span> SETTLEMENT</a>
+    <a href="#"><span>03</span> RESEARCH</a>
+    <a href="#"><span>04</span> THINK</a>
+    <a href="#"><span>05</span> LIFE</a>
+    <a href="#"><span>06</span> ACHIEVEMENTS</a>
+    <a href="#"><span>07</span> ARCHIVE</a>
+    <a href="#"><span>08</span> NEXT</a>
+  </nav>
+</header>
+
+<div class="mission-jumpbar">
+  <div class="jump-intro unified-mission-02"><span>MISSION 02 / SETTLEMENT</span></div>
+  <nav>
+    <a href="#city"><i>01</i>CITY VIEWS</a>
+    <a href="#systems"><i>02</i>HOW IT WORKS</a>
+    <a href="#library"><i>03</i>3D MODELING LIBRARY</a>
+    <a href="#build"><i>04</i>BUILD LOGIC</a>
+  </nav>
+</div>
+
+<main class="page">
+<section class="section settlement-section" id="city"><div class="section-heading"><div><h2>The settlement is the center of the story.</h2></div><p class="narrow">A city imagined as a living system—water, energy, research, communication, automation and community—built from the original Space City competition work.</p></div><div class="settlement-overview-grid">
+  <div class="overview-left"><div class="city-viewer"><div class="viewer-title"><span class="mono">DAN’S SPACE SETTLEMENT</span><h3>Explore the settlement through its spaces, systems, and design.</h3></div><img alt="" class="city-view-image" id="cityImg" src="./settlement/image3.webp"/><div class="city-vignette"></div><div class="scanlines"></div><div class="viewer-meta"><span class="mono" id="cityMeta">ORIGINAL SPACE CITY ASSET / VIEW 01</span><p id="cityCaption">Surface settlement overview — roads, research and external facilities.</p></div><div class="view-tabs"><button class="active" data-view="0">SURFACE</button><button class="" data-view="1">GATEWAY</button><button class="" data-view="2">CORE</button><button class="" data-view="3">HABITAT</button></div></div></div>
+  <aside class="overview-right">
+    <div class="overview-right-head"><span>SIX SETTLEMENT SYSTEMS</span><b>What keeps the city alive?</b></div>
+<div class="system-strip"><article><img alt="" src="./settlement/image25.webp"/><div><span class="mono">ENERGY</span><p>Orbital solar-power concepts, microwave transfer and a backup fusion system were developed as complementary energy paths.</p></div></article><article><img alt="" src="./settlement/image64.webp"/><div><span class="mono">AGRICULTURE</span><p>Food production was treated as infrastructure: controlled growing, irrigation, preservation and distribution.</p></div></article><article><img alt="" src="./settlement/image75.webp"/><div><span class="mono">TRANSPORT</span><p>Mobility included short-range low-maintenance transport and higher-capacity electric public vehicles.</p></div></article><article><img alt="" src="./settlement/image70.webp"/><div><span class="mono">COMMUNICATION</span><p>The settlement design included personal terminals, antenna infrastructure and networked mission control.</p></div></article><article><img alt="" src="./settlement/image135.webp"/><div><span class="mono">AUTOMATION</span><p>Construction, transport, maintenance, resource collection and emergency response were distributed across robotic systems.</p></div></article><article><img alt="" src="./settlement/image111.webp"/><div><span class="mono">COMMUNITY</span><p>Residential, commercial, agricultural, research and civic zones were connected as one human system.</p></div></article></div>  </aside>
+</div></section>
+
+<div class="continue-cue">
+  <span>THIS IS ONLY THE START</span>
+  <b>Explore the systems, 3D models, and construction logic below.</b>
+  <a href="#systems">CONTINUE ↓</a>
+</div>
+
+<section class="settlement-systems" id="systems">
+  <div class="systems-heading">
+    <p>HOW THE SETTLEMENT WORKS</p>
+    <h3>A city is not one object. It is a network of systems that must survive together.</h3>
+  </div>
+  <div class="systems-grid">
+    <article><span>01</span><b>UNDERGROUND HABITAT</b><p>Modular living spaces are placed within lava-tube environments, using the Martian subsurface as part of the settlement's protective architecture.</p></article>
+    <article><span>02</span><b>CORE & EXPANSION</b><p>The core arrives from Earth with essential equipment and 3D-printing robots. New modules expand outward from this starting point.</p></article>
+    <article><span>03</span><b>WATER SYSTEM</b><p>Martian ice is extracted and transported through drilling, pipelines or tankers, while wastewater is recycled to reduce dependence on new resources.</p></article>
+    <article><span>04</span><b>ENERGY NETWORK</b><p>Orbital solar collection and microwave transmission provide the primary energy pathway, supported by a fusion system for redundancy.</p></article>
+    <article><span>05</span><b>SURFACE INFRASTRUCTURE</b><p>Communication, research, vehicle, energy and port facilities form the surface layer connecting the underground city with Mars and orbit.</p></article>
+    <article><span>06</span><b>ROBOTS</b><p>Robotic systems support construction, infrastructure maintenance, agriculture, resource management, safety, emergency response and exploration.</p></article>
+    <article><span>07</span><b>COMMUNITY</b><p>Residential, research, agricultural and civic functions are designed as one connected settlement rather than isolated technical modules.</p></article>
+    <article><span>08</span><b>RESILIENCE</b><p>Redundancy, isolation, modularity, expandability and safety guide the architecture so that local failures do not become settlement-wide failures.</p></article>
+  </div>
+</section>
+
+
+
+<section class="human-city">
+  <div class="human-city-kicker">A CITY FOR PEOPLE</div>
+  <div class="human-city-copy">
+    <h3>Survival is only the beginning.</h3>
+    <p>A settlement is not successful simply because people can survive in it. They should be able to live with dignity, form relationships, find privacy, share responsibilities, celebrate, disagree, recover from failure, and feel that the place belongs to them. Designing a space settlement made me realize that engineering life-support systems is only half of the problem. The other half is designing a community worth sustaining.</p>
+  </div>
+  <div class="human-city-steps">
+    <div><b>SURVIVE</b><span>Water · Energy · Safety</span></div>
+    <div><b>LIVE</b><span>Privacy · Friendship · Recreation</span></div>
+    <div><b>BELONG</b><span>Community · Responsibility · Shared future</span></div>
+  </div>
+</section>
+<section class="model-library" id="library">
+  <div class="library-head">
+    <div><p>3D MODELING LIBRARY</p><h3>Designing the settlement, one object at a time.</h3></div>
+    <div class="library-note">A categorized archive of spatial studies, habitats, infrastructure, vehicles, robots and objects developed for the settlement design.</div>
+  </div>
+  <div class="model-filters">
+    <button class="active" data-filter="ALL">ALL <small>33</small></button>
+    <button data-filter="MASTERPLAN">MASTERPLAN</button>
+    <button data-filter="HABITAT">HABITAT</button>
+    <button data-filter="SURFACE">SURFACE</button>
+    <button data-filter="MOBILITY">MOBILITY</button>
+    <button data-filter="ROBOTICS">ROBOTICS</button>
+    <button data-filter="OBJECTS">OBJECTS</button>
+  </div>
+  <div class="model-grid"><button class="model-card" data-cat="MASTERPLAN" data-img="./settlement/image3.webp" data-title="Surface Masterplan" data-desc="Settlement-wide surface layout">
+<div class="model-thumb"><img src="./settlement/image3.webp" alt="Surface Masterplan"></div>
+<div class="model-info"><span>MASTERPLAN</span><b>Surface Masterplan</b><p>Settlement-wide surface layout</p><em>VIEW MODEL ↗</em></div>
+</button>
+<button class="model-card" data-cat="MASTERPLAN" data-img="./settlement/image12.webp" data-title="Central Platform" data-desc="Infrastructure arrangement">
+<div class="model-thumb"><img src="./settlement/image12.webp" alt="Central Platform"></div>
+<div class="model-info"><span>MASTERPLAN</span><b>Central Platform</b><p>Infrastructure arrangement</p><em>VIEW MODEL ↗</em></div>
+</button>
+<button class="model-card" data-cat="MASTERPLAN" data-img="./settlement/image38.webp" data-title="Surface Network" data-desc="Expanded site organization">
+<div class="model-thumb"><img src="./settlement/image38.webp" alt="Surface Network"></div>
+<div class="model-info"><span>MASTERPLAN</span><b>Surface Network</b><p>Expanded site organization</p><em>VIEW MODEL ↗</em></div>
+</button>
+<button class="model-card" data-cat="MASTERPLAN" data-img="./settlement/image50.webp" data-title="Platform Plan" data-desc="Top-view spatial planning">
+<div class="model-thumb"><img src="./settlement/image50.webp" alt="Platform Plan"></div>
+<div class="model-info"><span>MASTERPLAN</span><b>Platform Plan</b><p>Top-view spatial planning</p><em>VIEW MODEL ↗</em></div>
+</button>
+<button class="model-card" data-cat="HABITAT" data-img="./settlement/image14.webp" data-title="Gateway Habitat" data-desc="Connected entrance modules">
+<div class="model-thumb"><img src="./settlement/image14.webp" alt="Gateway Habitat"></div>
+<div class="model-info"><span>HABITAT</span><b>Gateway Habitat</b><p>Connected entrance modules</p><em>VIEW MODEL ↗</em></div>
+</button>
+<button class="model-card" data-cat="HABITAT" data-img="./settlement/image25.webp" data-title="Habitat Junction" data-desc="Modular surface connection">
+<div class="model-thumb"><img src="./settlement/image25.webp" alt="Habitat Junction"></div>
+<div class="model-info"><span>HABITAT</span><b>Habitat Junction</b><p>Modular surface connection</p><em>VIEW MODEL ↗</em></div>
+</button>
+<button class="model-card" data-cat="HABITAT" data-img="./settlement/image39.webp" data-title="Habitat Cluster" data-desc="Linked living modules">
+<div class="model-thumb"><img src="./settlement/image39.webp" alt="Habitat Cluster"></div>
+<div class="model-info"><span>HABITAT</span><b>Habitat Cluster</b><p>Linked living modules</p><em>VIEW MODEL ↗</em></div>
+</button>
+<button class="model-card" data-cat="HABITAT" data-img="./settlement/image40.webp" data-title="Underground Access" data-desc="Subsurface habitat concept">
+<div class="model-thumb"><img src="./settlement/image40.webp" alt="Underground Access"></div>
+<div class="model-info"><span>HABITAT</span><b>Underground Access</b><p>Subsurface habitat concept</p><em>VIEW MODEL ↗</em></div>
+</button>
+<button class="model-card" data-cat="HABITAT" data-img="./settlement/image41.webp" data-title="Subsurface Modules" data-desc="Linear underground system">
+<div class="model-thumb"><img src="./settlement/image41.webp" alt="Subsurface Modules"></div>
+<div class="model-info"><span>HABITAT</span><b>Subsurface Modules</b><p>Linear underground system</p><em>VIEW MODEL ↗</em></div>
+</button>
+<button class="model-card" data-cat="HABITAT" data-img="./settlement/image42.webp" data-title="Underground Network" data-desc="Sectional module sequence">
+<div class="model-thumb"><img src="./settlement/image42.webp" alt="Underground Network"></div>
+<div class="model-info"><span>HABITAT</span><b>Underground Network</b><p>Sectional module sequence</p><em>VIEW MODEL ↗</em></div>
+</button>
+<button class="model-card" data-cat="HABITAT" data-img="./settlement/image48.webp" data-title="Civic Habitat" data-desc="Residential / civic architecture">
+<div class="model-thumb"><img src="./settlement/image48.webp" alt="Civic Habitat"></div>
+<div class="model-info"><span>HABITAT</span><b>Civic Habitat</b><p>Residential / civic architecture</p><em>VIEW MODEL ↗</em></div>
+</button>
+<button class="model-card" data-cat="HABITAT" data-img="./settlement/image49.webp" data-title="Surface Facility" data-desc="Functional building module">
+<div class="model-thumb"><img src="./settlement/image49.webp" alt="Surface Facility"></div>
+<div class="model-info"><span>HABITAT</span><b>Surface Facility</b><p>Functional building module</p><em>VIEW MODEL ↗</em></div>
+</button>
+<button class="model-card" data-cat="SURFACE" data-img="./settlement/image4.webp" data-title="Surface Complex" data-desc="Infrastructure close-up">
+<div class="model-thumb"><img src="./settlement/image4.webp" alt="Surface Complex"></div>
+<div class="model-info"><span>SURFACE</span><b>Surface Complex</b><p>Infrastructure close-up</p><em>VIEW MODEL ↗</em></div>
+</button>
+<button class="model-card" data-cat="SURFACE" data-img="./settlement/image26.webp" data-title="Protected Zone" data-desc="Enclosed settlement concept">
+<div class="model-thumb"><img src="./settlement/image26.webp" alt="Protected Zone"></div>
+<div class="model-info"><span>SURFACE</span><b>Protected Zone</b><p>Enclosed settlement concept</p><em>VIEW MODEL ↗</em></div>
+</button>
+<button class="model-card" data-cat="SURFACE" data-img="./settlement/image43.webp" data-title="Mars Landscape" data-desc="Settlement environment study">
+<div class="model-thumb"><img src="./settlement/image43.webp" alt="Mars Landscape"></div>
+<div class="model-info"><span>SURFACE</span><b>Mars Landscape</b><p>Settlement environment study</p><em>VIEW MODEL ↗</em></div>
+</button>
+<button class="model-card" data-cat="SURFACE" data-img="./settlement/image44.webp" data-title="Industrial Complex" data-desc="Large surface facility">
+<div class="model-thumb"><img src="./settlement/image44.webp" alt="Industrial Complex"></div>
+<div class="model-info"><span>SURFACE</span><b>Industrial Complex</b><p>Large surface facility</p><em>VIEW MODEL ↗</em></div>
+</button>
+<button class="model-card" data-cat="SURFACE" data-img="./settlement/image47.webp" data-title="Communication Structure" data-desc="Surface communications element">
+<div class="model-thumb"><img src="./settlement/image47.webp" alt="Communication Structure"></div>
+<div class="model-info"><span>SURFACE</span><b>Communication Structure</b><p>Surface communications element</p><em>VIEW MODEL ↗</em></div>
+</button>
+<button class="model-card" data-cat="SURFACE" data-img="./settlement/image51.webp" data-title="Utility Node" data-desc="Compact surface infrastructure">
+<div class="model-thumb"><img src="./settlement/image51.webp" alt="Utility Node"></div>
+<div class="model-info"><span>SURFACE</span><b>Utility Node</b><p>Compact surface infrastructure</p><em>VIEW MODEL ↗</em></div>
+</button>
+<button class="model-card" data-cat="MOBILITY" data-img="./settlement/image73.webp" data-title="Personal Mobility" data-desc="Human-scale transport concept">
+<div class="model-thumb"><img src="./settlement/image73.webp" alt="Personal Mobility"></div>
+<div class="model-info"><span>MOBILITY</span><b>Personal Mobility</b><p>Human-scale transport concept</p><em>VIEW MODEL ↗</em></div>
+</button>
+<button class="model-card" data-cat="MOBILITY" data-img="./settlement/image75.webp" data-title="Tracked Transport" data-desc="All-terrain settlement vehicle">
+<div class="model-thumb"><img src="./settlement/image75.webp" alt="Tracked Transport"></div>
+<div class="model-info"><span>MOBILITY</span><b>Tracked Transport</b><p>All-terrain settlement vehicle</p><em>VIEW MODEL ↗</em></div>
+</button>
+<button class="model-card" data-cat="MOBILITY" data-img="./settlement/image138.webp" data-title="Exploration Rover" data-desc="Heavy-duty rover concept">
+<div class="model-thumb"><img src="./settlement/image138.webp" alt="Exploration Rover"></div>
+<div class="model-info"><span>MOBILITY</span><b>Exploration Rover</b><p>Heavy-duty rover concept</p><em>VIEW MODEL ↗</em></div>
+</button>
+<button class="model-card" data-cat="MOBILITY" data-img="./settlement/image139.webp" data-title="Utility Vehicle" data-desc="Robotic service platform">
+<div class="model-thumb"><img src="./settlement/image139.webp" alt="Utility Vehicle"></div>
+<div class="model-info"><span>MOBILITY</span><b>Utility Vehicle</b><p>Robotic service platform</p><em>VIEW MODEL ↗</em></div>
+</button>
+<button class="model-card" data-cat="ROBOTICS" data-img="./settlement/image134.webp" data-title="Robotic Module" data-desc="Compact autonomous unit">
+<div class="model-thumb"><img src="./settlement/image134.webp" alt="Robotic Module"></div>
+<div class="model-info"><span>ROBOTICS</span><b>Robotic Module</b><p>Compact autonomous unit</p><em>VIEW MODEL ↗</em></div>
+</button>
+<button class="model-card" data-cat="ROBOTICS" data-img="./settlement/image136.webp" data-title="Wheel Mechanism" data-desc="Mobility mechanism study">
+<div class="model-thumb"><img src="./settlement/image136.webp" alt="Wheel Mechanism"></div>
+<div class="model-info"><span>ROBOTICS</span><b>Wheel Mechanism</b><p>Mobility mechanism study</p><em>VIEW MODEL ↗</em></div>
+</button>
+<button class="model-card" data-cat="ROBOTICS" data-img="./settlement/image137.webp" data-title="Field Robot" data-desc="Multi-function robotic concept">
+<div class="model-thumb"><img src="./settlement/image137.webp" alt="Field Robot"></div>
+<div class="model-info"><span>ROBOTICS</span><b>Field Robot</b><p>Multi-function robotic concept</p><em>VIEW MODEL ↗</em></div>
+</button>
+<button class="model-card" data-cat="ROBOTICS" data-img="./settlement/image140.webp" data-title="Deployable Arm" data-desc="Articulated service mechanism">
+<div class="model-thumb"><img src="./settlement/image140.webp" alt="Deployable Arm"></div>
+<div class="model-info"><span>ROBOTICS</span><b>Deployable Arm</b><p>Articulated service mechanism</p><em>VIEW MODEL ↗</em></div>
+</button>
+<button class="model-card" data-cat="ROBOTICS" data-img="./settlement/image141.webp" data-title="Manipulator Rover" data-desc="Robotic operation platform">
+<div class="model-thumb"><img src="./settlement/image141.webp" alt="Manipulator Rover"></div>
+<div class="model-info"><span>ROBOTICS</span><b>Manipulator Rover</b><p>Robotic operation platform</p><em>VIEW MODEL ↗</em></div>
+</button>
+<button class="model-card" data-cat="ROBOTICS" data-img="./settlement/image142.webp" data-title="Service Robot" data-desc="Mobile manipulation concept">
+<div class="model-thumb"><img src="./settlement/image142.webp" alt="Service Robot"></div>
+<div class="model-info"><span>ROBOTICS</span><b>Service Robot</b><p>Mobile manipulation concept</p><em>VIEW MODEL ↗</em></div>
+</button>
+<button class="model-card" data-cat="OBJECTS" data-img="./settlement/image66.webp" data-title="Orbital / Device Study" data-desc="Independent object modeling">
+<div class="model-thumb"><img src="./settlement/image66.webp" alt="Orbital / Device Study"></div>
+<div class="model-info"><span>OBJECTS</span><b>Orbital / Device Study</b><p>Independent object modeling</p><em>VIEW MODEL ↗</em></div>
+</button>
+<button class="model-card" data-cat="OBJECTS" data-img="./settlement/image70.webp" data-title="Spherical Structure" data-desc="Form and geometry study">
+<div class="model-thumb"><img src="./settlement/image70.webp" alt="Spherical Structure"></div>
+<div class="model-info"><span>OBJECTS</span><b>Spherical Structure</b><p>Form and geometry study</p><em>VIEW MODEL ↗</em></div>
+</button>
+<button class="model-card" data-cat="OBJECTS" data-img="./settlement/image82.webp" data-title="Cargo Module CASSC" data-desc="Container design">
+<div class="model-thumb"><img src="./settlement/image82.webp" alt="Cargo Module CASSC"></div>
+<div class="model-info"><span>OBJECTS</span><b>Cargo Module CASSC</b><p>Container design</p><em>VIEW MODEL ↗</em></div>
+</button>
+<button class="model-card" data-cat="OBJECTS" data-img="./settlement/image83.webp" data-title="Cargo Module A0001" data-desc="Container variation">
+<div class="model-thumb"><img src="./settlement/image83.webp" alt="Cargo Module A0001"></div>
+<div class="model-info"><span>OBJECTS</span><b>Cargo Module A0001</b><p>Container variation</p><em>VIEW MODEL ↗</em></div>
+</button>
+<button class="model-card" data-cat="OBJECTS" data-img="./settlement/image135.webp" data-title="Equipment Housing" data-desc="Mechanical enclosure study">
+<div class="model-thumb"><img src="./settlement/image135.webp" alt="Equipment Housing"></div>
+<div class="model-info"><span>OBJECTS</span><b>Equipment Housing</b><p>Mechanical enclosure study</p><em>VIEW MODEL ↗</em></div>
+</button></div>
+</section>
+<div class="model-viewer" id="modelViewer" aria-hidden="true">
+ <div class="viewer-shell">
+   <button class="viewer-close" id="viewerClose">×</button>
+   <div class="viewer-image"><img id="viewerImg" alt=""></div>
+   <div class="viewer-copy"><span id="viewerCat"></span><h3 id="viewerTitle"></h3><p id="viewerDesc"></p><small>3D MODELING / SPACE SETTLEMENT</small></div>
+ </div>
+</div>
+
+<section class="build-sequence" id="build">
+  <div class="sequence-copy">
+    <p>BUILD / CONSTRUCTION LOGIC</p>
+    <h3>From orbit to a living city.</h3>
+    <span>The settlement grows in stages rather than appearing all at once.</span>
+  </div>
+  <div class="sequence-track">
+    <div><i>01</i><b>ORBIT</b><span>Mapping + energy satellites</span></div>
+    <div><i>02</i><b>PIONEERS</b><span>Initial team arrives</span></div>
+    <div><i>03</i><b>PORT</b><span>Landing + logistics</span></div>
+    <div><i>04</i><b>SURFACE</b><span>Labs, factories + power</span></div>
+    <div><i>05</i><b>LINK</b><span>Communication network</span></div>
+    <div><i>06</i><b>UNDERGROUND</b><span>Core + modular base</span></div>
+    <div><i>07</i><b>COMMUNITY</b><span>Residential expansion</span></div>
+  </div>
+</section>
+
+</main>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  /* CITY VIEW TABS */
+  const cityViews = [
+    {
+      img: "./settlement/image3.webp",
+      meta: "ORIGINAL SPACE CITY ASSET / VIEW 01",
+      cap: "Surface settlement overview — roads, research and external facilities."
+    },
+    {
+      img: "./settlement/image14.webp",
+      meta: "ORIGINAL SPACE CITY ASSET / VIEW 02",
+      cap: "Entrance / surface module network rendered for the settlement proposal."
+    },
+    {
+      img: "./settlement/image39.webp",
+      meta: "ORIGINAL SPACE CITY ASSET / VIEW 03",
+      cap: "Core access and modular underground settlement concept."
+    },
+    {
+      img: "./settlement/image48.webp",
+      meta: "ORIGINAL SPACE CITY ASSET / VIEW 04",
+      cap: "Residential / civic surface architecture from the original competition deck."
+    }
+  ];
+
+  const tabs = document.querySelectorAll(".view-tabs button");
+  tabs.forEach(function (btn, index) {
+    btn.addEventListener("click", function () {
+      tabs.forEach(function (b) { b.classList.remove("active"); });
+      btn.classList.add("active");
+      const v = cityViews[index];
+      const img = document.getElementById("cityImg");
+      const meta = document.getElementById("cityMeta");
+      const cap = document.getElementById("cityCaption");
+      if (img) img.src = v.img;
+      if (meta) meta.textContent = v.meta;
+      if (cap) cap.textContent = v.cap;
+    });
+  });
+
+  /* 3D MODEL LIBRARY FILTERS */
+  const filterButtons = document.querySelectorAll(".model-filters button");
+  const modelCards = document.querySelectorAll(".model-card");
+
+  filterButtons.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      const filter = btn.getAttribute("data-filter");
+      filterButtons.forEach(function (b) { b.classList.remove("active"); });
+      btn.classList.add("active");
+
+      modelCards.forEach(function (card) {
+        const show = filter === "ALL" || card.getAttribute("data-cat") === filter;
+        card.hidden = !show;
+      });
+    });
+  });
+
+  /* MODEL VIEWER */
+  const viewer = document.getElementById("modelViewer");
+  const viewerImg = document.getElementById("viewerImg");
+  const viewerCat = document.getElementById("viewerCat");
+  const viewerTitle = document.getElementById("viewerTitle");
+  const viewerDesc = document.getElementById("viewerDesc");
+  const viewerClose = document.getElementById("viewerClose");
+
+  function closeViewer() {
+    if (!viewer) return;
+    viewer.classList.remove("open");
+    viewer.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+  }
+
+  modelCards.forEach(function (card) {
+    card.addEventListener("click", function () {
+      if (!viewer) return;
+      if (viewerImg) {
+        viewerImg.src = card.getAttribute("data-img");
+        viewerImg.alt = card.getAttribute("data-title");
+      }
+      if (viewerCat) viewerCat.textContent = card.getAttribute("data-cat");
+      if (viewerTitle) viewerTitle.textContent = card.getAttribute("data-title");
+      if (viewerDesc) viewerDesc.textContent = card.getAttribute("data-desc");
+      viewer.classList.add("open");
+      viewer.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+    });
+  });
+
+  if (viewerClose) viewerClose.addEventListener("click", closeViewer);
+  if (viewer) {
+    viewer.addEventListener("click", function (e) {
+      if (e.target === viewer) closeViewer();
+    });
+  }
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") closeViewer();
+  });
+
+  /* LOCAL MISSION NAV — immediate jumps, no animation */
+  document.querySelectorAll('.mission-jumpbar a, .continue-cue a').forEach(function(link){
+    link.addEventListener("click", function(e){
+      const target = document.querySelector(link.getAttribute("href"));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({behavior:"auto", block:"start"});
+      }
+    });
+  });
+});
+</script>
+
+</body>
+</html>

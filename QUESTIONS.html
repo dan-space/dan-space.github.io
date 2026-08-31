@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DAN — 01 Questions</title>
+<style>
+*{box-sizing:border-box}
+html,body{
+  margin:0;width:100%;height:100%;overflow:hidden;
+  background:#f5e7d4;font-family:Arial,sans-serif
+}
+.viewport{
+  position:relative;
+  width:100%;
+  height:100vh;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#f5e7d4;
+}
+.art{
+  display:block;
+  width:102.5%;
+  max-width:none;
+  height:auto;
+  max-height:102.5vh;
+  object-fit:contain;
+}
+.hotspot{display:none}
+</style>
+
+<style id="v22-questions-responsive">
+@media(max-width:900px){
+  html,body{width:100%!important;height:100%!important;overflow:hidden!important}
+  .viewport{
+    width:100%!important;height:100dvh!important;
+    display:flex!important;align-items:center!important;justify-content:center!important;
+    overflow:hidden!important;
+  }
+  .art{
+    width:100%!important;height:100%!important;
+    max-width:100%!important;max-height:100%!important;
+    object-fit:contain!important;object-position:center!important;
+  }
+}
+</style>
+
+<style id="v25-question-mission-label">
+.mission-label-q{
+  position:absolute;
+  z-index:5;
+  top:18px;
+  left:clamp(28px,4.2vw,66px);
+  margin:0;
+  font-family:"Aptos","Segoe UI Variable Text","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  font-size:13px;
+  line-height:1.25;
+  font-weight:850;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:#a65336;
+  pointer-events:none;
+}
+@media(max-width:900px){
+  .mission-label-q{top:12px;left:18px;font-size:12px}
+}
+</style>
+<style id="v28-questions-no-bottom-cards">
+.art{max-height:100%!important;object-fit:contain!important}
+</style>
+<style id="v62-questions-responsive">
+html,body,.viewport{width:100%;max-width:100%;min-width:0}
+.art{max-width:100%!important;max-height:100dvh!important;object-fit:contain!important}
+@media(max-width:600px){
+ .viewport{height:100dvh!important;min-height:100dvh!important}
+ .art{width:100%!important;height:auto!important;max-height:100dvh!important}
+}
+</style>
+
+</head>
+<body>
+<div class="viewport"><p class="mission-label-q">MISSION 01 / QUESTIONS</p>
+  <img class="art" src="questions-approved.png" alt="Dan's Questions page">
+  <div class="hotspot h1"><a href="QUESTIONS.html" aria-label="Questions"></a></div>
+  <div class="hotspot h2"><a href="SETTLEMENT.html" aria-label="Settlement"></a></div>
+  <div class="hotspot h3"><a href="RESEARCH.html" aria-label="Research"></a></div>
+  <div class="hotspot h4"><a href="THINK.html" aria-label="Think"></a></div>
+  <div class="hotspot h5"><a href="LIFE.html" aria-label="Life"></a></div>
+  <div class="hotspot h6"><a href="ACHIEVEMENTS.html" aria-label="Achievements"></a></div>
+  <div class="hotspot h7"><a href="ARCHIVE.html" aria-label="Archive"></a></div>
+  <div class="hotspot h8"><a href="NEXT.html" aria-label="Next"></a></div>
+</div>
+</body>
+</html>

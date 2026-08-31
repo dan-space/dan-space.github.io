@@ -1,0 +1,2151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DAN — 04 Think</title>
+
+<style>
+:root{
+  --cream:#f4eadc;
+  --ink:#ece8df;
+  --muted:#c7c3ba;
+  --orange:#d58b5c;
+  --teal:#8eb8b9;
+  --deep:#17242d;
+  --panel:#1d2c35;
+  --line:rgba(255,255,255,.14);
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:#17242d;color:var(--ink);font-family:"Aptos","Segoe UI Variable Text","Segoe UI","Helvetica Neue",Arial,sans-serif}
+body{overflow-x:hidden}
+.topbar{
+ position:sticky;top:0;z-index:50;height:68px;display:flex;align-items:center;justify-content:center;
+ background:rgba(240,229,215,.96);color:#554940;border-bottom:1px solid rgba(91,71,58,.13)
+}
+.brand{position:absolute;left:26px;font-weight:800;letter-spacing:.11em;font-size:15px}
+.nav{display:flex;gap:22px;align-items:center}
+.nav a{font-size:12px;font-weight:700;color:#6c5f55;text-decoration:none;white-space:nowrap}
+.nav a.active{color:#b65e38}
+.page{padding:38px 4vw 70px;background:
+ radial-gradient(circle at 14% 10%,rgba(213,139,92,.13),transparent 25%),
+ linear-gradient(180deg,#1b2932 0%,#15232c 100%)}
+.section-heading{display:grid;grid-template-columns:1.3fr .7fr;gap:42px;align-items:end;margin-bottom:26px}
+.eyebrow{
+ margin:0 0 10px;
+ font-family:"Aptos Display","Segoe UI Variable Display","Segoe UI",sans-serif;
+ font-size:18px!important;font-weight:800!important;letter-spacing:.07em!important;color:#d8a17d!important;
+ text-transform:uppercase
+}
+.section-heading h2{
+ margin:0;
+ font-family:"Aptos Display","Segoe UI Variable Display","Segoe UI",sans-serif;
+ font-size:34px!important;line-height:1.12;font-weight:720;letter-spacing:-.01em;color:#fff6eb
+}
+.section-heading .narrow{font-size:17px!important;line-height:1.62;color:#d4cec5;max-width:520px;margin:0}
+.city-viewer{
+ position:relative;min-height:650px;overflow:hidden;border-radius:22px;border:1px solid rgba(255,255,255,.16);
+ background:#0f171d;box-shadow:0 28px 70px rgba(0,0,0,.26)
+}
+.city-view-image{width:100%;height:650px;object-fit:cover;display:block;filter:saturate(.85) contrast(1.03)}
+.city-vignette{position:absolute;inset:0;background:
+ linear-gradient(90deg,rgba(9,16,21,.72) 0%,rgba(9,16,21,.10) 28%,rgba(9,16,21,.04) 72%,rgba(9,16,21,.48) 100%),
+ linear-gradient(180deg,rgba(7,12,16,.35),transparent 25%,transparent 72%,rgba(7,12,16,.66))}
+.scanlines{display:none}
+.viewer-title{position:absolute;z-index:5;left:28px;top:25px;max-width:620px}
+.viewer-title>span{
+ display:inline-block;font-family:"Aptos Display","Segoe UI Variable Display","Segoe UI",sans-serif;
+ font-size:20px!important;font-weight:850;letter-spacing:.075em;color:#ffe8d6;
+ padding:10px 14px;border-radius:999px;background:rgba(19,31,39,.72);border:1px solid rgba(255,229,210,.25)
+}
+.viewer-title h3{
+ margin:14px 0 0;font-family:"Aptos Display","Segoe UI Variable Display","Segoe UI",sans-serif;
+ font-size:28px!important;font-weight:680;line-height:1.15;color:white;text-shadow:0 3px 20px rgba(0,0,0,.45)
+}
+.viewer-meta{position:absolute;z-index:5;left:28px;bottom:25px;max-width:540px;background:rgba(12,21,27,.78);padding:12px 15px;border-radius:12px;border:1px solid rgba(255,255,255,.13)}
+.viewer-meta span{font-size:12px!important;letter-spacing:.08em;color:#dca27b}
+.viewer-meta p{font-size:15px!important;line-height:1.45;margin:5px 0 0;color:#eee9e2}
+.view-tabs{position:absolute;z-index:6;right:24px;top:24px;display:flex;gap:7px}
+.view-tabs button{
+ border:1px solid rgba(255,255,255,.22);background:rgba(13,23,29,.70);color:#eee7de;
+ border-radius:999px;padding:10px 14px;font-size:12px;font-weight:750;letter-spacing:.05em;cursor:pointer
+}
+.view-tabs button.active{background:#e2a079;color:#182229;border-color:#f0b894}
+.settlement-node{
+ position:absolute;z-index:8;transform:translate(-50%,-50%);
+ background:none;border:0;padding:0;cursor:pointer;color:white;text-align:left
+}
+.node-dot{
+ position:relative;display:block;width:34px;height:34px;border-radius:50%;
+ background:radial-gradient(circle at 35% 30%,#fff7e9 0 8%,#efb17f 10% 24%,#c4693f 27% 52%,#5a2b20 70% 100%);
+ border:2px solid rgba(255,240,224,.88);
+ box-shadow:0 0 0 7px rgba(213,139,92,.14),0 0 24px rgba(227,151,102,.58),inset 0 0 7px rgba(255,255,255,.35)
+}
+.node-dot:before{
+ content:"";position:absolute;left:50%;top:50%;width:48px;height:18px;border:1px solid rgba(163,205,210,.72);
+ border-radius:50%;transform:translate(-50%,-50%) rotate(-18deg);box-shadow:0 0 9px rgba(142,184,185,.27)
+}
+.node-dot:after{
+ content:"";position:absolute;left:50%;top:50%;width:5px;height:5px;border-radius:50%;background:#fff8eb;transform:translate(-50%,-50%)
+}
+.node-label{
+ position:absolute;left:42px;top:3px;
+ font-family:"Aptos Display","Segoe UI Variable Display","Segoe UI",sans-serif!important;
+ font-size:15px!important;font-weight:850!important;letter-spacing:.075em!important;color:#fff7ed!important;
+ text-shadow:0 2px 10px rgba(0,0,0,.9);white-space:nowrap;
+ background:rgba(11,20,26,.72);padding:6px 9px;border-radius:8px;border:1px solid rgba(255,255,255,.15)
+}
+.settlement-node:hover .node-dot,.settlement-node.open .node-dot{box-shadow:0 0 0 9px rgba(142,184,185,.18),0 0 32px rgba(142,184,185,.75),inset 0 0 7px rgba(255,255,255,.35)}
+.settlement-node:hover .node-label,.settlement-node.open .node-label{background:#f0d1b9;color:#24323b!important;text-shadow:none;border-color:#f5dfcf}
+.node-tip{
+ display:none;position:absolute;left:42px;top:40px;width:260px;padding:13px 14px;border-radius:12px;
+ background:rgba(245,235,221,.97);color:#40362f;border:1px solid rgba(116,84,65,.18);box-shadow:0 16px 36px rgba(0,0,0,.25);
+ font-size:14px;line-height:1.42
+}
+.settlement-node.open .node-tip,.settlement-node:hover .node-tip{display:block}
+.node-tip b{display:block;font-size:13px;letter-spacing:.07em;color:#a85d39;margin-bottom:5px}
+.node-tip em{display:block;font-style:normal;font-size:11px;font-weight:800;letter-spacing:.08em;color:#397078;margin-top:8px}
+.system-strip{
+ margin-top:24px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px
+}
+.system-strip article{
+ overflow:hidden;border-radius:15px;background:#21313b;border:1px solid rgba(255,255,255,.13);min-height:155px;display:grid;grid-template-columns:135px 1fr
+}
+.system-strip img{width:135px;height:100%;object-fit:cover}
+.system-strip article>div{padding:16px}
+.system-strip span{font-family:"Aptos Display","Segoe UI Variable Display","Segoe UI",sans-serif!important;font-size:15px!important;font-weight:850!important;letter-spacing:.07em!important;color:#e9b28e!important}
+.system-strip p{font-size:15px!important;line-height:1.48;color:#d6d0c8;margin:8px 0 0}
+@media(max-width:1000px){
+ .nav{gap:10px}.nav a span{display:none}
+ .section-heading{grid-template-columns:1fr}.city-viewer,.city-view-image{height:600px;min-height:600px}
+ .system-strip{grid-template-columns:1fr 1fr}
+ .node-label{font-size:13px!important}
+}
+</style>
+
+
+<style>
+/* V2 — richer clickable node pages */
+.research-overlay{
+  display:none;position:fixed;inset:0;z-index:200;background:rgba(10,18,24,.96);
+  place-items:center;padding:22px;overflow:auto;
+}
+.research-overlay.open{display:grid}
+.research-shell{
+  position:relative;width:min(1220px,96vw);min-height:720px;
+  display:grid;grid-template-columns:360px 1fr;
+  background:#efe5d7;color:#3f3934;border:1px solid rgba(255,255,255,.13);
+  border-radius:24px;overflow:hidden;box-shadow:0 34px 100px rgba(0,0,0,.42)
+}
+.research-close{
+  position:absolute;right:18px;top:14px;z-index:8;width:42px;height:42px;border-radius:50%;
+  border:1px solid rgba(73,58,49,.18);background:rgba(255,249,240,.88);color:#5d5148;
+  font-size:27px;line-height:1;cursor:pointer
+}
+.research-visual{
+  position:relative;padding:34px 28px 26px;color:#f2eee8;
+  background:
+    radial-gradient(circle at 60% 18%,rgba(213,139,92,.21),transparent 30%),
+    radial-gradient(circle at 25% 65%,rgba(123,176,184,.15),transparent 36%),
+    linear-gradient(180deg,#172630,#0f1a21);
+  display:flex;flex-direction:column;align-items:flex-start
+}
+.research-breadcrumb{font-size:12px;font-weight:800;letter-spacing:.11em;color:#b9c2c4}
+.research-breadcrumb span{color:#efb18a}
+.system-orbit{position:relative;width:220px;height:220px;margin:40px auto 22px;align-self:center}
+.orbit-ring{position:absolute;left:50%;top:50%;border:1px solid rgba(191,220,225,.48);border-radius:50%;transform:translate(-50%,-50%) rotate(-18deg)}
+.ring-a{width:206px;height:86px}
+.ring-b{width:130px;height:206px;transform:translate(-50%,-50%) rotate(38deg)}
+.orbit-core{
+ position:absolute;left:50%;top:50%;width:82px;height:82px;transform:translate(-50%,-50%);border-radius:50%;
+ background:radial-gradient(circle at 35% 30%,#fff8ed 0 6%,#efb27d 10% 24%,#b75d38 28% 55%,#49251f 75% 100%);
+ box-shadow:0 0 0 14px rgba(214,139,92,.09),0 0 45px rgba(231,158,109,.45)
+}
+.orbit-label{
+ position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+ font-size:12px;font-weight:900;letter-spacing:.08em;color:#fff9ef;text-shadow:0 2px 10px rgba(0,0,0,.65)
+}
+.visual-kicker{font-size:13px;font-weight:900;letter-spacing:.10em;color:#e9b28d}
+.visual-signal{margin-top:10px;font-size:17px;line-height:1.45;font-weight:750;color:#f2eee7;min-height:50px}
+.signal-track{width:100%;height:4px;margin:13px 0 17px;border-radius:4px;background:linear-gradient(90deg,#e7a174,#86b8bd,#e7a174)}
+.visual-chips{display:flex;flex-wrap:wrap;gap:8px}
+.visual-chips span{
+ padding:7px 9px;border-radius:999px;border:1px solid rgba(255,255,255,.19);
+ background:rgba(255,255,255,.06);font-size:11px;font-weight:800;letter-spacing:.06em;color:#dfe7e5
+}
+.visual-mini{
+ margin-top:22px;padding:13px 14px;border-left:3px solid #e6a176;background:rgba(255,255,255,.055);
+ font-size:13px;font-weight:800;letter-spacing:.06em;line-height:1.4;color:#f0e8df
+}
+.node-nav{margin-top:auto;width:100%;display:flex;gap:8px;padding-top:24px}
+.node-nav button{
+ flex:1;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.05);color:#d8dfdf;
+ border-radius:10px;padding:10px 8px;font-size:10px;font-weight:800;letter-spacing:.06em;cursor:pointer
+}
+.research-content{padding:34px 42px 38px;overflow:auto}
+.research-topline{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-right:42px}
+.research-topline>div>span:first-child{
+ font-size:14px;font-weight:900;letter-spacing:.10em;color:#b25f3b
+}
+.research-topline .period{margin-left:10px;font-size:13px;font-weight:700;color:#7d746c}
+.back-city{
+ border:1px solid rgba(81,67,58,.18);background:#f8f0e5;color:#5f534a;
+ border-radius:999px;padding:9px 13px;font-size:11px;font-weight:800;letter-spacing:.07em;cursor:pointer
+}
+.research-content h2{
+ font-family:"Aptos Display","Segoe UI Variable Display","Segoe UI",sans-serif;
+ font-size:30px!important;line-height:1.18!important;font-weight:720!important;letter-spacing:-.01em!important;
+ color:#3f3832;margin:18px 45px 24px 0!important
+}
+.research-steps{display:grid;gap:10px}
+.research-step{
+ display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:start;
+ padding:16px 17px;border-radius:14px;background:#f8f1e8;border:1px solid rgba(92,72,58,.12)
+}
+.step-index{
+ width:36px;height:36px;border-radius:50%;display:grid;place-items:center;
+ background:#263944;color:#f5d2ba;font-size:11px;font-weight:900;letter-spacing:.04em
+}
+.step-label{
+ display:block;font-size:13px!important;font-weight:900!important;letter-spacing:.09em!important;color:#b75e38!important;margin:1px 0 6px
+}
+.research-step p{
+ margin:0!important;font-size:17px!important;line-height:1.58!important;color:#514841!important
+}
+.result-step{background:#edf1ed;border-color:rgba(86,125,117,.18)}
+.changed-step{
+ background:linear-gradient(135deg,#263944,#1b2c35);border-color:rgba(255,255,255,.08)
+}
+.changed-step .step-index{background:#e2a078;color:#26333b}
+.changed-step .step-label{color:#f0b18a!important}
+.changed-step p{color:#f1ede7!important;font-size:18px!important}
+.evidence-note{
+ display:flex;align-items:center;gap:12px;margin-top:13px;padding:12px 15px;border-radius:12px;
+ border:1px dashed rgba(91,72,60,.22);background:#f6ede1
+}
+.evidence-note span{font-size:11px;font-weight:900;letter-spacing:.09em;color:#39747a}
+.evidence-note p{margin:0;font-size:13px;color:#776b62}
+@media(max-width:900px){
+ .research-shell{grid-template-columns:1fr}
+ .research-visual{min-height:360px}.system-orbit{width:160px;height:160px;margin:24px auto 14px}
+ .ring-a{width:150px;height:65px}.ring-b{width:95px;height:150px}.orbit-core{width:64px;height:64px}
+ .research-content{padding:28px 24px}.research-content h2{font-size:26px!important}
+ .research-step p{font-size:16px!important}
+}
+</style>
+
+
+<style>
+body{background:linear-gradient(145deg,#e8dfd3 0%,#d9d2ca 42%,#cbd5d5 100%)!important}
+.research-map-section{min-height:100vh;padding-bottom:64px!important}
+.research-map-section .section-heading{margin-bottom:18px}
+.research-map-section .section-heading h2{font-size:36px!important}
+.research-map-section .section-heading .narrow{font-size:17px!important;line-height:1.55!important}
+.research-constellation{height:min(64vh,620px)!important;max-height:620px!important;background:#24343d!important}
+.research-constellation .city-view-image{filter:saturate(.62) brightness(.58) contrast(1.04)}
+.research-map-wash{position:absolute;inset:0;background:
+ radial-gradient(circle at 30% 25%,rgba(212,139,91,.24),transparent 27%),
+ radial-gradient(circle at 72% 65%,rgba(141,180,184,.22),transparent 30%),
+ linear-gradient(135deg,rgba(22,35,43,.10),rgba(22,35,43,.34));z-index:1;pointer-events:none}
+.research-constellation .city-vignette,.research-constellation .scanlines,
+.research-constellation .viewer-title,.research-constellation .viewer-meta,
+.research-constellation .settlement-node{z-index:2}
+.research-node-key{margin-top:12px;padding:13px 17px;border:1px solid rgba(75,61,50,.14);border-radius:14px;background:rgba(255,250,243,.68);display:flex;gap:16px;align-items:center;justify-content:space-between;color:#4b4139}
+.research-node-key span{font-size:11px;font-weight:900;letter-spacing:.1em;color:#b86643}
+.research-node-key b{font-size:13px;letter-spacing:.035em}
+.research-breadcrumb{font-size:13px!important}
+.research-content h2{font-size:30px!important}
+.research-step p{font-size:17px!important;line-height:1.55!important}
+@media(max-width:800px){.research-node-key{display:block}.research-node-key b{display:block;margin-top:7px;line-height:1.5}.research-constellation{height:560px!important}}
+</style>
+
+
+<style>
+body{background:linear-gradient(145deg,#e9e0d5 0%,#d9d3cb 43%,#c9d4d5 100%)!important;color:#24323a!important}
+.think-section-v1{padding-top:112px!important;max-width:1400px;margin:auto}
+.think-head{display:grid;grid-template-columns:1.15fr .85fr;gap:54px;align-items:end;margin-bottom:28px}
+.think-head h1{font-size:clamp(34px,4vw,52px)!important;line-height:1.05;margin:8px 0 0;letter-spacing:-.035em;color:#24323a}
+.think-intro{font-size:18px;line-height:1.62;margin:0;color:#526067}
+.think-map{height:470px;position:relative;overflow:hidden;border-radius:28px;background:
+radial-gradient(circle at 18% 48%,rgba(212,139,91,.24),transparent 25%),
+radial-gradient(circle at 51% 20%,rgba(141,180,184,.22),transparent 26%),
+radial-gradient(circle at 80% 53%,rgba(218,192,144,.18),transparent 26%),
+linear-gradient(145deg,#1d3039,#2b4149 60%,#33494d);box-shadow:0 24px 60px rgba(43,54,57,.18)}
+.think-map:after{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:42px 42px;pointer-events:none}
+.think-map-title{position:absolute;left:26px;top:22px;color:#eee7dc;z-index:3}.think-map-title span{display:block;font-size:11px;letter-spacing:.12em;color:#e49b6e}.think-map-title b{font-size:17px;display:block;margin-top:5px}
+.axis-line{position:absolute;height:1px;background:linear-gradient(90deg,transparent,rgba(235,226,212,.28),transparent);width:70%;left:15%;top:50%;transform-origin:center;z-index:1}.axis-a{transform:rotate(-14deg)}.axis-b{transform:rotate(16deg)}
+.thought-node{position:absolute;transform:translate(-50%,-50%);border:0;background:transparent;color:#f3ece2;text-align:left;z-index:4;cursor:pointer;min-width:170px}.thought-node i{display:block;width:28px;height:28px;border-radius:50%;border:7px solid rgba(255,255,255,.15);background:#d48b5b;box-shadow:0 0 0 1px rgba(255,255,255,.35),0 0 28px rgba(212,139,91,.35);margin-bottom:10px}.thought-node:nth-of-type(2) i{background:#8db4b8}.thought-node:nth-of-type(3) i{background:#d9bd85}.thought-node span{font-size:11px;letter-spacing:.1em;display:block;opacity:.78}.thought-node strong{font-size:17px;display:block;margin-top:4px}.thought-node.active strong{color:#fff}.thought-node.active i{border-color:rgba(255,255,255,.32);transform:scale(1.12)}
+.think-core{position:absolute;left:50%;top:54%;transform:translate(-50%,-50%);width:148px;height:148px;border-radius:50%;display:grid;place-content:center;text-align:center;background:rgba(238,231,220,.94);color:#283840;z-index:3;box-shadow:0 0 0 18px rgba(255,255,255,.035),0 18px 40px rgba(0,0,0,.18)}.think-core small{font-size:9px;letter-spacing:.12em;color:#b76743}.think-core b{font-size:21px;line-height:1.08;margin-top:5px}.think-map-note{position:absolute;right:24px;bottom:20px;color:#d8d3ca;font-size:10px;letter-spacing:.12em;z-index:3}
+.thought-reader{display:grid;grid-template-columns:.8fr 1.2fr;gap:20px;margin-top:16px}.thought-reader aside,.thought-reader article{border-radius:22px;padding:25px;background:rgba(255,250,243,.72);border:1px solid rgba(80,65,53,.12)}.thought-reader aside span{font-size:11px;letter-spacing:.1em;color:#b66542}.thought-reader h2{font-size:27px!important;line-height:1.15;margin:10px 0 18px}.thought-keywords{display:flex;gap:7px;flex-wrap:wrap}.thought-keywords i{font-style:normal;font-size:10px;font-weight:800;padding:7px 9px;border-radius:999px;background:#e8ded1;color:#556167}.thought-reader article p{font-size:17px;line-height:1.62;margin:0}.thought-reader blockquote{font-size:19px;line-height:1.4;margin:22px 0 0;padding-left:18px;border-left:3px solid #d48b5b;color:#46545a}
+.think-bridge{margin-top:42px;padding:28px;border-radius:24px;background:#243740;color:#eee7dc}.bridge-label{display:flex;align-items:baseline;justify-content:space-between;gap:20px;border-bottom:1px solid rgba(255,255,255,.12);padding-bottom:18px}.bridge-label span{font-size:11px;letter-spacing:.11em;color:#e29a6e}.bridge-label h2{font-size:28px!important;margin:0}.bridge-flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;gap:14px;align-items:center;padding-top:22px}.bridge-flow div{padding:15px;border-radius:14px;background:rgba(255,255,255,.055)}.bridge-flow b{font-size:13px;color:#e8b18c}.bridge-flow p{font-size:14px;line-height:1.4;margin:6px 0 0;color:#d5d0c7}.bridge-flow em{font-style:normal;opacity:.45}
+.think-notes{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}.think-notes article{padding:22px;border-radius:20px;background:rgba(255,250,243,.7);border:1px solid rgba(80,65,53,.12)}.think-notes span{font-size:10px;letter-spacing:.1em;color:#b66542}.think-notes h3{font-size:21px!important;line-height:1.18;margin:9px 0}.think-notes p{font-size:16px;line-height:1.55;margin:0;color:#566168}
+.think-closing{margin:38px 0 20px;padding:28px 0;border-top:1px solid rgba(63,70,70,.18)}.think-closing span{font-size:11px;letter-spacing:.12em;color:#b66542}.think-closing p{font-size:clamp(23px,2.6vw,34px);line-height:1.25;max-width:1000px;margin:10px 0 0;color:#29383e}
+@media(max-width:900px){.think-head,.thought-reader{grid-template-columns:1fr}.think-notes{grid-template-columns:1fr}.bridge-flow{grid-template-columns:1fr}.bridge-flow em{display:none}.think-map{height:560px}.thought-node{min-width:125px}.think-head{gap:18px}}
+</style>
+
+
+<style>
+.think-section-v2{padding-top:112px!important;max-width:1400px;margin:auto}
+.think-map-v2{height:610px;position:relative;overflow:hidden;border-radius:28px;background:
+radial-gradient(circle at 50% 50%,rgba(141,180,184,.11),transparent 20%),
+radial-gradient(circle at 16% 32%,rgba(212,139,91,.22),transparent 23%),
+radial-gradient(circle at 78% 67%,rgba(141,180,184,.19),transparent 25%),
+linear-gradient(145deg,#1c3039,#283e47 58%,#344b50);box-shadow:0 24px 60px rgba(43,54,57,.18)}
+.think-map-v2:after{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:42px 42px;pointer-events:none}
+.philosophy-orbit{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);border:1px solid rgba(237,230,218,.14);border-radius:50%;z-index:1}
+.orbit-one{width:54%;height:66%}.orbit-two{width:78%;height:84%;border-style:dashed}
+.philosophy-core{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);width:180px;height:180px;border-radius:50%;display:grid;place-content:center;text-align:center;background:rgba(239,232,221,.96);color:#283840;z-index:3;box-shadow:0 0 0 19px rgba(255,255,255,.035),0 20px 42px rgba(0,0,0,.18)}
+.philosophy-core small{font-size:9px;letter-spacing:.12em;color:#b76743}.philosophy-core b{font-size:22px;line-height:1.08;margin-top:6px}
+.philosophy-node{position:absolute;transform:translate(-50%,-50%);border:0;background:transparent;color:#f3ece2;text-align:left;z-index:4;cursor:pointer;width:190px}
+.philosophy-node i{display:block;width:25px;height:25px;border-radius:50%;border:6px solid rgba(255,255,255,.15);background:#d48b5b;box-shadow:0 0 0 1px rgba(255,255,255,.32),0 0 25px rgba(212,139,91,.3);margin-bottom:8px}
+.philosophy-node:nth-of-type(2n) i{background:#8db4b8}.philosophy-node:nth-of-type(3n) i{background:#d6b881}
+.philosophy-node span{font-size:10px;letter-spacing:.09em;display:block;opacity:.8}.philosophy-node strong{font-size:15px;line-height:1.25;display:block;margin-top:4px}
+.philosophy-node.active i{border-color:rgba(255,255,255,.38);transform:scale(1.18)}.philosophy-node.active strong{color:#fff}
+.thought-reader-v2{display:grid;grid-template-columns:.82fr 1.18fr;gap:16px;margin-top:16px}
+.thought-reader-v2 aside,.thought-reader-v2 article{padding:27px;border-radius:22px;background:rgba(255,250,243,.75);border:1px solid rgba(80,65,53,.12)}
+.thought-reader-v2 aside>span{font-size:11px;letter-spacing:.1em;color:#b66542}.thought-reader-v2 h2{font-size:28px!important;line-height:1.15;margin:10px 0 18px}
+.thought-reader-v2 article>p{font-size:17px;line-height:1.62;margin:0;color:#4f5c62}
+.thought-question{margin-top:22px;padding-top:18px;border-top:1px solid rgba(83,70,58,.14)}
+.thought-question span{font-size:10px;letter-spacing:.1em;color:#b66542;display:block}.thought-question strong{font-size:19px;line-height:1.4;display:block;margin-top:7px;color:#34444b}
+.philosophy-source-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:42px}
+.source-card{padding:23px;border-radius:20px;background:rgba(255,250,243,.72);border:1px solid rgba(80,65,53,.12)}
+.source-card span{font-size:10px;letter-spacing:.09em;color:#b66542}.source-card h3{font-size:21px!important;line-height:1.18;margin:10px 0}.source-card p{font-size:16px;line-height:1.55;margin:0;color:#566168}
+.think-synthesis{margin-top:18px;padding:28px;border-radius:25px;background:#243740;color:#eee7dc}
+.synthesis-heading{display:flex;align-items:end;justify-content:space-between;gap:24px;padding-bottom:20px;border-bottom:1px solid rgba(255,255,255,.12)}
+.synthesis-heading span{font-size:10px;letter-spacing:.11em;color:#e29a6e}.synthesis-heading h2{font-size:28px!important;margin:0}
+.principle-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}
+.principle-grid article{padding:16px;border-radius:15px;background:rgba(255,255,255,.055);min-height:164px}
+.principle-grid article:nth-child(7){grid-column:span 2}
+.principle-grid b{font-size:11px;color:#e6a77f}.principle-grid h3{font-size:18px!important;line-height:1.18;margin:9px 0 7px}.principle-grid p{font-size:14px;line-height:1.45;margin:0;color:#d6d0c8}
+.think-closing-v2{margin:40px 0 20px;padding:30px 0;border-top:1px solid rgba(63,70,70,.18)}
+.think-closing-v2 span{font-size:11px;letter-spacing:.12em;color:#b66542}.think-closing-v2 p{font-size:clamp(24px,2.7vw,35px);line-height:1.24;max-width:1050px;margin:10px 0 0;color:#29383e}
+@media(max-width:1000px){.philosophy-source-grid{grid-template-columns:1fr}.principle-grid{grid-template-columns:1fr 1fr}.principle-grid article:nth-child(7){grid-column:span 2}.thought-reader-v2{grid-template-columns:1fr}.think-map-v2{height:700px}}
+@media(max-width:650px){.principle-grid{grid-template-columns:1fr}.principle-grid article:nth-child(7){grid-column:auto}.philosophy-node{width:135px}.philosophy-node strong{font-size:13px}.think-map-v2{height:760px}}
+</style>
+
+
+<style>
+/* V4 — compact THINK / visual continuity with Missions 02–03 */
+body{
+  background:
+    radial-gradient(circle at 82% 10%,rgba(141,180,184,.13),transparent 28%),
+    linear-gradient(145deg,#e9e1d7 0%,#ded7cf 52%,#d1dbda 100%)!important;
+}
+.think-section-v2{
+  padding-top:92px!important;
+  padding-bottom:38px!important;
+  max-width:1320px!important;
+}
+.think-head{
+  grid-template-columns:1.02fr .98fr!important;
+  gap:36px!important;
+  align-items:center!important;
+  margin-bottom:18px!important;
+}
+.think-head .eyebrow{
+  font-size:12px!important;
+  letter-spacing:.11em!important;
+}
+.think-head h1{
+  font-size:clamp(31px,3.2vw,43px)!important;
+  line-height:1.06!important;
+  margin-top:7px!important;
+}
+.think-intro{
+  font-size:17px!important;
+  line-height:1.52!important;
+  padding-left:24px!important;
+  border-left:2px solid rgba(196,111,70,.46)!important;
+}
+
+/* The philosophy map is now a compact "interactive exhibit", not a huge hero. */
+.think-map-v2{
+  height:440px!important;
+  border-radius:22px!important;
+  background:
+    radial-gradient(circle at 48% 50%,rgba(141,180,184,.12),transparent 19%),
+    radial-gradient(circle at 14% 25%,rgba(212,139,91,.22),transparent 24%),
+    radial-gradient(circle at 82% 72%,rgba(141,180,184,.18),transparent 26%),
+    linear-gradient(145deg,#20343d,#2b424a 58%,#344d51)!important;
+  box-shadow:0 16px 42px rgba(43,54,57,.15)!important;
+}
+.think-map-title{left:22px!important;top:18px!important}
+.think-map-title span{font-size:10px!important}
+.think-map-title b{font-size:15px!important;margin-top:4px!important}
+.philosophy-core{
+  width:144px!important;height:144px!important;
+  box-shadow:0 0 0 13px rgba(255,255,255,.035),0 14px 32px rgba(0,0,0,.17)!important;
+}
+.philosophy-core small{font-size:8px!important}
+.philosophy-core b{font-size:19px!important}
+.philosophy-node{width:165px!important}
+.philosophy-node i{
+  width:21px!important;height:21px!important;border-width:5px!important;
+  margin-bottom:6px!important;
+}
+.philosophy-node span{font-size:9px!important}
+.philosophy-node strong{font-size:14px!important;line-height:1.2!important}
+.think-map-note{right:20px!important;bottom:16px!important}
+
+/* Reader sits visually attached to the map. */
+.thought-reader-v2{
+  gap:10px!important;
+  margin-top:10px!important;
+  grid-template-columns:.78fr 1.22fr!important;
+}
+.thought-reader-v2 aside,
+.thought-reader-v2 article{
+  padding:20px 22px!important;
+  border-radius:17px!important;
+  background:rgba(255,250,243,.80)!important;
+}
+.thought-reader-v2 h2{
+  font-size:23px!important;
+  line-height:1.17!important;
+  margin:8px 0 13px!important;
+}
+.thought-reader-v2 article>p{
+  font-size:16px!important;
+  line-height:1.50!important;
+}
+.thought-keywords{gap:5px!important}
+.thought-keywords i{
+  font-size:9px!important;
+  padding:5px 7px!important;
+}
+.thought-question{
+  margin-top:13px!important;
+  padding-top:12px!important;
+}
+.thought-question strong{
+  font-size:17px!important;
+  line-height:1.34!important;
+  margin-top:5px!important;
+}
+
+/* Three intellectual sources become a compact museum strip. */
+.philosophy-source-grid{
+  gap:10px!important;
+  margin-top:26px!important;
+}
+.source-card{
+  position:relative!important;
+  overflow:hidden!important;
+  padding:18px 19px 19px!important;
+  border-radius:17px!important;
+  background:rgba(250,246,239,.77)!important;
+  min-height:176px!important;
+}
+.source-card:before{
+  content:""!important;
+  position:absolute!important;
+  left:0!important;top:0!important;bottom:0!important;
+  width:4px!important;
+  background:#c8754d!important;
+}
+.source-card:nth-child(2):before{background:#739da2!important}
+.source-card:nth-child(3):before{background:#b99a64!important}
+.source-card span{font-size:9px!important}
+.source-card h3{
+  font-size:19px!important;
+  margin:8px 0 7px!important;
+}
+.source-card p{
+  font-size:15px!important;
+  line-height:1.45!important;
+}
+
+/* Synthesis is the second visual anchor, but kept compact. */
+.think-synthesis{
+  margin-top:12px!important;
+  padding:21px!important;
+  border-radius:20px!important;
+  background:
+    radial-gradient(circle at 92% 10%,rgba(141,180,184,.12),transparent 25%),
+    #263941!important;
+}
+.synthesis-heading{
+  align-items:center!important;
+  padding-bottom:14px!important;
+}
+.synthesis-heading h2{font-size:24px!important}
+.principle-grid{
+  grid-template-columns:repeat(4,1fr)!important;
+  gap:7px!important;
+  margin-top:10px!important;
+}
+.principle-grid article{
+  min-height:132px!important;
+  padding:13px!important;
+  border-radius:12px!important;
+}
+.principle-grid article:nth-child(7){
+  grid-column:auto!important;
+}
+.principle-grid b{font-size:10px!important}
+.principle-grid h3{
+  font-size:16px!important;
+  margin:6px 0 5px!important;
+}
+.principle-grid p{
+  font-size:13px!important;
+  line-height:1.36!important;
+}
+
+/* Seven items balance as 4 + 3; final card spans remaining width. */
+.principle-grid article:nth-child(5),
+.principle-grid article:nth-child(6){
+  grid-column:span 1!important;
+}
+.principle-grid article:nth-child(7){
+  grid-column:span 2!important;
+}
+
+.think-closing-v2{
+  margin:24px 0 0!important;
+  padding:22px 0 8px!important;
+}
+.think-closing-v2 p{
+  font-size:clamp(22px,2.3vw,30px)!important;
+  line-height:1.22!important;
+  max-width:1000px!important;
+}
+
+@media(max-width:1000px){
+  .think-head{grid-template-columns:1fr!important;gap:14px!important}
+  .think-intro{padding-left:16px!important}
+  .think-map-v2{height:540px!important}
+  .thought-reader-v2{grid-template-columns:1fr!important}
+  .principle-grid{grid-template-columns:1fr 1fr!important}
+  .principle-grid article:nth-child(7){grid-column:span 2!important}
+}
+@media(max-width:650px){
+  .think-map-v2{height:680px!important}
+  .philosophy-node{width:125px!important}
+  .philosophy-node strong{font-size:12px!important}
+  .principle-grid{grid-template-columns:1fr!important}
+  .principle-grid article:nth-child(7){grid-column:auto!important}
+}
+</style>
+
+
+<style>
+/* V5 — clearer, quieter closing statement */
+.think-closing-v2 p{
+  font-size:clamp(19px,1.9vw,25px)!important;
+  line-height:1.30!important;
+  color:#35464d!important;
+  font-weight:500!important;
+}
+.think-closing-v2 p b{
+  color:#a85636!important;
+  font-weight:750!important;
+}
+.think-closing-v2 span{
+  color:#8f4c34!important;
+}
+</style>
+
+
+<style>
+/* V6 — refined interactive philosophy constellation */
+.think-map-v2{
+  height:470px!important;
+  border:1px solid rgba(255,255,255,.14)!important;
+  background:
+    radial-gradient(circle at 50% 51%,rgba(236,224,205,.09) 0 1px,transparent 2px),
+    radial-gradient(circle at 17% 25%,rgba(220,139,91,.27),transparent 21%),
+    radial-gradient(circle at 82% 68%,rgba(116,170,176,.24),transparent 25%),
+    radial-gradient(circle at 55% 15%,rgba(211,188,137,.12),transparent 18%),
+    linear-gradient(145deg,#1b3039 0%,#263d46 48%,#314b50 100%)!important;
+  box-shadow:
+    0 20px 48px rgba(43,54,57,.17),
+    inset 0 1px rgba(255,255,255,.07)!important;
+}
+.think-map-v2:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle,rgba(255,255,255,.55) 0 1px,transparent 1.5px) 7% 18%/113px 97px,
+    radial-gradient(circle,rgba(255,255,255,.25) 0 1px,transparent 1.4px) 20% 43%/157px 139px;
+  opacity:.42;
+}
+.think-map-v2:after{
+  opacity:.38!important;
+  background-size:46px 46px!important;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,.7),rgba(0,0,0,.18))!important;
+}
+
+/* Fine constellation connectors */
+.philosophy-orbit{
+  border-color:rgba(234,226,213,.16)!important;
+}
+.orbit-one{
+  width:49%!important;height:62%!important;
+  border-style:solid!important;
+}
+.orbit-two{
+  width:76%!important;height:82%!important;
+  border-style:dashed!important;
+  border-color:rgba(141,180,184,.20)!important;
+}
+
+/* Central question becomes the visual focal point */
+.philosophy-core{
+  width:154px!important;height:154px!important;
+  background:
+    radial-gradient(circle at 35% 28%,#fffaf1 0%,#eee4d7 72%)!important;
+  border:1px solid rgba(255,255,255,.7)!important;
+  box-shadow:
+    0 0 0 9px rgba(238,231,220,.045),
+    0 0 0 20px rgba(141,180,184,.035),
+    0 18px 38px rgba(0,0,0,.20)!important;
+}
+.philosophy-core:before,
+.philosophy-core:after{
+  content:"";
+  position:absolute;
+  border-radius:50%;
+  pointer-events:none;
+}
+.philosophy-core:before{
+  inset:-30px;
+  border:1px solid rgba(229,218,200,.09);
+}
+.philosophy-core:after{
+  width:6px;height:6px;
+  right:-18px;top:33%;
+  background:#d98b5e;
+  box-shadow:-165px 78px 0 #86afb3,55px 115px 0 #d5b980;
+}
+.philosophy-core small{
+  color:#a95739!important;
+  font-size:8.5px!important;
+  letter-spacing:.13em!important;
+}
+.philosophy-core b{
+  color:#263840!important;
+  font-size:20px!important;
+}
+
+/* Nodes become small exhibit modules rather than loose text */
+.philosophy-node{
+  width:174px!important;
+  padding:9px 10px 9px 42px!important;
+  border:1px solid rgba(255,255,255,.10)!important;
+  border-radius:13px!important;
+  background:rgba(18,38,46,.40)!important;
+  backdrop-filter:blur(5px)!important;
+  box-shadow:0 8px 20px rgba(8,20,25,.10)!important;
+  min-height:57px!important;
+}
+.philosophy-node i{
+  position:absolute!important;
+  left:11px!important;
+  top:50%!important;
+  transform:translateY(-50%)!important;
+  width:18px!important;height:18px!important;
+  margin:0!important;
+  border:4px solid rgba(255,255,255,.14)!important;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.25),
+    0 0 17px rgba(212,139,91,.28)!important;
+}
+.philosophy-node span{
+  font-size:8.5px!important;
+  letter-spacing:.10em!important;
+  color:#d8d1c8!important;
+}
+.philosophy-node strong{
+  font-size:13.5px!important;
+  line-height:1.18!important;
+  margin-top:3px!important;
+  color:#f2ece3!important;
+}
+.philosophy-node.active{
+  background:rgba(246,239,228,.94)!important;
+  border-color:rgba(255,255,255,.72)!important;
+  box-shadow:0 12px 27px rgba(7,20,25,.18)!important;
+}
+.philosophy-node.active span{color:#a95d40!important}
+.philosophy-node.active strong{color:#2c3d44!important}
+.philosophy-node.active i{
+  transform:translateY(-50%) scale(1.12)!important;
+  border-color:rgba(255,255,255,.5)!important;
+}
+
+/* Header is framed like a museum instrument label */
+.think-map-title{
+  left:20px!important;top:17px!important;
+  padding:10px 13px!important;
+  border-left:3px solid #d18459!important;
+  background:rgba(16,34,42,.28)!important;
+  border-radius:0 10px 10px 0!important;
+}
+.think-map-title span{
+  color:#e2a27b!important;
+  letter-spacing:.13em!important;
+}
+.think-map-title b{
+  color:#f0e9df!important;
+  letter-spacing:.025em!important;
+}
+.think-map-note{
+  padding:7px 10px!important;
+  border-radius:999px!important;
+  background:rgba(239,232,220,.10)!important;
+  border:1px solid rgba(255,255,255,.10)!important;
+  color:#ddd7cf!important;
+}
+
+/* Reposition nodes for a cleaner, asymmetrical constellation */
+.philosophy-node[data-thought="priority"]{left:13%!important;top:31%!important}
+.philosophy-node[data-thought="practice"]{left:38%!important;top:18%!important}
+.philosophy-node[data-thought="humility"]{left:70%!important;top:20%!important}
+.philosophy-node[data-thought="coevolution"]{left:85%!important;top:48%!important}
+.philosophy-node[data-thought="values"]{left:72%!important;top:77%!important}
+.philosophy-node[data-thought="governance"]{left:42%!important;top:82%!important}
+.philosophy-node[data-thought="future"]{left:14%!important;top:69%!important}
+
+@media(max-width:1000px){
+  .think-map-v2{height:590px!important}
+  .philosophy-node{width:155px!important}
+}
+@media(max-width:650px){
+  .think-map-v2{height:720px!important}
+  .philosophy-node{width:126px!important;padding-left:34px!important}
+  .philosophy-node strong{font-size:11.5px!important}
+  .philosophy-node i{left:8px!important}
+}
+</style>
+
+
+<style>
+/* V7 — high-contrast closing statement */
+.think-closing-v2{
+  background:rgba(255,250,242,.78)!important;
+  border:1px solid rgba(73,62,52,.14)!important;
+  border-radius:18px!important;
+  padding:20px 22px!important;
+  margin-top:24px!important;
+}
+.think-closing-v2 p{
+  color:#172d36!important;
+  font-size:21px!important;
+  line-height:1.34!important;
+  font-weight:600!important;
+  opacity:1!important;
+  text-shadow:none!important;
+}
+.think-closing-v2 p b{
+  color:#9b4329!important;
+  font-weight:800!important;
+}
+.think-closing-v2 span{
+  color:#8a422e!important;
+  opacity:1!important;
+  font-weight:800!important;
+}
+</style>
+
+
+<style>
+/* V9 — premium philosophy atlas */
+.think-map-v2{
+  height:470px!important;
+  overflow:hidden!important;
+  border-radius:24px!important;
+  border:1px solid rgba(255,255,255,.18)!important;
+  background:
+    radial-gradient(circle at 50% 50%,rgba(237,228,213,.08),transparent 22%),
+    radial-gradient(circle at 12% 18%,rgba(210,128,82,.20),transparent 27%),
+    radial-gradient(circle at 88% 80%,rgba(105,161,168,.20),transparent 28%),
+    linear-gradient(135deg,#172c35 0%,#203841 42%,#2a454c 72%,#314d51 100%)!important;
+  box-shadow:0 20px 55px rgba(33,46,51,.18),inset 0 1px rgba(255,255,255,.08)!important;
+}
+.think-map-v2:before{
+  opacity:.24!important;
+  background-size:140px 118px!important;
+}
+.think-map-v2:after{
+  content:""!important;
+  position:absolute!important;
+  inset:12px!important;
+  border:1px solid rgba(255,255,255,.055)!important;
+  border-radius:18px!important;
+  background:
+    linear-gradient(90deg,transparent 49.8%,rgba(255,255,255,.025) 50%,transparent 50.2%),
+    linear-gradient(0deg,transparent 49.8%,rgba(255,255,255,.025) 50%,transparent 50.2%)!important;
+  pointer-events:none!important;
+  z-index:0!important;
+}
+
+.philosophy-network{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  z-index:1;
+  pointer-events:none;
+}
+.network-lines line,.network-lines path{
+  fill:none;
+  stroke:url(#lineWarm);
+  stroke-width:1.2;
+  vector-effect:non-scaling-stroke;
+}
+.network-lines line{stroke-dasharray:3 7;opacity:.82}
+.network-lines path{opacity:.48}
+.network-points circle{fill:#efe6d8;opacity:.42}
+
+.philosophy-orbit{z-index:1!important;opacity:.52!important}
+.orbit-one{
+  width:42%!important;height:58%!important;
+  border:1px solid rgba(238,228,213,.14)!important;
+  box-shadow:0 0 0 22px rgba(255,255,255,.012)!important;
+}
+.orbit-two{
+  width:67%!important;height:77%!important;
+  border:1px dashed rgba(139,182,185,.14)!important;
+}
+
+.think-map-title{
+  z-index:6!important;
+  left:22px!important;top:20px!important;
+  padding:9px 12px 10px 14px!important;
+  background:rgba(11,29,36,.44)!important;
+  border:1px solid rgba(255,255,255,.08)!important;
+  border-left:3px solid #d18259!important;
+  border-radius:0 9px 9px 0!important;
+  box-shadow:0 8px 20px rgba(6,18,24,.10)!important;
+}
+.think-map-title span{font-size:9px!important;color:#dda17e!important;letter-spacing:.16em!important}
+.think-map-title b{font-size:14px!important;color:#f1eade!important;letter-spacing:.04em!important}
+
+.philosophy-core{
+  z-index:5!important;
+  width:160px!important;height:160px!important;
+  background:
+    radial-gradient(circle at 34% 28%,#fffaf3 0%,#f2e9dc 57%,#e5d9c9 100%)!important;
+  border:1px solid rgba(255,255,255,.82)!important;
+  box-shadow:
+    0 0 0 8px rgba(240,230,214,.035),
+    0 0 0 22px rgba(131,177,181,.025),
+    0 18px 45px rgba(4,17,22,.24)!important;
+}
+.philosophy-core:before{
+  inset:-36px!important;
+  border:1px solid rgba(240,230,214,.08)!important;
+}
+.philosophy-core:after{
+  width:7px!important;height:7px!important;
+  background:#ce764d!important;
+  box-shadow:-172px 76px 0 #79aeb2,61px 122px 0 #d1ad68!important;
+}
+.philosophy-core small{font-size:8px!important;color:#a4573b!important;letter-spacing:.16em!important}
+.philosophy-core b{font-size:20px!important;color:#263940!important;line-height:1.16!important}
+
+.philosophy-node{
+  z-index:5!important;
+  width:174px!important;
+  min-height:60px!important;
+  padding:10px 10px 10px 43px!important;
+  border:1px solid rgba(255,255,255,.105)!important;
+  border-radius:14px!important;
+  background:linear-gradient(135deg,rgba(16,35,43,.68),rgba(28,51,58,.48))!important;
+  box-shadow:0 8px 22px rgba(4,16,22,.13),inset 0 1px rgba(255,255,255,.035)!important;
+  backdrop-filter:blur(7px)!important;
+  text-align:left!important;
+}
+.philosophy-node:before{
+  content:"";
+  position:absolute;
+  inset:5px;
+  border:1px solid rgba(255,255,255,.025);
+  border-radius:10px;
+  pointer-events:none;
+}
+.philosophy-node i{
+  left:12px!important;
+  width:17px!important;height:17px!important;
+  border:4px solid rgba(255,255,255,.16)!important;
+  background:#d48458!important;
+  box-shadow:0 0 0 1px rgba(255,255,255,.22),0 0 17px rgba(211,126,82,.24)!important;
+}
+.philosophy-node:nth-of-type(2n) i{background:#82adb1!important}
+.philosophy-node:nth-of-type(3n) i{background:#cfad6c!important}
+.philosophy-node span{font-size:8.4px!important;color:#d3c9bc!important;letter-spacing:.13em!important;opacity:.88!important}
+.philosophy-node strong{font-size:13.2px!important;color:#f4eee5!important;line-height:1.19!important;margin-top:4px!important;font-weight:650!important}
+.philosophy-node.active{
+  background:linear-gradient(135deg,rgba(255,250,242,.97),rgba(235,229,219,.94))!important;
+  border-color:rgba(255,255,255,.82)!important;
+  box-shadow:0 12px 32px rgba(3,17,22,.22),0 0 0 3px rgba(209,130,89,.10)!important;
+}
+.philosophy-node.active:after{
+  content:"CURRENT THOUGHT";
+  position:absolute;
+  right:10px;top:7px;
+  font:700 6.5px/1 "Aptos","Segoe UI",sans-serif;
+  letter-spacing:.12em;
+  color:#9c583e;
+  opacity:.78;
+}
+.philosophy-node.active span{color:#99593f!important}
+.philosophy-node.active strong{color:#253a42!important}
+.philosophy-node.active i{background:#c96e46!important;border-color:#f8eee1!important}
+
+/* make clickability self-evident without an instruction label */
+.philosophy-node{cursor:pointer!important}
+.philosophy-node:focus-visible{outline:2px solid #e3b18e!important;outline-offset:3px!important}
+
+/* Slightly tighten the reader so clicking feels like one connected exhibit */
+.thought-reader-v2{margin-top:8px!important}
+.thought-reader-v2 aside,.thought-reader-v2 article{border-top:1px solid rgba(64,81,84,.08)!important}
+
+@media(max-width:1000px){
+  .think-map-v2{height:590px!important}
+  .philosophy-network{display:none!important}
+}
+</style>
+
+
+<style>
+/* V10 — CURRENT THOUGHT label centered above selected node */
+.philosophy-node.active:after{
+  content:"CURRENT THOUGHT"!important;
+  position:absolute!important;
+  left:50%!important;
+  right:auto!important;
+  top:-17px!important;
+  transform:translateX(-50%)!important;
+  width:max-content!important;
+  padding:3px 7px!important;
+  border-radius:999px!important;
+  background:rgba(244,235,222,.94)!important;
+  border:1px solid rgba(255,255,255,.65)!important;
+  color:#914d35!important;
+  font:700 6.5px/1 "Aptos","Segoe UI",sans-serif!important;
+  letter-spacing:.12em!important;
+  box-shadow:0 4px 10px rgba(7,20,25,.10)!important;
+  z-index:8!important;
+  pointer-events:none!important;
+}
+</style>
+
+
+<style>
+/* V11 — keep 04 / CO-EVOLUTION and 06 / GOVERNANCE on one line */
+.philosophy-node[data-thought="coevolution"] span,
+.philosophy-node[data-thought="governance"] span{
+  white-space:nowrap!important;
+  display:block!important;
+}
+</style>
+
+
+<style>
+.philosophy-node.active:after{
+  content:none!important;
+  display:none!important;
+}
+</style>
+
+
+<style>
+/* V14 — only refresh the introductory header; keep the original dark green philosophy map */
+.think-head{
+  position:relative!important;
+  padding:26px 30px 25px!important;
+  margin-bottom:18px!important;
+  border-radius:22px!important;
+  background:
+    radial-gradient(circle at 88% 16%,rgba(129,173,176,.18),transparent 31%),
+    radial-gradient(circle at 8% 84%,rgba(209,132,84,.11),transparent 28%),
+    linear-gradient(135deg,rgba(255,250,242,.96) 0%,rgba(239,237,229,.95) 56%,rgba(222,234,233,.94) 100%)!important;
+  border:1px solid rgba(77,95,94,.12)!important;
+  box-shadow:0 10px 28px rgba(73,83,80,.075)!important;
+  overflow:hidden!important;
+}
+.think-head:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background-image:
+    linear-gradient(rgba(69,91,92,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(69,91,92,.025) 1px,transparent 1px);
+  background-size:34px 34px;
+  opacity:.55;
+}
+.think-head>div,.think-head>.think-intro{position:relative;z-index:1}
+.think-head .eyebrow{
+  color:#a45134!important;
+  font-weight:800!important;
+  opacity:1!important;
+}
+.think-head h1{
+  color:#243b42!important;
+  text-shadow:none!important;
+}
+.think-intro{
+  color:#40565d!important;
+  font-weight:500!important;
+  border-left-color:#c97850!important;
+  opacity:1!important;
+}
+</style>
+
+<style>
+/* unified-shell compatibility */
+html{scroll-behavior:auto!important}
+body{margin-top:0!important}
+header.topbar, header.top-nav, .topbar, .top-nav {display:none!important}
+</style><style>
+html{scroll-behavior:auto!important}
+header.topbar,header.top-nav,.topbar,.top-nav{display:none!important}
+</style>
+<style>
+/* V10: tighten only the top of Mission 04 / THINK */
+main, .page, .wrap, .shell, .content {
+  padding-top: 0 !important;
+}
+.hero, .intro, .mission-intro, .hero-copy {
+  margin-top: 0 !important;
+}
+.hero, .intro, .mission-intro {
+  padding-top: 18px !important;
+}
+</style>
+
+<style>
+/* V11 — Philosophy Map → Seven Principles */
+.think-map-v2{margin-bottom:18px!important}
+.think-synthesis{margin-top:0!important;margin-bottom:28px!important}
+</style>
+
+<style>
+/* V12: tighter Mission 04 opening */
+body > main, main, .page, .wrap, .shell, .content{
+  padding-top:0!important;
+  margin-top:0!important;
+}
+.hero, .intro, .mission-intro, .hero-copy{
+  margin-top:0!important;
+}
+.hero, .intro, .mission-intro{
+  padding-top:4px!important;
+}
+</style>
+
+<style>
+/* V16 — THINK de-AI pass: map is a quiet overview, not a clickable framework */
+.think-map-v2 .philosophy-node{
+  cursor:default!important;
+  pointer-events:none!important;
+}
+.think-map-v2 .philosophy-node:hover,
+.think-map-v2 .philosophy-node:focus{
+  transform:none!important;
+  filter:none!important;
+  box-shadow:inherit!important;
+}
+.think-map-v2 .philosophy-node.active{
+  outline:none!important;
+}
+.think-synthesis .eyebrow,
+.think-synthesis .kicker{
+  letter-spacing:.12em!important;
+}
+</style>
+
+<style id="v22-responsive">
+/* V22 responsive safeguards — desktop appearance preserved */
+html{box-sizing:border-box;-webkit-text-size-adjust:100%}
+*,*:before,*:after{box-sizing:inherit}
+html,body{max-width:100%;overflow-x:hidden}
+img,video,svg,canvas{max-width:100%;height:auto}
+table{max-width:100%}
+pre,code{white-space:pre-wrap;overflow-wrap:anywhere}
+@media (max-width:1100px){
+  main,.page,.wrap,.shell,.content,.container{
+    width:min(100% - 32px,1200px)!important;
+    max-width:100%!important;
+    margin-left:auto!important;margin-right:auto!important;
+  }
+  h1{font-size:clamp(30px,4.5vw,42px)!important}
+  h2{font-size:clamp(23px,3.2vw,31px)!important}
+}
+@media (max-width:760px){
+  main,.page,.wrap,.shell,.content,.container{
+    width:calc(100% - 24px)!important;
+  }
+  body{font-size:16px!important}
+  h1{font-size:clamp(27px,8vw,36px)!important;line-height:1.08!important}
+  h2{font-size:clamp(21px,6vw,28px)!important}
+  p{overflow-wrap:anywhere}
+  .grid,.cards,.card-grid,.module-grid,.district-grid,.archive-grid,
+  .research-grid,.life-grid,.achievement-grid,.philosophy-source-grid{
+    grid-template-columns:1fr!important;
+  }
+}
+</style>
+
+<style id="v23-think-top-spacing">
+/* V23: bring THINK content closer to the global navigation. */
+body > main, main, .page, .wrap, .shell, .content{
+  padding-top:0!important;
+  margin-top:0!important;
+}
+.hero,.intro,.mission-intro,.hero-copy{
+  margin-top:0!important;
+}
+.hero,.intro,.mission-intro{
+  padding-top:0!important;
+}
+.think-map-v2{
+  margin-top:clamp(8px,1.2vh,16px)!important;
+}
+@media(max-width:900px){
+  .hero,.intro,.mission-intro{padding-top:0!important}
+}
+</style>
+
+<style id="v25-mission-label">
+p.eyebrow,
+p.eyebrow.mono{
+  font-family:"Aptos","Segoe UI Variable Text","Segoe UI","Helvetica Neue",Arial,sans-serif!important;
+  font-size:13px!important;
+  line-height:1.25!important;
+  font-weight:850!important;
+  letter-spacing:.12em!important;
+  text-transform:uppercase!important;
+}
+</style>
+
+<style id="v35-humanity-think">
+.human-reflection{max-width:1120px;margin:34px auto 10px;padding:25px 30px;border-left:3px solid #d99067;background:rgba(239,229,213,.08)}
+.human-reflection span{font-size:11px;font-weight:900;letter-spacing:.14em;color:#d99067}.human-reflection p{margin:10px 0 0;font-size:17px;line-height:1.72}.human-reflection strong{font-weight:750}
+</style>
+
+<style id="v40-think-background-only-bright">
+/* Keep the original THINK design and layout. Only brighten its dark background surfaces. */
+html,body{
+  background:#edf1ec!important;
+}
+body{
+  background:
+    radial-gradient(circle at 18% 10%,rgba(220,151,108,.13),transparent 28%),
+    radial-gradient(circle at 82% 18%,rgba(120,164,158,.12),transparent 30%),
+    linear-gradient(180deg,#f4ede3 0%,#edf2ee 48%,#e7eeea 100%)!important;
+}
+
+/* The original philosophy-map area was almost black. Retain its exact layout,
+   nodes and typography, but replace only that field with a light sage surface. */
+.think-map-v2{
+  background:
+    radial-gradient(circle at 50% 42%,rgba(255,255,255,.30),transparent 36%),
+    linear-gradient(145deg,#d5e0d8 0%,#c6d7cf 100%)!important;
+  border-color:rgba(50,82,72,.18)!important;
+}
+
+/* Brighten other explicitly dark page-level panels without changing their geometry. */
+.think-synthesis,.thought-reader,.sources{
+  background-color:#e8ede7!important;
+}
+</style>
+
+
+<style id="think-v15-life-tone">
+/* Match Mission 05 LIFE's warm cream / muted teal / sage palette.
+   Structure, spacing, content and interaction stay unchanged. */
+html,body{
+  background:linear-gradient(180deg,#ede5da,#e5e2da)!important;
+  color:#294047!important;
+}
+body{
+  background:
+    radial-gradient(circle at 82% 10%,rgba(127,167,168,.10),transparent 28%),
+    radial-gradient(circle at 16% 14%,rgba(201,119,80,.08),transparent 24%),
+    linear-gradient(180deg,#ede5da 0%,#e7e3dc 54%,#dfe5e1 100%)!important;
+}
+
+/* Main philosophy map: same geometry, but a lighter sage/teal field like LIFE. */
+.think-map-v2{
+  border-color:rgba(61,86,87,.13)!important;
+  background:
+    radial-gradient(circle at 50% 50%,rgba(255,255,255,.36),transparent 21%),
+    radial-gradient(circle at 17% 25%,rgba(201,119,80,.13),transparent 23%),
+    radial-gradient(circle at 82% 68%,rgba(127,167,168,.16),transparent 26%),
+    linear-gradient(145deg,#dfe8e5 0%,#d4dfda 48%,#cbd9d5 100%)!important;
+  box-shadow:0 14px 34px rgba(68,82,79,.10)!important;
+}
+.think-map-v2:before{
+  opacity:.16!important;
+}
+.think-map-v2:after{
+  opacity:.18!important;
+}
+.philosophy-orbit{
+  border-color:rgba(63,91,88,.16)!important;
+}
+.orbit-two{
+  border-color:rgba(111,151,150,.22)!important;
+}
+
+/* Map typography switches from white-on-dark to LIFE-like ink tones. */
+.think-map-title{color:#294047!important}
+.think-map-title span{color:#a65436!important}
+.think-map-note{color:#66787b!important}
+.philosophy-node{
+  color:#294047!important;
+}
+.philosophy-node span{color:#66787b!important;opacity:1!important}
+.philosophy-node strong{color:#294047!important}
+.philosophy-node.active strong{color:#294047!important}
+.philosophy-node i{
+  border-color:rgba(255,255,255,.72)!important;
+  box-shadow:0 0 0 1px rgba(73,105,101,.18),0 5px 14px rgba(74,91,85,.10)!important;
+}
+
+/* Central question mirrors LIFE's warm core treatment. */
+.philosophy-core{
+  background:radial-gradient(circle at 35% 30%,#fffdf7,#f0e4d3 72%)!important;
+  color:#2e474d!important;
+  border-color:rgba(255,255,255,.88)!important;
+  box-shadow:0 0 0 10px rgba(255,255,255,.18),0 14px 30px rgba(68,82,79,.13)!important;
+}
+.philosophy-core small{color:#a55c3f!important}
+
+/* Reader and source cards use the same pale paper surface as LIFE. */
+.thought-reader-v2 aside,
+.thought-reader-v2 article,
+.source-card{
+  background:rgba(255,250,243,.82)!important;
+  border-color:rgba(61,86,87,.13)!important;
+  color:#294047!important;
+}
+.thought-reader-v2 article>p,
+.source-card p{color:#566a6e!important}
+.thought-keywords i{
+  background:#e8ded1!important;
+  color:#556167!important;
+}
+
+/* Synthesis: remove the remaining dark block and use a LIFE-like pale teal panel. */
+.think-synthesis{
+  background:linear-gradient(135deg,#dfe8e5,#eee8df)!important;
+  color:#294047!important;
+  border:1px solid rgba(61,86,87,.13)!important;
+  box-shadow:0 8px 22px rgba(78,85,80,.05)!important;
+}
+.synthesis-heading{
+  border-bottom-color:rgba(65,87,88,.13)!important;
+}
+.synthesis-heading span{color:#a45538!important}
+.synthesis-heading h2{color:#2d444a!important}
+.principle-grid article{
+  background:rgba(255,250,243,.72)!important;
+  border:1px solid rgba(61,86,87,.11)!important;
+}
+.principle-grid b{color:#a45739!important}
+.principle-grid h3{color:#2e464c!important}
+.principle-grid p{color:#65777a!important}
+
+/* Human reflection also follows LIFE's warm-paper palette. */
+.human-reflection{
+  background:rgba(255,250,243,.78)!important;
+  border-left-color:#c97750!important;
+  color:#294047!important;
+}
+.human-reflection p{color:#566a6e!important}
+.human-reflection span{color:#a45538!important}
+</style>
+
+
+<style id="think-v16-remove-dark-surroundings">
+/* Remove all remaining dark surroundings; keep the existing THINK layout/content. */
+html,body{
+  background:#eee8df!important;
+  color:#2d4447!important;
+}
+body{
+  background:
+    radial-gradient(circle at 12% 12%,rgba(207,132,91,.08),transparent 25%),
+    radial-gradient(circle at 88% 18%,rgba(120,164,160,.11),transparent 28%),
+    linear-gradient(180deg,#f3ece2 0%,#ebe8e0 48%,#e3e9e5 100%)!important;
+}
+
+/* Common outer wrappers that may still inherit the old black/dark-green page field. */
+main,.page,.wrap,.shell,.content,.think-page,.think-shell,
+.hero,.intro,.mission-intro,.think-intro{
+  background-color:transparent!important;
+  color:#2d4447!important;
+}
+
+/* Force any full-width dark section backgrounds into the same pale family. */
+.think-map-v2{
+  background:
+    radial-gradient(circle at 50% 46%,rgba(255,255,255,.42),transparent 28%),
+    linear-gradient(145deg,#dce6e1 0%,#cfddd7 100%)!important;
+}
+.think-synthesis{
+  background:linear-gradient(135deg,#e0e9e5,#efe9df)!important;
+}
+.thought-reader-v2,
+.sources{
+  background:#ebe8e0!important;
+}
+
+/* Eliminate dark pseudo-element veils around the page/map. */
+body:before,body:after,
+main:before,main:after,
+.page:before,.page:after,
+.wrap:before,.wrap:after,
+.shell:before,.shell:after,
+.content:before,.content:after{
+  background:transparent!important;
+  box-shadow:none!important;
+}
+</style>
+
+
+<style id="think-v17-actual-page-background-fix">
+/* ACTUAL large page background:
+   the original .page used a dark gradient (#1b2932 -> #15232c).
+   Override the whole background property, not only background-color. */
+.page{
+  background:
+    radial-gradient(circle at 14% 10%,rgba(201,119,80,.09),transparent 25%),
+    radial-gradient(circle at 86% 16%,rgba(120,164,160,.11),transparent 28%),
+    linear-gradient(180deg,#f3ece3 0%,#ebe7df 52%,#e2e8e4 100%)!important;
+  color:#2d4447!important;
+}
+
+/* Keep the section itself transparent so the pale page field is visible everywhere. */
+.think-section-v2,
+.section{
+  background:transparent!important;
+}
+
+/* Ensure no dark full-width block remains behind the content. */
+main.page,
+body > main.page{
+  background:
+    radial-gradient(circle at 14% 10%,rgba(201,119,80,.09),transparent 25%),
+    radial-gradient(circle at 86% 16%,rgba(120,164,160,.11),transparent 28%),
+    linear-gradient(180deg,#f3ece3 0%,#ebe7df 52%,#e2e8e4 100%)!important;
+}
+</style>
+
+
+<style id="think-v18-contrast-and-map">
+/* Stronger overall text contrast on the new pale background. */
+.page,main,section{
+  color:#20383e!important;
+}
+p,.think-intro p,.human-reflection p,.thought-reader-v2 article>p,
+.source-card p,.principle-grid p{
+  color:#435b60!important;
+}
+h1,h2,h3,strong,b{
+  color:#1f373d!important;
+}
+.eyebrow,.mono,.label{
+  color:#87513e!important;
+}
+
+/* Add restrained color depth without returning to a dark page. */
+.page{
+  background:
+    radial-gradient(circle at 10% 9%,rgba(202,119,74,.13),transparent 24%),
+    radial-gradient(circle at 89% 17%,rgba(69,132,130,.14),transparent 29%),
+    radial-gradient(circle at 72% 72%,rgba(174,154,92,.08),transparent 24%),
+    linear-gradient(180deg,#f4ece1 0%,#e9e7df 48%,#dfe8e4 100%)!important;
+}
+
+/* PHILOSOPHY MAP — stronger visual hierarchy and clearly visible geometry. */
+.think-map-v2{
+  background:
+    radial-gradient(circle at 50% 45%,rgba(255,255,255,.62),transparent 29%),
+    radial-gradient(circle at 14% 20%,rgba(206,123,78,.16),transparent 26%),
+    radial-gradient(circle at 86% 75%,rgba(62,130,128,.18),transparent 29%),
+    linear-gradient(145deg,#dbe8e3 0%,#cadbd5 100%)!important;
+  border:1px solid rgba(39,74,72,.28)!important;
+  box-shadow:0 16px 38px rgba(48,70,67,.13)!important;
+}
+.think-map-title{
+  color:#17383d!important;
+  font-weight:900!important;
+  text-shadow:0 1px 0 rgba(255,255,255,.7)!important;
+}
+.think-map-title span{
+  color:#934a32!important;
+  font-weight:900!important;
+  letter-spacing:.13em!important;
+}
+.think-map-note{
+  color:#405d61!important;
+  opacity:1!important;
+  font-weight:650!important;
+}
+
+/* Make orbit / connector geometry substantially clearer. */
+.philosophy-orbit{
+  border-color:rgba(41,91,88,.42)!important;
+  border-width:1.5px!important;
+  opacity:1!important;
+}
+.orbit-two{
+  border-color:rgba(153,88,60,.34)!important;
+  border-width:1.5px!important;
+}
+.think-map-v2 svg line,
+.think-map-v2 svg path,
+.think-map-v2 .connector,
+.think-map-v2 .line{
+  stroke:rgba(42,88,86,.55)!important;
+  opacity:1!important;
+}
+.think-map-v2:before{
+  opacity:.34!important;
+}
+.think-map-v2:after{
+  opacity:.30!important;
+}
+
+/* Node labels: darker and easier to scan. */
+.philosophy-node{
+  color:#17373c!important;
+  opacity:1!important;
+  text-shadow:0 1px 0 rgba(255,255,255,.78)!important;
+}
+.philosophy-node strong{
+  color:#17373c!important;
+  font-weight:900!important;
+}
+.philosophy-node span{
+  color:#455f63!important;
+  opacity:1!important;
+  font-weight:700!important;
+}
+.philosophy-node i{
+  background:#f7efe4!important;
+  border:2px solid rgba(51,104,100,.50)!important;
+  box-shadow:
+    0 0 0 4px rgba(255,255,255,.36),
+    0 5px 14px rgba(45,72,68,.14)!important;
+}
+.philosophy-node:nth-of-type(even) i{
+  background:#dce9e4!important;
+  border-color:rgba(157,82,54,.48)!important;
+}
+
+/* Central question: warm focal point with crisp dark text. */
+.philosophy-core{
+  background:radial-gradient(circle at 34% 28%,#fffdf8,#ead9c4 74%)!important;
+  color:#17373c!important;
+  border:2px solid rgba(151,82,55,.38)!important;
+  box-shadow:
+    0 0 0 10px rgba(255,255,255,.25),
+    0 16px 34px rgba(56,77,70,.18)!important;
+}
+.philosophy-core strong,
+.philosophy-core b{
+  color:#17373c!important;
+}
+.philosophy-core small{
+  color:#8c4934!important;
+  font-weight:850!important;
+}
+
+/* Slightly richer pale cards below the map. */
+.thought-reader-v2 aside,
+.thought-reader-v2 article,
+.source-card,
+.human-reflection{
+  background:rgba(255,249,240,.90)!important;
+  border-color:rgba(56,92,88,.20)!important;
+}
+.think-synthesis{
+  background:linear-gradient(135deg,#d9e8e3 0%,#efe5d8 100%)!important;
+  border-color:rgba(56,92,88,.20)!important;
+}
+.principle-grid article{
+  background:rgba(255,250,243,.82)!important;
+  border-color:rgba(56,92,88,.17)!important;
+}
+</style>
+
+
+<style id="think-v19-clearer-map">
+/* Rebuild the visual treatment of the Philosophy Map only.
+   Keep positions, content, and interaction unchanged. */
+
+.think-map-v2{
+  height:500px!important;
+  background:
+    radial-gradient(circle at 18% 18%,rgba(218,139,91,.20),transparent 24%),
+    radial-gradient(circle at 82% 20%,rgba(88,145,143,.17),transparent 27%),
+    radial-gradient(circle at 78% 80%,rgba(211,179,102,.15),transparent 24%),
+    radial-gradient(circle at 32% 78%,rgba(121,154,184,.12),transparent 24%),
+    linear-gradient(145deg,#eef3ee 0%,#dfeae5 48%,#e8e2d8 100%)!important;
+  border:1px solid rgba(48,83,80,.22)!important;
+  box-shadow:0 18px 42px rgba(53,76,71,.13)!important;
+}
+
+/* Title becomes a crisp light exhibit label, not translucent dark glass. */
+.think-map-title{
+  background:rgba(255,252,246,.95)!important;
+  border:1px solid rgba(61,93,88,.20)!important;
+  border-left:4px solid #c76e49!important;
+  box-shadow:0 8px 20px rgba(61,77,72,.10)!important;
+  padding:11px 14px 12px 15px!important;
+}
+.think-map-title span{
+  color:#9a4e34!important;
+  font-size:10px!important;
+  font-weight:900!important;
+  letter-spacing:.15em!important;
+}
+.think-map-title b{
+  color:#17373d!important;
+  font-size:16px!important;
+  line-height:1.15!important;
+  font-weight:950!important;
+  letter-spacing:.025em!important;
+}
+
+/* Make the actual SVG network visible and colorful. */
+.network-lines line{
+  stroke:#5d8f8b!important;
+  stroke-width:1.7!important;
+  stroke-dasharray:4 6!important;
+  opacity:.72!important;
+}
+.network-lines path{
+  stroke:#b77758!important;
+  stroke-width:1.45!important;
+  opacity:.48!important;
+}
+.network-points circle{
+  fill:#375f61!important;
+  opacity:.62!important;
+}
+.philosophy-orbit{
+  opacity:1!important;
+}
+.orbit-one{
+  border:1.5px solid rgba(68,113,109,.32)!important;
+  box-shadow:0 0 0 22px rgba(255,255,255,.18)!important;
+}
+.orbit-two{
+  border:1.5px dashed rgba(183,111,77,.30)!important;
+}
+
+/* Seven nodes: pale cards, dark text, much larger type.
+   The old dark glass backgrounds were the main readability problem. */
+.philosophy-node{
+  width:184px!important;
+  min-height:66px!important;
+  padding:11px 12px 11px 46px!important;
+  background:rgba(255,252,246,.93)!important;
+  border:1px solid rgba(48,83,80,.18)!important;
+  box-shadow:0 8px 20px rgba(56,74,69,.11)!important;
+  backdrop-filter:none!important;
+  color:#17373d!important;
+}
+.philosophy-node:before{
+  border-color:rgba(69,100,96,.08)!important;
+}
+.philosophy-node span{
+  color:#8f523d!important;
+  font-size:9.4px!important;
+  line-height:1.1!important;
+  font-weight:900!important;
+  letter-spacing:.10em!important;
+  opacity:1!important;
+}
+.philosophy-node strong{
+  color:#1d3a40!important;
+  font-size:14.6px!important;
+  line-height:1.22!important;
+  font-weight:800!important;
+  text-shadow:none!important;
+}
+.philosophy-node i{
+  left:13px!important;
+  width:18px!important;
+  height:18px!important;
+  border:3px solid #fff8ef!important;
+  box-shadow:0 0 0 2px rgba(53,94,90,.19),0 4px 10px rgba(54,77,72,.11)!important;
+}
+.philosophy-node:nth-of-type(2n) i{background:#659b98!important}
+.philosophy-node:nth-of-type(3n) i{background:#d2aa61!important}
+.philosophy-node:nth-of-type(4n) i{background:#7898b2!important}
+
+/* Give alternating nodes subtle color identities for more visual interest. */
+.philosophy-node[data-thought="priority"],
+.philosophy-node[data-thought="values"]{
+  border-top:3px solid #c97650!important;
+}
+.philosophy-node[data-thought="practice"],
+.philosophy-node[data-thought="governance"]{
+  border-top:3px solid #639995!important;
+}
+.philosophy-node[data-thought="humility"],
+.philosophy-node[data-thought="future"]{
+  border-top:3px solid #c6a45c!important;
+}
+.philosophy-node[data-thought="coevolution"]{
+  border-top:3px solid #7898b2!important;
+}
+
+/* Selected thought: richer but still bright. */
+.philosophy-node.active{
+  background:linear-gradient(135deg,#fffaf2,#e7efe9)!important;
+  border-color:rgba(47,91,87,.34)!important;
+  box-shadow:0 12px 28px rgba(54,79,73,.16),0 0 0 3px rgba(201,111,75,.08)!important;
+}
+.philosophy-node.active span{color:#8d4933!important}
+.philosophy-node.active strong{color:#17373d!important}
+.philosophy-node.active i{
+  background:#c86d46!important;
+  border-color:#fff8ef!important;
+}
+
+/* Central question gets a clearer, slightly more playful "planet" treatment. */
+.philosophy-core{
+  width:170px!important;
+  height:170px!important;
+  background:
+    radial-gradient(circle at 31% 25%,#fffdf8 0%,#f5e6d2 56%,#dfc7aa 100%)!important;
+  border:2px solid rgba(160,91,61,.34)!important;
+  box-shadow:
+    0 0 0 9px rgba(255,255,255,.28),
+    0 0 0 23px rgba(102,154,149,.08),
+    0 15px 30px rgba(64,80,72,.15)!important;
+}
+.philosophy-core small{
+  color:#9a4e34!important;
+  font-size:8.8px!important;
+  font-weight:900!important;
+}
+.philosophy-core b{
+  color:#17373d!important;
+  font-size:21px!important;
+  font-weight:900!important;
+  line-height:1.14!important;
+}
+
+/* Add tiny color markers around the central system for a museum-map feel. */
+.philosophy-core:after{
+  background:#c96f49!important;
+  box-shadow:
+    -172px 76px 0 #659b98,
+    61px 122px 0 #d0aa61,
+    137px -88px 0 #7898b2!important;
+}
+
+/* Keep the grid texture very faint so it never interferes with text. */
+.think-map-v2:after{
+  opacity:.10!important;
+}
+.think-map-v2:before{
+  opacity:.14!important;
+}
+
+@media(max-width:1000px){
+  .think-map-v2{height:590px!important}
+}
+</style>
+
+
+<style id="v43-think-wide-layout">
+/* Use more of the desktop canvas while preserving the approved THINK design. */
+@media(min-width:1100px){
+  .think-section-v2,
+  .think-synthesis,
+  .human-reflection,
+  .sources{
+    width:auto!important;
+    max-width:none!important;
+    margin-left:4.5vw!important;
+    margin-right:4.5vw!important;
+  }
+  .think-map-v2{
+    width:auto!important;
+    max-width:none!important;
+    margin-left:4.5vw!important;
+    margin-right:4.5vw!important;
+  }
+  .thought-reader-v2{
+    width:auto!important;
+    max-width:none!important;
+    margin-left:4.5vw!important;
+    margin-right:4.5vw!important;
+    grid-template-columns:minmax(260px,.62fr) minmax(0,1.38fr)!important;
+    gap:28px!important;
+  }
+  .principle-grid{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:18px!important;
+  }
+}
+</style>
+
+
+<style id="v44-think-fullwidth">
+@media(min-width:1100px){
+  .page{
+    max-width:none!important;
+    width:100%!important;
+    margin:0!important;
+    padding:30px 2.8vw 64px!important;
+    box-sizing:border-box!important;
+  }
+  .think-section-v2{
+    max-width:none!important;
+    width:100%!important;
+    margin:0!important;
+    padding-left:0!important;
+    padding-right:0!important;
+  }
+  .think-head{
+    grid-template-columns:minmax(0,1.18fr) minmax(360px,.82fr)!important;
+    gap:4vw!important;
+    width:100%!important;
+  }
+  .think-map-v2,
+  .human-reflection,
+  .think-synthesis,
+  .thought-reader-v2,
+  .sources,
+  .philosophy-source-grid{
+    max-width:none!important;
+    width:100%!important;
+    margin-left:0!important;
+    margin-right:0!important;
+  }
+  .think-map-v2{height:540px!important}
+  .principle-grid{
+    grid-template-columns:repeat(7,minmax(0,1fr))!important;
+    gap:12px!important;
+  }
+  .principle-grid article,
+  .principle-grid article:nth-child(7){
+    grid-column:auto!important;
+    min-height:190px!important;
+  }
+  .thought-reader-v2{
+    grid-template-columns:minmax(300px,.62fr) minmax(0,1.38fr)!important;
+    gap:22px!important;
+  }
+}
+</style>
+
+
+<style id="v45-think-order-and-one-line">
+/* Reduce the old oversized gap below the global header. */
+.think-section-v2{
+  padding-top:22px!important;
+}
+
+/* Keep the synthesis statement on one line on desktop. */
+@media(min-width:1100px){
+  .think-synthesis > p,
+  .think-synthesis .synthesis-heading + p{
+    max-width:none!important;
+    width:100%!important;
+  }
+}
+
+/* Exact sentence: force its containing paragraph to remain on one line when screen width allows. */
+@media(min-width:1250px){
+  .think-synthesis p{
+    white-space:nowrap!important;
+  }
+}
+</style>
+
+
+<style id="v46-think-principles-human-fix">
+/* V45 accidentally applied nowrap to every paragraph in .think-synthesis,
+   which broke the seven synthesis cards. Restore normal wrapping there. */
+.think-synthesis .principle-grid p{
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  word-break:normal!important;
+}
+
+/* Keep only the final A WORKING PHILOSOPHY sentence on one line on wide desktop. */
+@media(min-width:1250px){
+  .think-closing-v2 p{
+    white-space:nowrap!important;
+    max-width:none!important;
+    width:100%!important;
+    font-size:clamp(15px,1.05vw,17px)!important;
+  }
+}
+@media(max-width:1249px){
+  .think-closing-v2 p{
+    white-space:normal!important;
+  }
+}
+
+/* Seven synthesis cards: readable typography and stable layout. */
+.principle-grid article{
+  min-width:0!important;
+  overflow:visible!important;
+}
+.principle-grid b{
+  font-size:11px!important;
+  line-height:1!important;
+}
+.principle-grid h3{
+  font-size:16px!important;
+  line-height:1.22!important;
+  margin:8px 0 7px!important;
+  overflow-wrap:anywhere!important;
+}
+.principle-grid p{
+  font-size:13.5px!important;
+  line-height:1.48!important;
+  color:#435b60!important;
+}
+
+/* THE HUMAN QUESTION now sits immediately before A WORKING PHILOSOPHY
+   and uses the same rounded-panel vocabulary as the rest of the page. */
+.human-reflection{
+  margin:30px 0 20px!important;
+  padding:22px 26px!important;
+  border:1px solid rgba(156,88,59,.20)!important;
+  border-left:4px solid #c97750!important;
+  border-radius:20px!important;
+  background:
+    linear-gradient(135deg,rgba(255,249,240,.94),rgba(231,239,234,.92))!important;
+  box-shadow:0 9px 24px rgba(58,79,72,.07)!important;
+}
+.human-reflection span{
+  display:block!important;
+  margin-bottom:8px!important;
+}
+.human-reflection p{
+  margin:0!important;
+  font-size:16px!important;
+  line-height:1.58!important;
+}
+
+/* Visually connect the final two sections without crowding them. */
+.think-closing-v2{
+  margin-top:0!important;
+}
+</style>
+
+
+<style id="v62-page-responsive-safety">
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html,body{width:100%;max-width:100%;overflow-x:hidden}
+img,svg,video,canvas{max-width:100%}
+.page,.wrap,.section,.hero,.intro{min-width:0}
+p,h1,h2,h3,h4,b,strong,span{overflow-wrap:break-word}
+@media(max-width:900px){
+  .page,.wrap{
+    width:100%!important;
+    max-width:none!important;
+    margin:0!important;
+    padding-left:18px!important;
+    padding-right:18px!important;
+  }
+  .hero{
+    grid-template-columns:1fr!important;
+    gap:18px!important;
+    padding:23px 22px!important;
+    border-radius:18px!important;
+  }
+  .section-heading,.section-head,.intro,
+  .human-city,.settlement-overview-grid,.systems-grid,
+  .principle-grid,.philosophy-source-grid,.life-grid,
+  .districts,.build-legend{
+    grid-template-columns:1fr!important;
+  }
+  .section-heading,.section-head,.intro{
+    gap:12px!important;
+    align-items:start!important;
+  }
+}
+@media(max-width:600px){
+  .page,.wrap{
+    padding-left:14px!important;
+    padding-right:14px!important;
+  }
+  .hero{padding:20px 18px!important;border-radius:16px!important}
+  h1{font-size:clamp(27px,8vw,34px)!important;line-height:1.08!important}
+  h2{font-size:clamp(21px,6.2vw,27px)!important}
+  h3{line-height:1.22!important}
+  p,.lead{line-height:1.55!important}
+}
+</style>
+
+
+<style id="v62-think-mobile">
+@media(max-width:900px){
+ .principle-grid,.philosophy-source-grid{grid-template-columns:1fr!important}
+ .think-map-v2{height:auto!important;min-height:0!important;padding:82px 14px 16px!important;overflow:hidden!important}
+ .philosophy-network{position:relative!important;inset:auto!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+ .philosophy-node{position:relative!important;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;transform:none!important;width:auto!important;min-height:0!important}
+ .philosophy-core{position:relative!important;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;transform:none!important;margin:12px auto!important}
+ .network-lines,.network-points,.philosophy-orbit{display:none!important}
+}
+@media(max-width:560px){
+ .philosophy-network{grid-template-columns:1fr!important}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">DAN</div>
+  <nav class="nav">
+    <a href="#"><span>01</span> QUESTIONS</a>
+    <a class="active" href="#"><span>02</span> SETTLEMENT</a>
+    <a href="#"><span>03</span> RESEARCH</a>
+    <a href="#"><span>04</span> THINK</a>
+    <a href="#"><span>05</span> LIFE</a>
+    <a href="#"><span>06</span> ACHIEVEMENTS</a>
+    <a href="#"><span>07</span> ARCHIVE</a>
+    <a href="#"><span>08</span> NEXT</a>
+  </nav>
+</header>
+<main class="page">
+
+
+<main>
+<section class="section think-section-v2" id="think">
+  <div class="think-head">
+    <div>
+      <p class="eyebrow mono">MISSION 04 / THINK</p>
+      <h1>What should science<br/>and technology be for?</h1>
+    </div>
+    <p class="think-intro">My research taught me how to ask whether something can work. Philosophy changed the question: when knowledge becomes technology, who does it serve, what does it change, and what responsibility begins with our ability to build?</p>
+  </div>
+
+  <div class="think-map-v2">
+    <div class="think-map-title">
+      <span class="mono">DAN’S PHILOSOPHY MAP</span>
+      <b>SCIENCE × TECHNOLOGY × SOCIETY</b>
+    </div>
+
+    <svg class="philosophy-network" viewBox="0 0 1000 470" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="lineWarm" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#d99067" stop-opacity="0.08"/>
+          <stop offset="0.5" stop-color="#efe5d5" stop-opacity="0.33"/>
+          <stop offset="1" stop-color="#86b2b5" stop-opacity="0.10"/>
+        </linearGradient>
+      </defs>
+      <g class="network-lines">
+        <line x1="500" y1="235" x2="130" y2="136"/>
+        <line x1="500" y1="235" x2="390" y2="80"/>
+        <line x1="500" y1="235" x2="710" y2="103"/>
+        <line x1="500" y1="235" x2="860" y2="230"/>
+        <line x1="500" y1="235" x2="700" y2="367"/>
+        <line x1="500" y1="235" x2="390" y2="385"/>
+        <line x1="500" y1="235" x2="130" y2="320"/>
+        <path d="M130 136 C270 38 560 29 710 103"/>
+        <path d="M710 103 C850 145 905 205 860 230"/>
+        <path d="M860 230 C846 324 796 350 700 367"/>
+        <path d="M700 367 C560 440 275 430 130 320"/>
+        <path d="M130 320 C76 250 78 190 130 136"/>
+      </g>
+      <g class="network-points">
+        <circle cx="500" cy="235" r="3"/>
+        <circle cx="245" cy="84" r="2"/><circle cx="820" cy="157" r="2"/>
+        <circle cx="793" cy="330" r="2"/><circle cx="263" cy="389" r="2"/>
+      </g>
+    </svg>
+
+    <div class="philosophy-orbit orbit-one"></div>
+    <div class="philosophy-orbit orbit-two"></div>
+    <div class="philosophy-core">
+      <small class="mono">THE CENTRAL QUESTION</small>
+      <b>What should<br/>we build —<br/>and why?</b>
+    </div>
+
+    <div class="philosophy-node" data-thought="priority" style="left:13%;top:29%">
+      <i></i><span class="mono">01 / PRIORITY</span><strong>Not everything possible is urgent.</strong>
+    </div>
+    <div class="philosophy-node" data-thought="practice" style="left:39%;top:17%">
+      <i></i><span class="mono">02 / PRACTICE</span><strong>Knowledge is made through action.</strong>
+    </div>
+    <div class="philosophy-node" data-thought="humility" style="left:71%;top:22%">
+      <i></i><span class="mono">03 / HUMILITY</span><strong>Certainty is an ideal, not reality.</strong>
+    </div>
+    <div class="philosophy-node" data-thought="coevolution" style="left:86%;top:49%">
+      <i></i><span class="mono">04 / CO-EVOLUTION</span><strong>Technology changes us too.</strong>
+    </div>
+    <div class="philosophy-node" data-thought="values" style="left:70%;top:78%">
+      <i></i><span class="mono">05 / VALUES</span><strong>Design always carries choices.</strong>
+    </div>
+    <div class="philosophy-node" data-thought="governance" style="left:39%;top:82%">
+      <i></i><span class="mono">06 / GOVERNANCE</span><strong>Complex systems need many voices.</strong>
+    </div>
+    <div class="philosophy-node" data-thought="future" style="left:13%;top:68%">
+      <i></i><span class="mono">07 / FUTURE</span><strong>The future is not simply found.</strong>
+    </div>
+
+  </div>
+
+  
+
+<div class="think-synthesis">
+    <div class="synthesis-heading">
+      <span class="mono">MY EXTENSIONS / SYNTHESIS</span>
+      <h2>Ideas I keep coming back to.</h2>
+    </div>
+    <div class="principle-grid">
+      <article><b>01</b><h3>Capability ≠ Priority</h3><p>Being able to build something does not automatically make it the most important thing to build.</p></article>
+      <article><b>02</b><h3>Knowledge is Situated</h3><p>What we know depends partly on how we observe, measure, model, intervene, and define the problem.</p></article>
+      <article><b>03</b><h3>Build with Humility</h3><p>Complex technologies should be designed with explicit awareness of uncertainty, failure, and limits of prediction.</p></article>
+      <article><b>04</b><h3>Every Technology Rewrites a System</h3><p>A new device can alter behavior, power, institutions, and relationships far beyond its intended technical function.</p></article>
+      <article><b>05</b><h3>Values Enter Through Design</h3><p>Data selection, rules, optimization targets, interfaces, and access all embed judgments about what matters.</p></article>
+      <article><b>06</b><h3>Governance is Part of Engineering</h3><p>When systems affect many people, feedback from users, communities, experts, institutions, and policymakers becomes part of responsible design.</p></article>
+      <article><b>07</b><h3>The Future is a Design Responsibility</h3><p>Technology expands what is possible; human beings still have to decide which possibilities become the world we live in.</p></article>
+    </div>
+  </div>
+
+
+  <div class="thought-reader-v2">
+    <aside>
+      <span class="mono" id="thoughtSource">FROM MY JOHN LOCKE ESSAY</span>
+      <h2 id="thoughtTitle">A debate about space is really a debate about priorities.</h2>
+      <div class="thought-keywords" id="thoughtKeywords">
+        <i>NECESSITY</i><i>RESOURCES</i><i>HUMAN NEEDS</i><i>PRIORITY</i>
+      </div>
+    </aside>
+    <article>
+      <p id="thoughtBody">Space exploration can create knowledge and new technology, but limited resources force societies to choose. If hunger, disease, and poverty remain unresolved, technological ambition cannot be justified by possibility alone. The harder question is not whether humanity can go farther, but what deserves to come first.</p>
+      <div class="thought-question"><span class="mono">A QUESTION I KEEP</span><strong id="thoughtQuestion">When resources are limited, how should a civilization decide what counts as progress?</strong></div>
+    </article>
+  </div>
+
+  <div class="philosophy-source-grid">
+    <article class="source-card">
+      <span class="mono">MY ESSAY / JOHN LOCKE</span>
+      <h3>Progress requires priorities.</h3>
+      <p>My essay on space exploration moved from “Can we?” to “Should this come first?” It made technological progress a problem of allocation, justice, and human need rather than capability alone.</p>
+    </article>
+    <article class="source-card">
+      <span class="mono">PROF. LIU PENG / PHILOSOPHY OF SCIENTIFIC PRACTICE</span>
+      <h3>Science does not merely describe the world.</h3>
+      <p>Scientific knowledge emerges through experiments, instruments, models, materials, institutions, and intervention. Practice does not simply test finished ideas; it helps make scientific objects and knowledge possible.</p>
+    </article>
+    <article class="source-card">
+      <span class="mono">PROF. LIU PENG / ROBOTS IN HUMAN SOCIETY</span>
+      <h3>Technology enters society as a relationship.</h3>
+      <p>A robot is not merely a new object placed into an old world. Its arrival changes roles, rules, responsibilities, expectations, and even the people who live with it. Integration therefore requires continuous social reconstruction.</p>
+    </article>
+  </div>
+
+  <div class="human-reflection">
+  <span>THE HUMAN QUESTION</span>
+  <p><strong>The more I learned how to build systems, the more I became interested in the people who have to live inside them.</strong> A technically optimal solution is not always a humanly desirable one. A city can maximize efficiency and still feel isolating; an algorithm can optimize performance while increasing anxiety; a robot can replace dangerous work while changing dignity, responsibility, and human relationships. Technology does not simply solve problems—it also changes the people and societies that use it.</p>
+</div>
+
+  <div class="think-closing-v2">
+    <span class="mono">A WORKING PHILOSOPHY</span>
+    <p>Science gives us new ways to understand and intervene in the world. Technology turns those possibilities into power. <b>Philosophy asks us to choose a direction.</b></p>
+  </div>
+</section>
+</main>
+
+
+
+<script>
+(function () {
+  const thoughts = {
+    priority: {
+      source: "FROM MY JOHN LOCKE ESSAY",
+      title: "A debate about space is really a debate about priorities.",
+      keywords: ["NECESSITY", "RESOURCES", "HUMAN NEEDS", "PRIORITY"],
+      body: "Space exploration can create knowledge and new technology, but limited resources force societies to choose. If hunger, disease, and poverty remain unresolved, technological ambition cannot be justified by possibility alone. The harder question is not whether humanity can go farther, but what deserves to come first.",
+      question: "When resources are limited, how should a civilization decide what counts as progress?"
+    },
+    practice: {
+      source: "FROM PROF. LIU PENG / PHILOSOPHY OF SCIENTIFIC PRACTICE",
+      title: "Science is not only a body of ideas; it is a way of acting in the world.",
+      keywords: ["EXPERIMENT", "INSTRUMENTS", "INTERVENTION", "PRACTICE"],
+      body: "Scientific knowledge is produced through experiments, instruments, materials, models and communities of practice. Practice does more than verify theories after they are proposed: it helps establish what can be observed, manipulated, measured and eventually known.",
+      question: "If our tools and practices help shape what we can know, where does observation end and construction begin?"
+    },
+    humility: {
+      source: "FROM PROF. LIU PENG / ROBOTS IN HUMAN SOCIETY",
+      title: "Certainty is the ideal; uncertainty is the condition we actually design within.",
+      keywords: ["HUMILITY", "UNCERTAINTY", "LIMITS", "OPENNESS"],
+      body: "New technologies are often deployed before all of their consequences can be known. That makes epistemic humility an engineering virtue: designers should remain sensitive to the boundaries of models, data and prediction, and be willing to revise systems as evidence changes.",
+      question: "How should we act when waiting for perfect certainty is impossible, but acting too early can create irreversible consequences?"
+    },
+    coevolution: {
+      source: "FROM PROF. LIU PENG / ROBOTS IN HUMAN SOCIETY",
+      title: "Technology does not enter society without changing the society that receives it.",
+      keywords: ["HUMAN–TECH RELATION", "SOCIAL ROLE", "CO-EVOLUTION", "RECONSTRUCTION"],
+      body: "A robot is more than a technical object occupying physical space. Once it becomes part of daily life, it changes roles, habits, expectations and relationships. Humans shape technologies, but technologies also reshape human behavior, cognition and values.",
+      question: "When we design a technology, are we also designing new ways for people to live together?"
+    },
+    values: {
+      source: "FROM PROF. LIU PENG / ROBOTS IN HUMAN SOCIETY",
+      title: "Values do not appear only after a technology is finished.",
+      keywords: ["RULES", "DATA", "BIAS", "DESIGN CHOICES"],
+      body: "Rules, datasets, interfaces and optimization targets all contain human choices. Even apparently factual data can create value-laden consequences when applied to different groups or contexts. Responsible design therefore requires attention to whose values, whose data and whose interests become encoded.",
+      question: "Can an engineering system ever be value-neutral once it begins making decisions that affect people?"
+    },
+    governance: {
+      source: "FROM PROF. LIU PENG / ROBOTS IN HUMAN SOCIETY",
+      title: "The more connected a technology becomes, the less its governance can belong to one designer.",
+      keywords: ["FEEDBACK", "PUBLICS", "EXPERTS", "CO-GOVERNANCE"],
+      body: "Technologies embedded in large networks affect users, communities, companies, institutions and governments. Their governance therefore needs multiple forms of knowledge—including feedback from ordinary users whose local experience may reveal failures that experts cannot see from the laboratory.",
+      question: "Who should have a voice when a technical system begins to shape a shared social world?"
+    },
+    future: {
+      source: "MY SYNTHESIS / EXTENSION",
+      title: "The future is not merely predicted; parts of it are designed.",
+      keywords: ["DIRECTION", "RESPONSIBILITY", "CONSTRUCTION", "FUTURE"],
+      body: "My essay asks which goals deserve priority; philosophy of scientific practice shows that knowledge grows through intervention; the philosophy of technology shows that new systems reconstruct social relationships. Together they suggest a responsibility larger than invention: choosing which possible futures should be made real.",
+      question: "If technology expands the space of possible futures, what principles should guide the futures we choose to construct?"
+    }
+  };
+
+  const nodes = Array.from(document.querySelectorAll(".philosophy-node[data-thought]"));
+  const reader = document.querySelector(".thought-reader-v2");
+  const source = document.getElementById("thoughtSource");
+  const title = document.getElementById("thoughtTitle");
+  const keywords = document.getElementById("thoughtKeywords");
+  const body = document.getElementById("thoughtBody");
+  const question = document.getElementById("thoughtQuestion");
+
+  function showThought(key, moveToReader) {
+    const data = thoughts[key];
+    if (!data) return;
+
+    nodes.forEach(node => node.classList.toggle("active", node.dataset.thought === key));
+
+    source.textContent = data.source;
+    title.textContent = data.title;
+    keywords.innerHTML = data.keywords.map(k => "<i>" + k + "</i>").join("");
+    body.textContent = data.body;
+    question.textContent = data.question;
+
+    if (moveToReader && reader) {
+      reader.scrollIntoView({ behavior: "auto", block: "start" });
+    }
+  }
+
+  nodes.forEach(node => {
+    node.addEventListener("click", function (event) {
+      event.preventDefault();
+      showThought(this.dataset.thought, true);
+    });
+  });
+})();
+</script>

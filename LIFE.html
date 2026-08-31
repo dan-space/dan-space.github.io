@@ -1,0 +1,759 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DAN — 05 Life</title>
+<style>
+:root{
+  --cream:#f2eadf; --paper:#fbf6ee; --ink:#294047; --muted:#66787b;
+  --orange:#c97750; --teal:#7fa7a8; --sage:#aebeb4; --gold:#c5a366;
+  --deep:#29454a; --line:rgba(53,76,78,.13);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:auto}
+body{margin:0;background:linear-gradient(180deg,#ede5da,#e5e2da);color:var(--ink);font-family:"Aptos","Segoe UI Variable Text","Segoe UI","Helvetica Neue",Arial,sans-serif;overflow-x:hidden}
+button,a{font:inherit}
+.topbar{position:sticky;top:0;z-index:50;height:68px;display:flex;align-items:center;justify-content:center;background:rgba(242,234,223,.97);border-bottom:1px solid rgba(91,71,58,.13);color:#554940}
+.brand{position:absolute;left:26px;font-weight:800;letter-spacing:.11em;font-size:15px}
+.nav{display:flex;gap:22px;align-items:center}
+.nav a{font-size:12px;font-weight:750;color:#6c5f55;text-decoration:none;white-space:nowrap}
+.nav a.active{color:#b65e38}
+.page{max-width:1360px;margin:auto;padding:34px 4vw 58px}
+
+.hero{position:relative;overflow:hidden;display:grid;grid-template-columns:1.04fr .96fr;gap:36px;align-items:center;padding:30px 32px;border:1px solid var(--line);border-radius:24px;background:
+ radial-gradient(circle at 90% 20%,rgba(123,166,168,.19),transparent 30%),
+ radial-gradient(circle at 12% 88%,rgba(203,119,78,.11),transparent 27%),
+ linear-gradient(135deg,#fffaf2 0%,#efece4 55%,#dbe7e5 100%);
+ box-shadow:0 13px 34px rgba(75,85,81,.08)}
+.hero:after{content:"";position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(67,92,94,.026) 1px,transparent 1px),linear-gradient(90deg,rgba(67,92,94,.026) 1px,transparent 1px);background-size:34px 34px}
+.hero-copy,.hero-orbit{position:relative;z-index:1}
+.eyebrow{margin:0 0 8px;color:#a65436;font-size:12px;font-weight:850;letter-spacing:.12em;text-transform:uppercase}
+h1{margin:0;font-family:"Aptos Display","Segoe UI Variable Display","Segoe UI",sans-serif;font-size:clamp(34px,4vw,50px);line-height:1.04;letter-spacing:-.025em;color:#263e45}
+.lead{margin:16px 0 0;max-width:700px;font-size:17px;line-height:1.6;color:#4d6267}
+.hero-note{margin-top:18px;display:inline-flex;align-items:center;gap:9px;padding:9px 13px;border-radius:999px;background:rgba(255,255,255,.62);border:1px solid rgba(68,91,91,.12);color:#7f503d;font-size:11px;font-weight:800;letter-spacing:.07em}
+.hero-note i{width:7px;height:7px;border-radius:50%;background:#c97750;box-shadow:0 0 0 5px rgba(201,119,80,.10)}
+
+.hero-orbit{height:238px;display:grid;place-items:center}
+.life-core{position:absolute;width:116px;height:116px;border-radius:50%;display:grid;place-items:center;text-align:center;background:radial-gradient(circle at 35% 30%,#fffdf7,#f0e4d3 70%);border:1px solid rgba(255,255,255,.9);box-shadow:0 0 0 12px rgba(255,255,255,.18),0 15px 32px rgba(68,82,79,.13)}
+.life-core small{display:block;color:#a55c3f;font-size:8px;font-weight:850;letter-spacing:.13em}.life-core b{display:block;margin-top:4px;color:#2e474d;font-size:19px;line-height:1.05}
+.ring{position:absolute;border:1px solid rgba(74,103,105,.16);border-radius:50%}.ring.r1{width:240px;height:150px;transform:rotate(-13deg)}.ring.r2{width:300px;height:190px;transform:rotate(33deg);border-style:dashed}
+.dot{position:absolute;width:11px;height:11px;border-radius:50%;background:#c97750;box-shadow:0 0 0 6px rgba(201,119,80,.10)}
+.d1{left:15%;top:26%}.d2{right:12%;top:34%;background:#7da6a8}.d3{right:22%;bottom:15%;background:#c5a366}.d4{left:24%;bottom:13%;background:#98b2a6}
+
+.section-title{display:flex;justify-content:space-between;gap:24px;align-items:end;margin:28px 2px 14px}.section-title h2{margin:0;font-size:25px;color:#2d444a}.section-title p{margin:0;max-width:560px;font-size:15px;line-height:1.5;color:#66777a}
+
+.life-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.life-card{position:relative;min-height:188px;padding:17px;border:1px solid rgba(61,86,87,.13);border-radius:17px;background:rgba(255,250,243,.78);box-shadow:0 7px 18px rgba(78,85,80,.045);cursor:pointer;text-align:left;color:inherit;overflow:hidden}
+.life-card:before{content:"";position:absolute;width:90px;height:90px;border-radius:50%;right:-28px;top:-28px;background:var(--tone,rgba(201,119,80,.11))}
+.life-card:hover,.life-card.active{border-color:rgba(179,99,62,.30);background:#fffaf2}.life-card.active{box-shadow:0 11px 26px rgba(93,79,67,.09),0 0 0 3px rgba(201,119,80,.07)}
+.num{font-size:10px;font-weight:850;letter-spacing:.11em;color:#a45739}.life-card h3{margin:30px 0 7px;font-size:20px;line-height:1.08;color:#2e464c}.life-card p{margin:0;font-size:13.5px;line-height:1.42;color:#65777a}.tag{position:absolute;left:17px;bottom:15px;font-size:9px;font-weight:850;letter-spacing:.11em;color:#789194}
+
+.story{margin-top:10px;display:grid;grid-template-columns:.82fr 1.18fr;gap:10px}
+.story-side,.story-main{border:1px solid rgba(65,87,88,.13);border-radius:19px;background:rgba(255,250,243,.83);padding:22px 24px}
+.story-side{background:linear-gradient(135deg,#dfe8e5,#eee8df)}
+.story-side span{font-size:10px;font-weight:850;letter-spacing:.11em;color:#a45538}.story-side h3{margin:8px 0 10px;font-size:24px;line-height:1.12;color:#2a4248}.story-side p{margin:0;font-size:14.5px;line-height:1.5;color:#566a6e}
+.story-main .story-kicker{font-size:10px;font-weight:850;letter-spacing:.11em;color:#a45538}.story-main h2{margin:7px 0 11px;font-size:24px;line-height:1.15;color:#293f46}.story-main p{margin:0;font-size:16px;line-height:1.56;color:#485e63}.lesson{margin-top:14px;padding-top:12px;border-top:1px solid rgba(65,87,88,.11)}.lesson small{display:block;font-size:9px;font-weight:850;letter-spacing:.12em;color:#849597}.lesson strong{display:block;margin-top:4px;font-size:16px;line-height:1.35;color:#8e4d35}
+
+.footer-line{margin-top:20px;padding:20px 2px 2px;border-top:1px solid rgba(66,88,89,.12);display:flex;justify-content:space-between;gap:22px;align-items:center}.footer-line p{margin:0;font-size:18px;font-weight:650;color:#30484e}.footer-line span{font-size:11px;font-weight:850;letter-spacing:.12em;color:#a65a3d}
+
+@media(max-width:1000px){.nav{gap:10px}.hero{grid-template-columns:1fr}.hero-orbit{height:210px}.life-grid{grid-template-columns:repeat(2,1fr)}.story{grid-template-columns:1fr}}
+@media(max-width:650px){.brand{display:none}.topbar{overflow:auto;justify-content:flex-start;padding:0 16px}.nav{min-width:max-content}.page{padding:22px 16px 42px}.hero{padding:22px}.life-grid{grid-template-columns:1fr}.section-title{align-items:start;flex-direction:column}.hero-orbit{display:none}}
+</style>
+
+<style>
+/* V2 — return the personal LIFE page to the Space Settlement narrative */
+.settlement-return{
+  margin-top:20px;
+  padding:22px 24px;
+  display:grid;
+  grid-template-columns:.55fr 1.45fr;
+  gap:16px 28px;
+  align-items:center;
+  border:1px solid rgba(61,86,87,.13);
+  border-radius:20px;
+  background:
+    radial-gradient(circle at 90% 20%,rgba(126,167,169,.16),transparent 28%),
+    linear-gradient(135deg,rgba(255,250,243,.91),rgba(225,234,231,.88));
+  box-shadow:0 8px 22px rgba(75,85,80,.055);
+}
+.return-kicker{
+  display:block;
+  font-size:10px;
+  font-weight:850;
+  letter-spacing:.12em;
+  color:#a45538;
+}
+.settlement-return h2{
+  margin:5px 0 0;
+  font-size:25px;
+  color:#2b4349;
+}
+.return-values{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+.return-values span{
+  padding:6px 9px;
+  border-radius:999px;
+  border:1px solid rgba(64,89,90,.12);
+  background:rgba(255,255,255,.52);
+  color:#60787b;
+  font-size:9px;
+  font-weight:850;
+  letter-spacing:.09em;
+}
+.settlement-return p{
+  grid-column:1/-1;
+  margin:0;
+  padding-top:13px;
+  border-top:1px solid rgba(64,89,90,.10);
+  font-size:18px;
+  line-height:1.45;
+  color:#40575c;
+}
+.settlement-return strong{
+  color:#9b5035;
+}
+@media(max-width:700px){
+  .settlement-return{grid-template-columns:1fr}
+  .settlement-return p{grid-column:auto}
+}
+</style>
+
+
+<style>
+/* V3 — stable scrolling + more consistent typography */
+
+/* Prevent the sticky header from covering content when cards jump to the story. */
+#lifeStory, .story, .settlement-return {
+  scroll-margin-top: 86px !important;
+}
+
+/* Keep only the top mission bar sticky; no content text should float over another block. */
+.hero, .section-title, .life-grid, .life-card, .story,
+.story-side, .story-main, .settlement-return, .footer-line {
+  position: relative;
+  z-index: 1;
+}
+.topbar { z-index: 100 !important; }
+
+/* More consistent text scale across the page. */
+h1{
+  font-size:36px!important;
+  line-height:1.12!important;
+}
+.lead{
+  font-size:16.5px!important;
+  line-height:1.58!important;
+}
+.section-title h2{
+  font-size:23px!important;
+  line-height:1.2!important;
+}
+.section-title p{
+  font-size:15.5px!important;
+  line-height:1.5!important;
+}
+.life-card{
+  min-height:200px!important;
+  padding:18px!important;
+}
+.life-card h3{
+  margin:27px 0 8px!important;
+  font-size:19px!important;
+  line-height:1.15!important;
+}
+.life-card p{
+  font-size:14.5px!important;
+  line-height:1.45!important;
+  padding-bottom:25px!important;
+}
+.num{
+  font-size:10.5px!important;
+  line-height:1.25!important;
+}
+.tag{
+  left:18px!important;
+  right:15px!important;
+  bottom:15px!important;
+  font-size:9.5px!important;
+  line-height:1.2!important;
+}
+.story-side h3,
+.story-main h2,
+.settlement-return h2{
+  font-size:22px!important;
+  line-height:1.2!important;
+}
+.story-side p{
+  font-size:15px!important;
+  line-height:1.5!important;
+}
+.story-main p{
+  font-size:15.5px!important;
+  line-height:1.58!important;
+}
+.lesson strong{
+  font-size:15.5px!important;
+  line-height:1.4!important;
+}
+.settlement-return p{
+  font-size:16.5px!important;
+  line-height:1.5!important;
+}
+.footer-line p{
+  font-size:16.5px!important;
+  line-height:1.4!important;
+}
+
+/* Avoid accidental overlap caused by wrapping in narrow widths. */
+.life-card, .story-side, .story-main, .settlement-return {
+  overflow:hidden!important;
+}
+.life-card h3,.life-card p,.tag,.num,
+.story-side h3,.story-side p,.story-main h2,.story-main p,
+.settlement-return p {
+  overflow-wrap:break-word!important;
+  word-break:normal!important;
+}
+.footer-line{
+  flex-wrap:wrap!important;
+}
+
+/* Keep the desktop nav readable without overlapping the brand. */
+@media (max-width:1180px){
+  .brand{display:none!important}
+  .topbar{justify-content:center!important;padding:0 12px!important}
+  .nav{gap:14px!important}
+}
+@media (max-width:900px){
+  h1{font-size:32px!important}
+  .topbar{
+    justify-content:flex-start!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+  }
+  .nav{min-width:max-content!important}
+}
+@media (max-width:650px){
+  h1{font-size:29px!important}
+  .lead{font-size:16px!important}
+  .section-title h2,.story-side h3,.story-main h2,.settlement-return h2{
+    font-size:21px!important;
+  }
+}
+</style>
+
+
+<style>
+/* V5 — V3 structure preserved; only subtle visual enrichment */
+
+/* Quiet settlement-life diagram in the page background. */
+.page{
+  position:relative;
+  isolation:isolate;
+}
+.page:before{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  left:1.8%;
+  right:1.8%;
+  top:335px;
+  height:650px;
+  pointer-events:none;
+  opacity:.38;
+  background:
+    radial-gradient(circle at 8% 18%,rgba(201,119,80,.08) 0 4px,transparent 5px),
+    radial-gradient(circle at 92% 28%,rgba(126,167,169,.10) 0 5px,transparent 6px),
+    radial-gradient(circle at 24% 78%,rgba(173,190,180,.10) 0 4px,transparent 5px),
+    radial-gradient(circle at 77% 84%,rgba(197,163,102,.09) 0 5px,transparent 6px),
+    linear-gradient(18deg,transparent 49.88%,rgba(76,104,105,.045) 50%,transparent 50.12%),
+    linear-gradient(-16deg,transparent 49.88%,rgba(76,104,105,.035) 50%,transparent 50.12%);
+}
+
+/* Keep V3 grid, but give each card a distinct quiet identity. */
+.life-card{
+  --accent:#c97750;
+  --wash:rgba(201,119,80,.08);
+  background:
+    radial-gradient(circle at 91% 12%,var(--wash),transparent 34%),
+    rgba(255,250,243,.80)!important;
+}
+.life-card:nth-child(2){--accent:#739b9d;--wash:rgba(115,155,157,.11)}
+.life-card:nth-child(3){--accent:#b89052;--wash:rgba(184,144,82,.10)}
+.life-card:nth-child(4){--accent:#8da99b;--wash:rgba(141,169,155,.11)}
+.life-card:nth-child(5){--accent:#bb7456;--wash:rgba(187,116,86,.09)}
+.life-card:nth-child(6){--accent:#658f94;--wash:rgba(101,143,148,.11)}
+.life-card:nth-child(7){--accent:#ae8951;--wash:rgba(174,137,81,.10)}
+.life-card:nth-child(8){--accent:#789e90;--wash:rgba(120,158,144,.11)}
+
+.life-card:after{
+  position:absolute;
+  right:16px;
+  top:16px;
+  width:31px;
+  height:31px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  border:1px solid color-mix(in srgb,var(--accent) 28%,transparent);
+  background:rgba(255,255,255,.44);
+  color:var(--accent);
+  font-size:15px;
+  font-weight:700;
+  line-height:1;
+}
+.life-card:nth-child(1):after{content:"↗"}   /* compete / motion */
+.life-card:nth-child(2):after{content:"◎"}   /* lead / center */
+.life-card:nth-child(3):after{content:"◖"}   /* communicate / voice */
+.life-card:nth-child(4):after{content:"♪"}   /* perform */
+.life-card:nth-child(5):after{content:"＋"}  /* serve */
+.life-card:nth-child(6):after{content:"⌘"}   /* collaborate */
+.life-card:nth-child(7):after{content:"△"}   /* challenge */
+.life-card:nth-child(8):after{content:"✦"}   /* explore */
+
+.life-card .num{
+  color:var(--accent)!important;
+}
+.life-card.active{
+  border-color:color-mix(in srgb,var(--accent) 38%,transparent)!important;
+  box-shadow:0 10px 25px rgba(82,82,72,.075),0 0 0 3px var(--wash)!important;
+}
+.life-card.active:before{
+  background:var(--wash)!important;
+}
+
+/* A thin 'orbit' detail around the story without changing its layout. */
+.story{
+  position:relative;
+}
+.story:before{
+  content:"";
+  position:absolute;
+  pointer-events:none;
+  z-index:0;
+  width:150px;
+  height:150px;
+  right:20px;
+  top:18px;
+  border:1px dashed rgba(102,143,146,.12);
+  border-radius:50%;
+}
+.story-side,.story-main{position:relative;z-index:1}
+
+/* Make the settlement return feel like a destination, not another text card. */
+.settlement-return{
+  position:relative;
+  overflow:hidden!important;
+}
+.settlement-return:after{
+  content:"";
+  position:absolute;
+  width:190px;
+  height:190px;
+  right:-62px;
+  bottom:-104px;
+  border:1px solid rgba(103,145,147,.15);
+  border-radius:50%;
+  box-shadow:
+    0 0 0 20px rgba(103,145,147,.035),
+    0 0 0 43px rgba(201,119,80,.025);
+  pointer-events:none;
+}
+
+/* No motion effects. */
+.life-card,.story,.settlement-return{
+  transition:none!important;
+  animation:none!important;
+}
+</style>
+
+
+<style>
+/* V6 — verified activities added without turning LIFE into a résumé */
+.evidence-chip{
+  display:inline-flex!important;
+  align-self:flex-start;
+  position:static!important;
+  margin:-1px 0 7px!important;
+  padding:4px 7px!important;
+  border-radius:999px;
+  border:1px solid rgba(70,94,94,.10);
+  background:rgba(255,255,255,.48);
+  color:#8c5a45!important;
+  font-size:8.5px!important;
+  line-height:1!important;
+  font-weight:850!important;
+  letter-spacing:.075em!important;
+  white-space:nowrap;
+}
+.life-card p{
+  padding-bottom:27px!important;
+}
+.story-side p{
+  font-size:14px!important;
+  line-height:1.48!important;
+}
+@media(max-width:650px){
+  .evidence-chip{white-space:normal}
+}
+</style>
+
+<style>
+/* unified-shell compatibility */
+html{scroll-behavior:auto!important}
+body{margin-top:0!important}
+header.topbar, header.top-nav, .topbar, .top-nav {display:none!important}
+</style><style>
+html{scroll-behavior:auto!important}
+header.topbar,header.top-nav,.topbar,.top-nav{display:none!important}
+</style>
+<style id="v22-responsive">
+/* V22 responsive safeguards — desktop appearance preserved */
+html{box-sizing:border-box;-webkit-text-size-adjust:100%}
+*,*:before,*:after{box-sizing:inherit}
+html,body{max-width:100%;overflow-x:hidden}
+img,video,svg,canvas{max-width:100%;height:auto}
+table{max-width:100%}
+pre,code{white-space:pre-wrap;overflow-wrap:anywhere}
+@media (max-width:1100px){
+  main,.page,.wrap,.shell,.content,.container{
+    width:min(100% - 32px,1200px)!important;
+    max-width:100%!important;
+    margin-left:auto!important;margin-right:auto!important;
+  }
+  h1{font-size:clamp(30px,4.5vw,42px)!important}
+  h2{font-size:clamp(23px,3.2vw,31px)!important}
+}
+@media (max-width:760px){
+  main,.page,.wrap,.shell,.content,.container{
+    width:calc(100% - 24px)!important;
+  }
+  body{font-size:16px!important}
+  h1{font-size:clamp(27px,8vw,36px)!important;line-height:1.08!important}
+  h2{font-size:clamp(21px,6vw,28px)!important}
+  p{overflow-wrap:anywhere}
+  .grid,.cards,.card-grid,.module-grid,.district-grid,.archive-grid,
+  .research-grid,.life-grid,.achievement-grid,.philosophy-source-grid{
+    grid-template-columns:1fr!important;
+  }
+}
+</style>
+
+<style id="v25-mission-label">
+p.eyebrow,
+p.eyebrow.mono{
+  font-family:"Aptos","Segoe UI Variable Text","Segoe UI","Helvetica Neue",Arial,sans-serif!important;
+  font-size:13px!important;
+  line-height:1.25!important;
+  font-weight:850!important;
+  letter-spacing:.12em!important;
+  text-transform:uppercase!important;
+}
+</style>
+
+<style id="v35-humanity-life">
+.life-human-note{max-width:920px;margin:0 auto 34px;padding:0 28px;text-align:center}.life-human-note p{margin:0;font-size:17px;line-height:1.7;color:inherit;opacity:.84;font-style:italic}
+</style>
+
+<style id="v43-life-wide-layout">
+/* Expand LIFE from a narrow centered column into a full-width editorial grid. */
+@media(min-width:1100px){
+  .life-section,
+  .life-human-note,
+  .life-grid,
+  .life-wrap,
+  .life-shell,
+  .section-heading{
+    width:auto!important;
+    max-width:none!important;
+    margin-left:4.5vw!important;
+    margin-right:4.5vw!important;
+  }
+  .life-human-note{
+    max-width:none!important;
+    padding-left:8vw!important;
+    padding-right:8vw!important;
+  }
+  .life-grid{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:20px!important;
+  }
+  .life-card,
+  .module,
+  .life-grid > article,
+  .life-grid > div{
+    min-width:0!important;
+  }
+}
+</style>
+
+
+<style id="v44-life-fullwidth">
+@media(min-width:1100px){
+  .page{
+    max-width:none!important;
+    width:100%!important;
+    margin:0!important;
+    padding:30px 2.8vw 64px!important;
+    box-sizing:border-box!important;
+  }
+  .hero,.section-title,.life-human-note,.life-grid,.story{
+    max-width:none!important;
+    width:100%!important;
+    margin-left:0!important;
+    margin-right:0!important;
+  }
+  .hero{
+    grid-template-columns:minmax(0,1.32fr) minmax(360px,.68fr)!important;
+    min-height:285px!important;
+    padding:34px 3vw!important;
+  }
+  .life-human-note{
+    padding-left:10vw!important;
+    padding-right:10vw!important;
+  }
+  .life-grid{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:16px!important;
+  }
+  .life-card{
+    min-height:250px!important;
+    padding:22px!important;
+  }
+  .story{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:16px!important;
+  }
+}
+</style>
+
+
+<style id="v53-life-skill-gain">
+.life-skill-bridge{
+  width:100%;
+  box-sizing:border-box;
+  margin:18px 0 20px;
+  padding:17px 22px;
+  border:1px solid rgba(53,76,78,.13);
+  border-left:4px solid #c97750;
+  border-radius:17px;
+  background:linear-gradient(135deg,rgba(251,246,238,.92),rgba(231,238,233,.92));
+}
+.life-skill-bridge span,
+.human-note-label{
+  display:block;
+  margin-bottom:6px;
+  color:#b56543;
+  font-size:10px;
+  line-height:1;
+  font-weight:850;
+  letter-spacing:.13em;
+}
+.life-skill-bridge p{
+  margin:0;
+  max-width:none;
+  color:#435b60;
+  font-size:15.5px;
+  line-height:1.5;
+}
+.life-skill-bridge strong{color:#294047}
+
+.skill-gain{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:7px;
+  margin:8px 0 10px;
+}
+.skill-gain b{
+  display:inline-flex;
+  align-items:center;
+  min-height:20px;
+  padding:3px 7px;
+  border-radius:999px;
+  background:rgba(201,119,80,.12);
+  color:#a85f40;
+  font-size:8px;
+  line-height:1;
+  letter-spacing:.11em;
+  font-weight:900;
+}
+.skill-gain span{
+  color:#506d70;
+  font-size:11px;
+  line-height:1.25;
+  font-weight:800;
+  letter-spacing:.025em;
+}
+.life-human-note .human-note-label{
+  margin-bottom:8px;
+}
+
+@media(min-width:1100px){
+  .life-skill-bridge{
+    margin:16px 0 20px!important;
+    padding:16px 22px!important;
+  }
+  .life-skill-bridge p{
+    font-size:16px!important;
+  }
+  .skill-gain span{
+    font-size:11.5px!important;
+  }
+}
+</style>
+
+
+<style id="v62-page-responsive-safety">
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html,body{width:100%;max-width:100%;overflow-x:hidden}
+img,svg,video,canvas{max-width:100%}
+.page,.wrap,.section,.hero,.intro{min-width:0}
+p,h1,h2,h3,h4,b,strong,span{overflow-wrap:break-word}
+@media(max-width:900px){
+  .page,.wrap{
+    width:100%!important;
+    max-width:none!important;
+    margin:0!important;
+    padding-left:18px!important;
+    padding-right:18px!important;
+  }
+  .hero{
+    grid-template-columns:1fr!important;
+    gap:18px!important;
+    padding:23px 22px!important;
+    border-radius:18px!important;
+  }
+  .section-heading,.section-head,.intro,
+  .human-city,.settlement-overview-grid,.systems-grid,
+  .principle-grid,.philosophy-source-grid,.life-grid,
+  .districts,.build-legend{
+    grid-template-columns:1fr!important;
+  }
+  .section-heading,.section-head,.intro{
+    gap:12px!important;
+    align-items:start!important;
+  }
+}
+@media(max-width:600px){
+  .page,.wrap{
+    padding-left:14px!important;
+    padding-right:14px!important;
+  }
+  .hero{padding:20px 18px!important;border-radius:16px!important}
+  h1{font-size:clamp(27px,8vw,34px)!important;line-height:1.08!important}
+  h2{font-size:clamp(21px,6.2vw,27px)!important}
+  h3{line-height:1.22!important}
+  p,.lead{line-height:1.55!important}
+}
+</style>
+
+
+<style id="v62-life-mobile">
+@media(max-width:900px){
+ .life-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ .story,.settlement-return{grid-template-columns:1fr!important}
+ .hero-orbit{min-height:180px!important}
+}
+@media(max-width:600px){
+ .life-grid{grid-template-columns:1fr!important}
+ .life-card{min-width:0!important}
+ .life-skill-bridge{padding:15px 16px!important}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><a href="index.html" style="color:inherit;text-decoration:none">DAN\'S SPACE SETTLEMENT</a></div>
+  <nav class="nav">
+    <a href="QUESTIONS.html">01 QUESTIONS</a><a href="SETTLEMENT.html">02 SETTLEMENT</a><a href="RESEARCH.html">03 RESEARCH</a><a href="THINK.html">04 THINK</a><a href="LIFE.html" class="active">05 LIFE</a><a href="ACHIEVEMENTS.html">06 ACHIEVEMENTS</a><a href="ARCHIVE.html">07 ARCHIVE</a><a href="NEXT.html">08 NEXT</a>
+  </nav>
+</header>
+<main class="page">
+  <section class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">MISSION 05 / LIFE</p>
+      <h1>A settlement needs more than systems. It needs a life worth living.</h1>
+      <p class="lead">I began by designing habitats, energy networks, transportation, and water systems. But a city is not alive because its systems work. It becomes alive when people compete, lead, communicate, perform, serve, collaborate, challenge themselves, and explore. So before imagining life in a space settlement, I looked at the life I already know.</p>
+      <div class="hero-note"><i></i> LIFE IN A SETTLEMENT / WHAT SHOULD WE CARRY WITH US?</div>
+    </div>
+    <div class="hero-orbit" aria-hidden="true">
+      <div class="ring r1"></div><div class="ring r2"></div>
+      <div class="dot d1"></div><div class="dot d2"></div><div class="dot d3"></div><div class="dot d4"></div>
+      <div class="life-core"><div><small>BEYOND THE DESK</small><b>DAN<br>IN MOTION</b></div></div>
+    </div>
+  </section>
+<div class="life-skill-bridge">
+  <span>WHAT I BRING INTO THE CITY</span>
+  <p>A settlement grows through its systems. I grow through the experiences that teach me how to live, work, compete, and build with others. <strong>Each experience adds something I would bring into the city.</strong></p>
+</div>
+
+
+  <div class="section-title">
+    <h2>EIGHT THINGS A FUTURE CITY SHOULD PRESERVE</h2>
+    <p>I found the answer in ordinary human experiences: challenge, responsibility, expression, art, service, collaboration, growth, and exploration.</p>
+  </div>
+
+  
+<div class="life-human-note"><span class="human-note-label">BEYOND THE SKILL POINTS</span>
+  <p>Some of the systems I value most cannot be engineered: trust, friendship, humor, and the feeling of being part of a team. Badminton taught me to compete; collaborative projects taught me something harder—how to depend on other people.</p>
+</div>
+<section class="life-grid" id="lifeGrid">
+    <button class="life-card active" data-life="badminton" style="--tone:rgba(201,119,80,.13)"><span class="num">01 / BADMINTON</span><h3>COMPETE</h3><span class="evidence-chip">MEN’S SINGLES ×2 · 2025</span><p>Badminton, athletics, competition, and the discipline of returning for the next point.</p><span class="tag">TEAM / TRAINING / RESILIENCE</span></button>
+    <button class="life-card" data-life="leadership" style="--tone:rgba(126,167,169,.15)"><span class="num">02 / STUDENT LIFE</span><h3>LEAD</h3><span class="evidence-chip">CLASS REP · TA · STUDENT COUNCIL</span><p>Class responsibility, teaching assistance, and stepping forward to represent a student community.</p><span class="tag">RESPONSIBILITY / INITIATIVE</span></button>
+    <button class="life-card" data-life="tedx" style="--tone:rgba(197,163,102,.16)"><span class="num">03 / TEDx & HOSTING</span><h3>COMMUNICATE</h3><span class="evidence-chip">TEDx · MC · ADMISSIONS</span><p>TEDx, hosting, and admissions work taught me to turn ideas into something people can enter.</p><span class="tag">VOICE / AUDIENCE / LISTENING</span></button>
+    <button class="life-card" data-life="chorus" style="--tone:rgba(154,180,168,.16)"><span class="num">04 / CHORUS</span><h3>PERFORM</h3><span class="evidence-chip">CHORAL FESTIVAL</span><p>One voice matters, but only when it can find its place inside a larger sound.</p><span class="tag">RHYTHM / PRESENCE / ENSEMBLE</span></button>
+    <button class="life-card" data-life="volunteer" style="--tone:rgba(201,119,80,.10)"><span class="num">05 / VOLUNTEERING</span><h3>SERVE</h3><span class="evidence-chip">6 SERVICE SETTINGS</span><p>From charity events and museums to clinics and admissions, service put usefulness before recognition.</p><span class="tag">SERVICE / COMMUNITY / EMPATHY</span></button>
+    <button class="life-card" data-life="settlement" style="--tone:rgba(126,167,169,.14)"><span class="num">06 / SPACE SETTLEMENT TEAM</span><h3>COLLABORATE</h3><span class="evidence-chip">TEAM DESIGN · 3D MODELING</span><p>Design became real when different people had to make one complicated system work together.</p><span class="tag">TEAMWORK / DESIGN / SYSTEMS</span></button>
+    <button class="life-card" data-life="challenge" style="--tone:rgba(197,163,102,.14)"><span class="num">07 / CHALLENGES</span><h3>TEST MYSELF</h3><span class="evidence-chip">ESSAY · COMPETITION</span><p>Competitions and difficult problems gave me a reason to enjoy not knowing the answer yet.</p><span class="tag">CURIOSITY / PRESSURE / GROWTH</span></button>
+    <button class="life-card" data-life="summer" style="--tone:rgba(154,180,168,.15)"><span class="num">08 / NEW ENVIRONMENTS</span><h3>EXPLORE</h3><span class="evidence-chip">CS · AI · FIELDWORK</span><p>Computer science, AI outreach, research training, and fieldwork pushed me beyond familiar routines.</p><span class="tag">OPENNESS / INDEPENDENCE / DISCOVERY</span></button>
+  </section>
+
+  <section class="story" id="lifeStory">
+    <aside class="story-side">
+      <span id="storyLabel">01 / BADMINTON</span>
+      <h3 id="storyTitle">Learning to respond before I have time to hesitate.</h3>
+      <p id="storyMeta">School team · weekly training · years of repetition</p>
+    </aside>
+    <article class="story-main">
+      <span class="story-kicker">A MOMENT THAT STAYED WITH ME</span>
+      <h2 id="storyHeadline">At first, I thought badminton was about speed.</h2>
+      <p id="storyBody">What kept me training was something more difficult: the gap between seeing what was coming and being ready to respond. A rally does not wait for a perfect plan. I learned to read patterns, commit quickly, and reset after mistakes instead of carrying them into the next point.</p>
+      <div class="lesson"><small>WHAT IT TAUGHT ME</small><strong id="storyLesson">Preparation matters. So does the ability to begin again immediately.</strong></div>
+    </article>
+  </section>
+
+  <section class="settlement-return">
+    <div>
+      <span class="return-kicker">WHAT SHOULD A SETTLEMENT PRESERVE?</span>
+      <h2>Not just survival.</h2>
+    </div>
+    <div class="return-values">
+      <span>CHALLENGE</span><span>EXPRESSION</span><span>RESPONSIBILITY</span><span>COMMUNITY</span><span>CREATIVITY</span><span>CURIOSITY</span>
+    </div>
+    <p>A space settlement should not merely keep people alive. <strong>It should give them reasons to live fully.</strong></p>
+  </section>
+  <div class="footer-line"><p>I do not want a life organized around one kind of excellence.</p><span>05 / LIFE → PARTICIPATE FULLY</span></div>
+</main>
+<script>
+const lifeData={
+ badminton:{label:"01 / BADMINTON + ATHLETICS",title:"Learning to respond before I have time to hesitate.",meta:"School athletics · Nanjing High School Badminton Tournament · Men’s Singles Champion × 2 at club competitions (2025)",headline:"At first, I thought badminton was about speed.",body:"Training and competition taught me something more difficult: the gap between seeing what is coming and being ready to respond. In 2025, I won men’s singles at two club competitions. I also took part in the Nanjing High School Badminton Tournament and the school athletics meet. A rally does not wait for a perfect plan; I learned to read patterns, commit quickly, and reset after mistakes.",lesson:"Preparation matters. So does the ability to begin again immediately."},
+ leadership:{label:"02 / LEADERSHIP + RESPONSIBILITY",title:"Responsibility is not the same as visibility.",meta:"Chemistry Class Representative & Teaching Assistant · Candidate for President, International Division Student Council",headline:"I learned that leadership often begins before anyone notices it.",body:"Serving as Chemistry Class Representative and Teaching Assistant from September 2025 to June 2026 made responsibility practical: listening, explaining, responding, and helping classmates when the answer was not always immediate. Running for President of the International Division Student Council pushed me to think about representing a community rather than simply expressing my own ideas.",lesson:"Leadership is less about having the loudest voice than creating conditions in which other people can contribute."},
+ tedx:{label:"03 / TEDx + HOSTING",title:"Ideas change when they meet an audience.",meta:"Speaker, TEDx JLHS Youth (2026) · MC, Talent Show & Gala Show (2025) · Student Admissions Volunteer (2025, 2026)",headline:"A good idea is not automatically a communicable idea.",body:"Speaking at TEDx JLHS Youth, serving as an MC, and helping with student admissions put me in very different conversations. Each required me to read an audience, adjust quickly, and make information feel clear and welcoming without losing its substance.",lesson:"Expression is not transmission. It is a relationship between an idea and the people receiving it."},
+ chorus:{label:"04 / CHORUS + PERFORMANCE",title:"Sometimes the goal is not to stand out.",meta:"Jinling High School Choral Festival · First Prize, 2nd Place Overall (2025)",headline:"Chorus taught me a different definition of contribution.",body:"In an ensemble, individual strength is useful only when it fits the whole. Timing, listening, restraint, and trust matter as much as volume. Performing with the group—and earning First Prize, 2nd Place Overall—made the paradox tangible: I became more aware of my own voice by learning when not to dominate the sound.",lesson:"Collaboration can require precision, but also humility."},
+ volunteer:{label:"05 / SERVICE + COMMUNITY",title:"Attention becomes different when the task is not about me.",meta:"Pneumoconiosis Charity Marathon · Book Donation · TCM Museum · Academic Symposium · Runzhou Renchun Clinic · Admissions Volunteering",headline:"Volunteering changed the scale of what I considered useful.",body:"My service experiences ranged from a pneumoconiosis charity marathon and a graduate book donation program to the Museum of Traditional Chinese Medicine, an academic symposium, Runzhou Renchun Clinic, and two years of student admissions volunteering. The settings were different, but the question was similar: what is actually useful here?",lesson:"Contribution begins with understanding what is needed, not with deciding what I want to provide."},
+ settlement:{label:"06 / SPACE SETTLEMENT TEAM",title:"A complicated idea becomes possible only when people connect their parts.",meta:"International Space Settlement Design Competition · team design · 3D modeling",headline:"The settlement was never one person's object.",body:"Its habitats, transport, resources, infrastructure, models, and social systems had to coexist. Working in a team taught me to defend an idea when necessary, revise it when someone else had a better constraint, and think about interfaces between parts rather than only the part I owned.",lesson:"Systems thinking is also a form of teamwork: every part has consequences for the rest."},
+ challenge:{label:"07 / CHALLENGES",title:"I enjoy the moment when I do not yet know how to solve something.",meta:"John Locke Institute Essay Competition · academic competitions · unfamiliar problems",headline:"A challenge gives uncertainty a deadline.",body:"Whether I was working through a difficult scientific problem or entering the John Locke Institute Essay Competition, the first approach was not always enough. I learned to stay with uncertainty longer, try another representation, and separate the pressure of evaluation from the pleasure of figuring something out.",lesson:"Not knowing is not an interruption to learning. It is often where learning actually begins."},
+ summer:{label:"08 / NEW ENVIRONMENTS",title:"A new environment reveals the habits I had stopped noticing.",meta:"Fly Beyond Program · Nanxiaoqiao Research Program · Yingcai Talent Program (Computer Science) · AI Science Outreach · Agricultural Fieldwork",headline:"Leaving a familiar classroom changed how I saw myself as a learner.",body:"Research training in integrated circuits and advanced manufacturing, the Nanxiaoqiao Research Program, the Yingcai Talent Program’s Computer Science track, Nanjing’s AI science outreach program, and agricultural fieldwork all placed me in settings with different people, tools, and expectations. Each asked me to become comfortable being a beginner again.",lesson:"Curiosity grows when I am willing to enter a new environment before I know exactly how it works."}
+}
+const cards=[...document.querySelectorAll('.life-card')];
+const story=document.getElementById('lifeStory');
+function showLife(key){const d=lifeData[key];if(!d)return;cards.forEach(c=>c.classList.toggle('active',c.dataset.life===key));document.getElementById('storyLabel').textContent=d.label;document.getElementById('storyTitle').textContent=d.title;document.getElementById('storyMeta').textContent=d.meta;document.getElementById('storyHeadline').textContent=d.headline;document.getElementById('storyBody').textContent=d.body;document.getElementById('storyLesson').textContent=d.lesson;story.scrollIntoView({behavior:'auto',block:'start'});}
+cards.forEach(c=>c.addEventListener('click',()=>showLife(c.dataset.life)));
+</script>
+</body>
+</html>
