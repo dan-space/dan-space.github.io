@@ -1,0 +1,5 @@
+V109.4
+Research page header unified with the main website.
+- Same header/navigation structure as Home/Settlement/Next.
+- Research content and interactions retained.
+- No PDFs added.

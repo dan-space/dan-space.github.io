@@ -1,0 +1,3 @@
+V109.7 — Restore Research map
+Restored the exact space-city-clean.png background from V107.6.
+All four HTML pages remain identical to V109.6, preserving the unified header, two-line Next heading and existing Research interactions.

@@ -1,0 +1,3 @@
+V109.8 — Restore Research location lines
+Fixed script startup when optional editing controls are absent from the unified header.
+All nine leader lines now initialize; destination coordinates match V107.6 exactly.

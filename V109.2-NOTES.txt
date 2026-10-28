@@ -1,0 +1,8 @@
+V109.2
+Expanded all 11 Research Work detail descriptions.
+Each item now includes:
+- research object
+- methodology/concept
+- future settlement relevance
+- system-level significance
+No PDFs included.

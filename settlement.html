@@ -1,0 +1,925 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DAN — Settlement</title><style>
+:root{
+  --cream:#f5eadb;--paper:#fffaf2;--ink:#294047;--muted:#68797b;
+  --orange:#c97750;--orange2:#a95334;--teal:#719fa1;--sage:#afbeb4;--blue:#718aa6;
+  --line:rgba(52,76,77,.14);--shadow:0 14px 38px rgba(55,73,69,.08);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:auto;-webkit-text-size-adjust:100%}
+body{margin:0;color:var(--ink);background:linear-gradient(180deg,#f3eadf,#e7e9e3);font-family:"Aptos","Segoe UI Variable Text","Segoe UI","Helvetica Neue",Arial,sans-serif;overflow-x:hidden}
+a{color:inherit}
+.page{width:min(1500px,100%);margin:0 auto;padding:34px 4vw 64px}
+.eyebrow{margin:0 0 10px;color:var(--orange2);font-size:12px;font-weight:900;letter-spacing:.14em;text-transform:uppercase}
+h1,h2,h3{font-family:"Aptos Display","Segoe UI Variable Display","Helvetica Neue",Arial,sans-serif}
+h1{font-size:clamp(34px,4.2vw,58px);line-height:1.05;letter-spacing:-.035em;margin:0}
+h2{font-size:clamp(25px,2.5vw,34px);line-height:1.15;margin:0}
+h3{font-size:19px;line-height:1.25;margin:0}
+p{font-size:16.5px;line-height:1.62}
+.lead{font-size:18px;line-height:1.62;color:#50666a;max-width:820px}
+.pill{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.48);font-size:11px;font-weight:850;letter-spacing:.07em}
+.section{margin-top:32px}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:16px}
+.section-head p{margin:0;max-width:720px;color:var(--muted);font-size:15px}
+.card{border:1px solid var(--line);background:rgba(255,250,242,.72);border-radius:18px;box-shadow:0 8px 24px rgba(56,76,72,.055)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;padding:10px 13px;border-radius:10px;border:1px solid rgba(169,83,52,.25);background:rgba(201,119,80,.10);color:#8e4d36;font-size:12px;font-weight:850;letter-spacing:.045em}
+.btn:hover{background:rgba(201,119,80,.16)}
+.kicker-line{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+@media(max-width:800px){
+ .page{padding:24px 16px 44px}.section{margin-top:25px}.section-head{align-items:flex-start;flex-direction:column;gap:7px}
+ h1{font-size:clamp(31px,9vw,42px)}.lead{font-size:16.5px}p{font-size:16px}
+}
+
+.hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(430px,.9fr);gap:26px;align-items:stretch;padding:28px;border:1px solid var(--line);border-radius:24px;background:linear-gradient(135deg,#fff8ee,#e4ece6);box-shadow:var(--shadow)}
+.hero-copy{padding:10px 6px}.hero-copy .lead{margin:15px 0 0}.hero-visual{min-height:330px;border-radius:18px;overflow:hidden;position:relative;background:#29454a}.hero-visual img{width:100%;height:100%;object-fit:cover}.hero-visual:after{content:"SURFACE MASTERPLAN";position:absolute;left:15px;bottom:14px;padding:7px 9px;border-radius:8px;background:rgba(25,51,56,.78);color:white;font-size:10px;font-weight:850;letter-spacing:.09em}
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:18px}.stat{padding:12px;border:1px solid var(--line);border-radius:13px;background:rgba(255,255,255,.52)}.stat b{display:block;font-size:15px}.stat span{font-size:11.5px;color:var(--muted)}
+.logic{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.logic article{padding:18px}.logic small{color:var(--orange2);font-size:10px;font-weight:900;letter-spacing:.11em}.logic h3{margin-top:7px}.logic p{margin:7px 0 0;font-size:13.5px;color:var(--muted)}
+.human{display:grid;grid-template-columns:.42fr 1.38fr .8fr;gap:24px;align-items:center;padding:22px 25px;background:linear-gradient(135deg,#fff8ee,#e3ece7)}.human .eyebrow{margin:0}.human h2{font-size:26px}.human p{margin:8px 0 0;color:#52686b;font-size:15px}.human-steps{display:grid;gap:7px}.human-steps span{padding:9px 10px;border-radius:10px;background:rgba(255,255,255,.55);font-size:12px}.human-steps b{color:var(--orange2)}
+.models{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.model{appearance:none;text-align:left;padding:0;overflow:hidden;border:1px solid var(--line);border-radius:14px;background:rgba(255,250,242,.74);cursor:pointer;color:var(--ink)}.model img{display:block;width:100%;aspect-ratio:1.55/1;object-fit:cover;background:#dce4df}.model span{display:block;padding:10px 11px 12px}.model small{display:block;color:var(--orange2);font-size:8.5px;font-weight:900;letter-spacing:.1em}.model b{display:block;margin-top:4px;font-size:13.5px}.model em{display:block;margin-top:3px;color:var(--muted);font-style:normal;font-size:11.5px}
+details.library{margin-top:12px;border:1px solid var(--line);border-radius:16px;background:rgba(255,250,242,.58);overflow:hidden}details.library summary{cursor:pointer;padding:15px 18px;font-weight:850;font-size:13px;letter-spacing:.035em}details.library[open] summary{border-bottom:1px solid var(--line)}details.library .models{padding:14px}
+.docs{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.modal{position:fixed;inset:0;z-index:50;display:none;place-items:center;padding:18px;background:rgba(25,40,43,.82)}.modal.open{display:grid}.modal-box{width:min(1100px,96vw);max-height:94vh;overflow:auto;border-radius:18px;background:#eef0ea;padding:12px}.modal img{width:100%;max-height:78vh;object-fit:contain;background:#243b40;border-radius:12px}.modal-meta{display:flex;justify-content:space-between;gap:18px;padding:10px 5px 3px}.modal-meta p{margin:3px 0 0;font-size:13px;color:var(--muted)}.close{border:0;background:#fff8ee;border-radius:9px;padding:8px 10px;font-weight:900;cursor:pointer}
+@media(max-width:1000px){.hero{grid-template-columns:1fr}.stat-row,.logic{grid-template-columns:repeat(2,1fr)}.models{grid-template-columns:repeat(3,1fr)}.human{grid-template-columns:1fr}}
+@media(max-width:650px){.hero{padding:18px}.hero-visual{min-height:230px}.stat-row,.logic{grid-template-columns:1fr 1fr}.models{grid-template-columns:repeat(2,1fr)}.model b{font-size:12.5px}.model em{font-size:10.5px}}
+</style><style id="v02-home-match">
+body{background:linear-gradient(180deg,#fffaf2,#f7efe4)!important;color:#23343a!important}
+.site-header{height:92px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 3.2vw;background:rgba(255,251,244,.97);border-bottom:1px solid rgba(120,95,75,.12);font-family:"Aptos","Segoe UI Variable Text","Segoe UI","Helvetica Neue",Arial,sans-serif}
+.site-brand{font-size:22px;font-weight:760;letter-spacing:.03em;color:#d16b10;white-space:nowrap}
+.site-nav{grid-column:2;display:flex;gap:18px;align-items:center}
+.site-nav a{padding:13px 20px;border-radius:10px;text-decoration:none;color:#202b30;font-size:15px;font-weight:760;white-space:nowrap}
+.site-nav a.active{background:#0d7e84;color:white;box-shadow:0 4px 12px rgba(13,126,132,.16)}
+.page{padding-top:30px!important;background:transparent!important}
+.eyebrow{font-size:17px!important;line-height:1.3!important;letter-spacing:.07em!important;margin-bottom:10px!important;color:#b85e2d!important}
+.hero{background:linear-gradient(135deg,#fffaf2,#e8efea)!important}
+.hero-copy h1{font-size:30px!important;line-height:1.22!important;letter-spacing:-.015em!important;color:#0d7e84!important;font-weight:720!important}
+.lead{font-size:17px!important;line-height:1.58!important}
+h2{font-size:27px!important;line-height:1.25!important;color:#0d7e84!important}
+h3{font-size:19px!important;line-height:1.3!important}
+p{font-size:17px!important;line-height:1.58!important}
+.stat b{font-size:17px!important}.stat span{font-size:15px!important;line-height:1.35!important}
+.logic small{font-size:14px!important;letter-spacing:.07em!important}.logic p{font-size:16px!important;line-height:1.48!important}
+.human h2{font-size:27px!important}.human p{font-size:17px!important}.human-steps span{font-size:15.5px!important;line-height:1.4!important}
+.section-head p{font-size:16.5px!important;line-height:1.5!important}
+.models{gap:14px!important}
+.model span{padding:13px 14px 15px!important}
+.model small{font-size:13px!important;letter-spacing:.07em!important}
+.model b{font-size:17px!important;line-height:1.3!important;margin-top:5px!important}
+.model em{font-size:15px!important;line-height:1.4!important;margin-top:4px!important}
+details.library{margin-top:18px!important}
+details.library summary{font-size:16px!important;padding:17px 19px!important;color:#0d7e84!important}
+.modal-meta b{font-size:18px!important}.modal-meta p{font-size:16px!important}.close{font-size:15px!important}
+@media(max-width:1000px){
+ .site-header{height:auto;min-height:74px;padding:12px 18px;grid-template-columns:auto 1fr}
+ .site-brand{font-size:18px}.site-nav{grid-column:2;justify-content:flex-end;gap:7px}.site-nav a{font-size:13px;padding:10px 11px}
+ .models{grid-template-columns:repeat(2,1fr)!important}
+}
+@media(max-width:650px){
+ .site-header{display:flex;flex-direction:column;gap:9px}.site-nav{width:100%;justify-content:center;overflow-x:auto}
+ .site-nav a{font-size:12px;padding:9px 9px}.page{padding-top:22px!important}
+ .hero-copy h1{font-size:27px!important}.eyebrow{font-size:15px!important}
+ h2,.human h2{font-size:24px!important}.lead,p,.human p{font-size:16px!important}
+ .logic{grid-template-columns:1fr!important}.models{grid-template-columns:1fr 1fr!important}
+ .model b{font-size:15.5px!important}.model em{font-size:14px!important}.model small{font-size:12px!important}
+}
+</style>
+<style id="v03-upgrades">
+/* Keep typography close to HOME: readable and not wildly different in scale */
+.page{padding-top:30px!important}
+.eyebrow{font-size:18px!important;line-height:1.25!important}
+.hero-copy h1{font-size:30px!important;line-height:1.22!important}
+.lead,p{font-size:17px!important;line-height:1.58!important}
+h2{font-size:28px!important;line-height:1.24!important}
+h3{font-size:20px!important;line-height:1.28!important}
+.section-head p{font-size:17px!important}
+.stat b{font-size:17px!important}.stat span{font-size:15.5px!important}
+.logic small{font-size:14.5px!important}.logic p{font-size:16.5px!important}
+.human p{font-size:17px!important}.human-steps span{font-size:16px!important}
+.model small{font-size:13.5px!important}.model b{font-size:17px!important}.model em{font-size:15.5px!important}
+
+/* Hero 4-view switcher */
+.hero-visual.hero-switcher{position:relative;min-height:365px;background:#eee4d7!important}
+.hero-switcher img{width:100%;height:100%;min-height:365px;object-fit:contain;background:#fff}
+.hero-visual:after{display:none!important}
+.hero-view-label{display:none!important}
+.hero-tabs{position:absolute;left:14px;right:14px;bottom:14px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.hero-tab{border:1px solid rgba(255,255,255,.65);background:rgba(255,250,242,.88);color:#28464a;border-radius:9px;padding:10px 8px;font-size:14px;font-weight:850;cursor:pointer}
+.hero-tab.active{background:#0d7e84;color:#fff;border-color:#0d7e84}
+
+/* More visual explanation of the settlement itself */
+.network-section{margin-top:34px}
+.network-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.network-card{padding:0!important;overflow:hidden}
+.network-card img{width:100%;aspect-ratio:1.55/1;object-fit:cover}
+.network-card span{display:block;padding:12px 13px 14px!important}
+.network-card small{font-size:13px!important}
+.network-card b{font-size:16.5px!important;margin-top:4px!important}
+
+/* Category filtering */
+.model-filters{display:flex;flex-wrap:wrap;gap:9px;padding:14px 14px 0}
+.filter-btn{border:1px solid rgba(13,126,132,.20);background:#fffaf2;color:#0d7e84;border-radius:999px;padding:9px 13px;font-size:14px;font-weight:820;cursor:pointer}
+.filter-btn.active{background:#0d7e84;color:#fff;border-color:#0d7e84}
+.model.filtered-out{display:none!important}
+
+@media(max-width:1000px){
+ .network-grid{grid-template-columns:repeat(2,1fr)}
+ .hero-visual.hero-switcher,.hero-switcher img{min-height:300px}
+}
+@media(max-width:650px){
+ .eyebrow{font-size:16px!important}.hero-copy h1{font-size:28px!important}
+ h2{font-size:25px!important}.lead,p{font-size:16px!important}
+ .network-grid{grid-template-columns:1fr 1fr}
+ .hero-tabs{grid-template-columns:repeat(2,1fr)}
+ .hero-tab{font-size:13px;padding:8px 6px}
+ .filter-btn{font-size:13px;padding:8px 11px}
+}
+</style>
+<style id="v04-visual-upgrade">
+/* Visual richness without turning the webpage into a screenshot */
+.network-feature{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(250px,.45fr);gap:16px;margin-top:18px;background:rgba(255,250,242,.88);border:1px solid rgba(88,72,56,.14);border-radius:18px;padding:14px}
+.network-map{border-radius:13px;overflow:hidden;background:#eee4d7}
+.network-map img{display:block;width:100%;height:315px;object-fit:cover;object-position:center}
+.network-copy{align-self:center;padding:8px 10px}
+.network-copy h3{color:#0d7e84!important;font-size:20px!important;margin:4px 0 10px!important}
+.network-copy p{font-size:16px!important}
+.network-views{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-top:14px}
+.network-views .model img{aspect-ratio:1.55/1;object-fit:cover}
+.visual-highlights{margin-top:34px}
+.highlight-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:11px;margin-top:16px}
+.highlight-grid figure{margin:0;background:#fffaf2;border:1px solid rgba(88,72,56,.14);border-radius:14px;overflow:hidden}
+.highlight-grid img{display:block;width:100%;aspect-ratio:1.45/1;object-fit:cover}
+.highlight-grid figcaption{padding:10px 11px 12px}
+.highlight-grid b{display:block;color:#0d6070;font-size:16px;line-height:1.25}
+.highlight-grid span{display:inline-block;margin-top:5px;padding:4px 7px;border-radius:5px;background:#e8f1f2;color:#0d6e7c;font-size:13px;font-weight:780}
+@media(max-width:1100px){
+ .network-feature{grid-template-columns:1fr}.network-map img{height:auto}
+ .highlight-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:700px){
+ .network-views{grid-template-columns:1fr 1fr}
+ .highlight-grid{grid-template-columns:1fr 1fr}
+ .network-copy p{font-size:15.5px!important}
+ .highlight-grid b{font-size:15px}
+}
+</style>
+<style id="v05-cleanup">
+/* Full network diagram: show the complete image, never crop it */
+.network-feature{
+  grid-template-columns:minmax(0,1.42fr) minmax(260px,.58fr)!important;
+  align-items:center!important;
+}
+.network-map{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:#f5ede3!important;
+  padding:10px!important;
+}
+.network-map img{
+  display:block!important;
+  width:100%!important;
+  height:auto!important;
+  max-height:360px!important;
+  object-fit:contain!important;
+  object-position:center center!important;
+}
+
+/* Remove visual duplication and make the human section clearly conceptual */
+.human{
+  margin-top:22px!important;
+}
+.human h2{font-size:28px!important}
+.human p{font-size:17px!important;line-height:1.58!important}
+.human-steps span{font-size:16px!important}
+
+/* The 33-view library is now the only 3D-modeling gallery */
+.modeling-library{margin-top:34px!important}
+.modeling-library .section-head{margin-bottom:14px!important}
+.modeling-library details.library{margin-top:0!important}
+.modeling-library details.library summary{
+  font-size:17px!important;
+  padding:16px 18px!important;
+}
+.modeling-library .model-filters{padding-top:15px!important}
+.modeling-library .filter-btn{font-size:14.5px!important;padding:9px 14px!important}
+.modeling-library .model b{font-size:17px!important}
+.modeling-library .model em{font-size:15.5px!important}
+.modeling-library .model small{font-size:13.5px!important}
+
+/* Keep hierarchy close to HOME */
+.eyebrow{font-size:18px!important}
+h2{font-size:28px!important}
+p{font-size:17px!important}
+
+@media(max-width:1000px){
+  .network-feature{grid-template-columns:1fr!important}
+  .network-map img{max-height:none!important}
+}
+@media(max-width:650px){
+  .eyebrow{font-size:16px!important}
+  h2,.human h2{font-size:25px!important}
+  p,.human p{font-size:16px!important}
+  .modeling-library .filter-btn{font-size:13px!important}
+}
+</style>
+
+<style id="v06-refinement">
+/* HERO: give the right-side visual more presence, while moving copy further left */
+@media(min-width:1181px){
+  .page{padding-left:2.0vw!important;padding-right:2.4vw!important}
+  .hero{
+    grid-template-columns:minmax(390px,.64fr) minmax(850px,1.36fr)!important;
+    gap:18px!important;
+    align-items:center!important;
+  }
+  .hero-copy{
+    padding-left:0!important;
+    margin-left:0!important;
+    padding-right:6px!important;
+  }
+  .hero-visual.hero-switcher{
+    min-height:420px!important;
+  }
+  .hero-switcher img{
+    min-height:420px!important;
+    height:420px!important;
+    object-fit:cover!important;
+    object-position:center 52%!important;
+    background:#efe5d9!important;
+  }
+}
+.hero-copy h1{font-size:30px!important}
+.hero-copy .lead{font-size:17px!important}
+
+/* Connected City: show complete map + supporting PDF visuals, no blank area */
+.network-feature{
+  display:grid!important;
+  grid-template-columns:minmax(0,1.48fr) minmax(270px,.52fr)!important;
+  gap:18px!important;
+  align-items:stretch!important;
+}
+.network-collage{
+  display:grid!important;
+  grid-template-columns:minmax(0,1.45fr) minmax(220px,.55fr)!important;
+  gap:12px!important;
+  min-height:360px!important;
+}
+.network-main,
+.network-side{
+  background:#f3eadf!important;
+  border-radius:14px!important;
+  overflow:hidden!important;
+  border:1px solid rgba(88,72,56,.12)!important;
+}
+.network-main{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:8px!important;
+}
+.network-main img{
+  width:100%!important;
+  height:100%!important;
+  max-height:360px!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  display:block!important;
+}
+.network-side{
+  display:grid!important;
+  grid-template-rows:1fr 1fr!important;
+  gap:8px!important;
+  padding:8px!important;
+  background:#fbf4ea!important;
+}
+.network-side img{
+  width:100%!important;
+  height:100%!important;
+  min-height:0!important;
+  object-fit:cover!important;
+  object-position:center!important;
+  display:block!important;
+  border-radius:9px!important;
+}
+.network-copy{
+  align-self:stretch!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  padding:18px 16px!important;
+}
+.network-copy h3{
+  font-size:21px!important;
+  line-height:1.3!important;
+}
+.network-copy p{
+  font-size:16.5px!important;
+  line-height:1.55!important;
+}
+
+@media(max-width:1180px){
+  .network-feature{grid-template-columns:1fr!important}
+  .network-collage{grid-template-columns:1.3fr .7fr!important}
+}
+@media(max-width:720px){
+  .network-collage{grid-template-columns:1fr!important}
+  .network-side{grid-template-columns:1fr 1fr!important;grid-template-rows:auto!important}
+  .network-main img{max-height:none!important}
+}
+</style>
+
+<style id="v07-network-layout">
+/* Compact the "What the city actually looks like" module:
+   title + explanation use one row, visuals use the full width below. */
+.network-section .section-head{
+  display:grid!important;
+  grid-template-columns:minmax(360px,.72fr) minmax(0,1.28fr)!important;
+  gap:24px!important;
+  align-items:end!important;
+  margin-bottom:15px!important;
+}
+.network-section .section-head h2{margin-bottom:0!important}
+.network-section .section-head>p{
+  margin:0!important;
+  max-width:none!important;
+  align-self:end!important;
+}
+
+/* Put Connected City copy above the collage rather than consuming a tall
+   right-hand column, which was the main source of unused space. */
+.network-feature{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:12px!important;
+  padding:14px!important;
+}
+.network-copy{
+  order:0!important;
+  display:grid!important;
+  grid-template-columns:190px minmax(250px,.72fr) minmax(0,1.28fr)!important;
+  gap:18px!important;
+  align-items:center!important;
+  padding:4px 5px 10px!important;
+}
+.network-copy .eyebrow{
+  margin:0!important;
+}
+.network-copy h3{
+  margin:0!important;
+  font-size:20px!important;
+  line-height:1.3!important;
+}
+.network-copy p:last-child{
+  margin:0!important;
+  font-size:16.5px!important;
+  line-height:1.5!important;
+}
+.network-collage{
+  order:1!important;
+  width:100%!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1.62fr) minmax(270px,.38fr)!important;
+  gap:11px!important;
+  min-height:0!important;
+}
+.network-main{
+  min-height:0!important;
+  padding:6px!important;
+}
+.network-main img{
+  width:100%!important;
+  height:390px!important;
+  max-height:none!important;
+  object-fit:contain!important;
+  object-position:center!important;
+}
+.network-side{
+  min-height:0!important;
+  height:390px!important;
+  grid-template-rows:1fr 1fr!important;
+  gap:8px!important;
+}
+.network-side img{
+  min-height:0!important;
+  height:100%!important;
+  object-fit:cover!important;
+}
+
+@media(max-width:1000px){
+ .network-section .section-head{grid-template-columns:1fr!important;gap:9px!important}
+ .network-copy{grid-template-columns:1fr!important;gap:7px!important}
+ .network-collage{grid-template-columns:1.35fr .65fr!important}
+ .network-main img,.network-side{height:330px!important}
+}
+@media(max-width:700px){
+ .network-collage{grid-template-columns:1fr!important}
+ .network-main img{height:auto!important}
+ .network-side{height:auto!important;grid-template-columns:1fr 1fr!important;grid-template-rows:auto!important}
+ .network-side img{height:150px!important}
+}
+</style>
+
+<style id="v08-layout-fix">
+/* HERO — large enough to matter, but contained above the stat cards */
+@media(min-width:1181px){
+  .hero{
+    grid-template-columns:minmax(430px,.78fr) minmax(650px,1.22fr)!important;
+    gap:24px!important;
+    align-items:start!important;
+  }
+  .hero-visual.hero-switcher{
+    min-height:0!important;
+    height:350px!important;
+    max-height:350px!important;
+    overflow:hidden!important;
+  }
+  .hero-switcher img{
+    width:100%!important;
+    height:350px!important;
+    min-height:0!important;
+    max-height:350px!important;
+    object-fit:cover!important;
+    object-position:center 52%!important;
+  }
+  .hero-copy{align-self:start!important}
+}
+
+/* NETWORK — two images shoulder-to-shoulder + explanatory copy on the right */
+.network-feature{
+  display:grid!important;
+  grid-template-columns:minmax(0,1.62fr) minmax(300px,.58fr)!important;
+  gap:16px!important;
+  align-items:stretch!important;
+  padding:14px!important;
+}
+.network-collage{
+  order:0!important;
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  gap:10px!important;
+  width:100%!important;
+  min-height:0!important;
+  height:330px!important;
+}
+.network-main{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:0!important;
+  min-height:0!important;
+  height:330px!important;
+  background:#f6eee4!important;
+}
+.network-main img{
+  display:block!important;
+  width:100%!important;
+  height:330px!important;
+  max-height:none!important;
+  object-fit:contain!important;
+  object-position:center!important;
+}
+.network-side{
+  display:block!important;
+  height:330px!important;
+  padding:0!important;
+  background:#f6eee4!important;
+  overflow:hidden!important;
+}
+.network-side img:first-child{
+  display:block!important;
+  width:100%!important;
+  height:330px!important;
+  object-fit:cover!important;
+  object-position:center!important;
+  border-radius:0!important;
+}
+.network-side img:nth-child(n+2){display:none!important}
+
+.network-copy{
+  order:1!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  gap:8px!important;
+  padding:18px 16px!important;
+  min-width:0!important;
+}
+.network-copy .eyebrow{margin:0!important}
+.network-copy h3{
+  margin:0 0 5px!important;
+  font-size:20px!important;
+  line-height:1.3!important;
+}
+.network-copy p:last-child{
+  margin:0!important;
+  font-size:16.5px!important;
+  line-height:1.55!important;
+}
+
+/* Keep the module header compact */
+.network-section .section-head{
+  grid-template-columns:minmax(360px,.78fr) minmax(0,1.22fr)!important;
+  gap:20px!important;
+  margin-bottom:13px!important;
+}
+.network-section .section-head>p{margin:0!important}
+
+@media(max-width:1050px){
+  .network-feature{grid-template-columns:1fr!important}
+  .network-copy{padding:8px 4px 4px!important}
+}
+@media(max-width:720px){
+  .network-collage{grid-template-columns:1fr!important;height:auto!important}
+  .network-main,.network-main img,.network-side,.network-side img:first-child{height:auto!important}
+  .network-side img:first-child{max-height:260px!important;object-fit:cover!important}
+  .network-section .section-head{grid-template-columns:1fr!important}
+}
+</style>
+
+<style id="v09-network-function-views">
+.network-collage{
+  grid-template-columns:1.08fr .92fr!important;
+  height:350px!important;
+}
+.network-main,.network-side{height:350px!important}
+.network-main img{
+  height:350px!important;
+  object-fit:contain!important;
+  background:#fffaf2!important;
+}
+.network-side img:first-child{
+  height:350px!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  background:#fffaf2!important;
+}
+.network-copy{
+  padding-left:18px!important;
+  padding-right:14px!important;
+}
+@media(max-width:720px){
+ .network-collage{height:auto!important}
+ .network-main,.network-side{height:auto!important}
+ .network-main img,.network-side img:first-child{height:auto!important;max-height:none!important}
+}
+</style>
+
+<style id="v10-network-single-view">
+.network-feature{
+  grid-template-columns:minmax(0,1.55fr) minmax(300px,.45fr)!important;
+  gap:18px!important;
+}
+.network-collage{
+  display:block!important;
+  width:100%!important;
+  height:360px!important;
+}
+.network-side{
+  display:block!important;
+  width:100%!important;
+  height:360px!important;
+  padding:0!important;
+}
+.network-side img:first-child{
+  display:block!important;
+  width:100%!important;
+  height:360px!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  background:#fffaf2!important;
+}
+.network-copy{
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  padding:18px 16px!important;
+}
+@media(max-width:1050px){
+ .network-feature{grid-template-columns:1fr!important}
+}
+@media(max-width:720px){
+ .network-collage,.network-side{height:auto!important}
+ .network-side img:first-child{height:auto!important}
+}
+</style>
+<style id="merged-nav-style">
+.merged-nav{display:flex;gap:10px;justify-content:center;align-items:center}
+.merged-nav a{font-size:15px;font-weight:850;letter-spacing:.045em;padding:9px 15px;border-radius:999px;color:#075e68;text-decoration:none}
+</style>
+<style id="v78-global-responsive">
+/* Consistent active navigation */
+.merged-nav a.active,
+header nav a.active{
+  background:#0d7e84 !important;
+  color:#fff !important;
+}
+
+/* Fluid typography and layout: preserve the established desktop scale,
+   while adapting gracefully to laptops, tablets and phones. */
+html{-webkit-text-size-adjust:100%}
+img,video,svg{max-width:100%;height:auto}
+body{overflow-x:hidden}
+main,.page{width:min(100%,1480px);margin-left:auto;margin-right:auto}
+
+/* Medium laptop / tablet landscape */
+@media (max-width:1180px){
+  main,.page{padding-left:24px!important;padding-right:24px!important}
+  header{padding-left:24px!important;padding-right:24px!important}
+  h1{font-size:clamp(27px,2.7vw,30px)!important}
+  h2{font-size:clamp(24px,2.4vw,28px)!important}
+}
+
+/* Tablet */
+@media (max-width:900px){
+  header{
+    height:auto!important;
+    min-height:72px;
+    grid-template-columns:1fr!important;
+    gap:9px;
+    padding-top:12px!important;
+    padding-bottom:12px!important;
+  }
+  header .brand,.brand{text-align:center}
+  .merged-nav,header nav{
+    width:100%;
+    justify-content:center!important;
+    flex-wrap:wrap!important;
+    gap:7px!important;
+  }
+  .merged-nav a,header nav a{
+    font-size:14.5px!important;
+    padding:8px 12px!important;
+  }
+  main,.page{padding:24px 20px 48px!important}
+}
+
+/* Phone */
+@media (max-width:600px){
+  body{font-size:16px!important;line-height:1.55!important}
+  main,.page{padding-left:16px!important;padding-right:16px!important}
+  .brand{font-size:18px!important}
+  .merged-nav,header nav{gap:5px!important}
+  .merged-nav a,header nav a{
+    font-size:13.5px!important;
+    padding:7px 9px!important;
+    letter-spacing:.025em!important;
+  }
+  h1{font-size:27px!important;line-height:1.22!important}
+  h2{font-size:24px!important;line-height:1.25!important}
+  h3{font-size:18px!important}
+  p{font-size:16px!important}
+  .eyebrow{font-size:15.5px!important}
+}
+
+/* Narrow phone: keep all four navigation items usable without overflow */
+@media (max-width:390px){
+  .merged-nav a,header nav a{
+    font-size:12.5px!important;
+    padding:6px 7px!important;
+  }
+  main,.page{padding-left:13px!important;padding-right:13px!important}
+}
+</style>
+<style id="original-contributions">
+/* Added contribution section: it deliberately follows the original page's typography and card language. */
+.original-contributions{margin-top:34px!important}
+.contribution-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:18px}
+.contribution-card{display:grid;grid-template-columns:minmax(180px,.74fr) minmax(0,1.26fr);min-height:300px;overflow:hidden;border:1px solid rgba(88,72,56,.14);border-radius:18px;background:rgba(255,250,242,.88);box-shadow:0 8px 24px rgba(56,76,72,.055)}
+.contribution-card img{width:100%;height:100%;min-height:300px;object-fit:cover;background:#e9e5df}.contribution-card img.contribution-zoom{cursor:zoom-in}
+.contribution-card.solar img{object-position:center}
+.contribution-copy{padding:22px 22px 20px}.contribution-copy h3{margin:4px 0 9px!important;color:#0d7e84!important;font-size:22px!important}.contribution-copy p{margin:7px 0 0!important;font-size:16px!important;line-height:1.52!important;color:#52686b!important}.contribution-copy strong{color:#a95334}
+@media(max-width:1100px){.contribution-card{grid-template-columns:1fr}.contribution-card img{min-height:235px;max-height:290px}.contribution-grid{gap:14px}}
+@media(max-width:720px){.contribution-grid{grid-template-columns:1fr}.contribution-copy{padding:19px}.contribution-copy h3{font-size:21px!important}.contribution-copy p{font-size:16px!important}}
+
+/* The shield sequence is the lead original contribution.  All five frames use
+   one canonical module: graphite end rings, woven white pressure hull, black
+   belts, and a pale outer bumper on fixed stand-off struts. */
+.shield-feature{display:none!important}.shield-sequence{margin-top:20px!important}.shield-sequence .section-head{display:block!important;margin-bottom:18px}.shield-title-row{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}.shield-title-row .eyebrow{margin:0!important}.shield-title-row h2{margin:0!important;font-size:clamp(24px,2.45vw,34px)!important;line-height:1.1!important}.shield-sequence .section-head>p{max-width:none;width:100%;margin:14px 0 0!important;color:#53696c!important;font-size:16px!important;line-height:1.6!important}.shield-sequence-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}.shield-stage{min-width:0;border:1px solid rgba(88,72,56,.14);border-radius:12px;overflow:hidden;background:#fffaf2}.shield-stage img{display:block;width:100%;aspect-ratio:1/1;object-fit:cover;background:#000}.shield-stage-copy{padding:12px 11px 13px}.shield-stage-copy small{display:block;color:#0d7e84;font-size:11px;font-weight:800;letter-spacing:.08em}.shield-stage-copy h3{margin:6px 0 0!important;color:#53696c!important;font-size:15px!important;font-weight:500!important;line-height:1.3!important}.shield-sequence-note{margin:12px 0 0!important;color:#60767a!important;font-size:13px!important;line-height:1.5!important}@media(max-width:980px){.shield-sequence-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:600px){.shield-title-row{gap:8px}.shield-sequence-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.shield-stage-copy h3{font-size:15px!important}}
+</style>
+</head><body><header class="site-header">
+  <div class="site-brand">DAN'S SPACE SETTLEMENT</div>
+  <nav class="merged-nav"><a href="index.html">HOME</a><a class="active" href="settlement.html">SETTLEMENT</a><a href="research.html">RESEARCH</a><a href="next.html">NEXT</a></nav>
+</header><main class="page"><section class="hero"><div class="hero-copy"><p class="eyebrow">SETTLEMENT / THE ORIGINAL WORLD</p><h1>Designing a city made the question concrete.</h1><p class="lead">The group-based International Space Settlement Design Competition turned a childhood idea into systems engineering: habitats, mobility, robotics, infrastructure, resources, and the human life that has to fit inside them.</p><div class="stat-row"><div class="stat"><b>ISSDC</b><span>Space settlement design</span></div><div class="stat"><b>Champion</b><span>Asia Finals + China Finals</span></div><div class="stat"><b>Team project</b><span>Design · presentation · modeling</span></div><div class="stat"><b>3D portfolio</b><span>Masterplans to robots</span></div></div></div><div class="hero-visual hero-switcher">
+      <img id="heroView" src="settlement-surface-cropped.png" alt="Surface view of the settlement">
+      <div class="hero-tabs" aria-label="Settlement views">
+        <button class="hero-tab active" data-src="settlement-surface-cropped.png" data-label="SURFACE">SURFACE</button>
+        <button class="hero-tab" data-src="./settlement/image39.webp" data-label="CORE">CORE</button>
+        <button class="hero-tab" data-src="./settlement/image14.webp" data-label="GATEWAY">GATEWAY</button>
+        <button class="hero-tab" data-src="./settlement/image48.webp" data-label="HABITAT">HABITAT</button>
+      </div>
+    </div></section>
+<section class="section shield-feature">
+  <div class="section-head">
+    <div><p class="eyebrow">MY ORIGINAL ENGINEERING CONCEPT / ISSDC</p><h2>Light at launch. Protected in orbit.</h2></div>
+    <p>In Grade 10, I confronted a hard conflict in space-habitat design: a module had to be compact and lightweight enough to launch, yet resilient enough to protect people from hypervelocity micrometeoroids and extreme orbital conditions.</p>
+  </div>
+  <p class="shield-intro">Rather than treating protection as a thicker metal wall, I proposed a non-rigid, layered approach that combines a <strong>Stuffed Whipple Shield</strong> with <strong>expandable multi-layer pressure fabric</strong>. The outer bumper fragments a particle at first contact; the stand-off gap lets the debris cloud spread; a stuffed buffer captures the remaining fragments before they reach the inner pressure wall. After orbit insertion, the flexible structure inflates into a habitable volume. The concept does not evade physical constraints—it uses them as the basis for a more lightweight protective system.</p>
+  <div class="shield-layout">
+  <div class="shield-story" id="shieldStory">
+    <article class="shield-frame active"><img src="./settlement/shield-01-folded.png" alt="Folded expandable shield module"><div class="shield-caption"><b>01 / FOLDED FOR LAUNCH</b><p>The multilayer fabric shell travels compactly around the graphite core, reducing mass and launch volume.</p></div></article>
+    <article class="shield-frame"><img src="./settlement/shield-02-expanded.png" alt="Expanded inflatable shield module"><div class="shield-caption"><b>02 / INFLATED IN ORBIT</b><p>After orbit insertion, the pressure hull expands within the same outer bumper-and-strut frame.</p></div></article>
+    <article class="shield-frame"><img src="./settlement/shield-03-impact.png" alt="Micrometeoroid strikes outer bumper"><div class="shield-caption"><b>03 / FIRST CONTACT</b><p>A micrometeoroid reaches only the sacrificial outer bumper; the inner pressure wall is unchanged.</p></div></article>
+    <article class="shield-frame"><img src="./settlement/shield-04-dispersal.png" alt="Debris cloud captured between shield layers"><div class="shield-caption"><b>04 / FRAGMENT + DISPERSE + CAPTURE</b><p>The debris cloud expands across the gap and is intercepted by the stuffed capture layer.</p></div></article>
+    <article class="shield-frame"><img src="./settlement/shield-05-intact.png" alt="Intact pressure hull after impact"><div class="shield-caption"><b>05 / PRESSURE VOLUME INTACT</b><p>The bumper bears a localised mark; the interior pressure hull remains protected and habitable.</p></div></article>
+    <div class="shield-controls"><button class="shield-play" id="shieldPlay">Ⅱ &nbsp; PAUSE</button><div class="shield-steps" id="shieldSteps"></div><span class="shield-count" id="shieldCount">01 / 05</span></div>
+  </div>
+  <aside class="shield-narrative">
+    <p class="eyebrow">ORIGIN OF THE IDEA</p>
+    <h3>Working inside the “rigid frame” of physics.</h3>
+    <p>In Grade 10, the Space Settlement Design Competition gave me my first encounter with a hard physical trade-off. I wanted a future habitat module that could be extremely lightweight and compact for launch, yet still withstand micrometeoroid impacts, vacuum, and extreme temperature changes. Conventional engineering logic made the conflict seem absolute: a thick, rigid metal shell offered protection but imposed a major mass penalty; a thinner shell saved mass but was vulnerable.</p>
+    <p style="margin-top:13px!important">I refused to accept that the only answer was a mediocre compromise. After exploring advanced materials and impact mechanics, I combined a Stuffed Whipple Shield with expandable multi-layer fabric. I was not breaking the laws of physics; I was using their constraints to create a more precise engineering response—fragmenting the impact, dispersing its energy, and then expanding into a protective habitat once in orbit.</p>
+  </aside>
+  </div>
+  <p class="shield-note"><strong>Concept note:</strong> at hypervelocity, a sacrificial bumper typically fragments a projectile and can partially vaporise material; final performance requires ballistic-limit testing and material-specific simulation.</p>
+</section>
+<section class="section original-contributions">
+  <div class="section-head">
+    <div><p class="eyebrow">MY ORIGINAL DESIGN CONTRIBUTIONS</p><h2>Systems I designed myself.</h2></div>
+    <p>I developed a standardised cargo container for the China Final and a retractable solar-sail system for the Asia Final—two ideas with distinct engineering roles.</p>
+  </div>
+  <div class="contribution-grid">
+    <article class="contribution-card">
+      <img class="contribution-zoom" src="./settlement/china-final-container.png" data-title="China Finals A0001 Cargo Container" data-desc="Original reusable cargo-container concept for robotic handling, transfer, storage, and reuse." alt="China Finals A0001 cargo container concept">
+      <div class="contribution-copy"><p class="eyebrow">CHINA FINALS / CARGO CONTAINER</p><h3>One module, from arrival to reuse.</h3><p>I designed the <strong>A0001 cargo-container concept</strong> as a reusable transport unit for a Mars settlement. Its regular protected form supports robotic handling, airlock transfer, storage, and repeated deployment, turning cargo movement into a standardised logistics system rather than a one-time delivery task.</p></div>
+    </article>
+    <article class="contribution-card solar">
+      <img class="contribution-zoom" src="./settlement/asia-final-solar-sail.jpg" data-title="Asia Finals Solar Sail System" data-desc="Retractable solar-sail deployment, stowage, and directional-control concept." alt="Asia Finals solar sail system concept">
+      <div class="contribution-copy"><p class="eyebrow">ASIA FINALS / SOLAR SAIL</p><h3>Making the settlement itself mobile.</h3><p>I designed a <strong>retractable solar-sail system</strong> that places six lightweight sails around the non-rotating axle between the habitat rings. The sails can deploy to capture solar-radiation pressure, rotate for directional control, and retract for storage, linking propulsion to the settlement's own structure.</p></div>
+    </article>
+  </div>
+</section>
+<section class="section shield-sequence">
+  <div class="section-head">
+    <div class="shield-title-row"><p class="eyebrow">MY ORIGINAL ENGINEERING CONCEPT</p><h2>Light at launch. Protected in orbit.</h2></div>
+    <p>For this competition, I addressed a difficult engineering trade-off: a habitat had to remain light and compact enough for launch, yet still protect its crew from hypervelocity micrometeoroids once in orbit. Rather than relying on a heavier rigid shell, I proposed an expandable multilayer system that combines a Stuffed Whipple Shield with flexible composite pressure fabric. The module launches folded inside the rocket fairing, then inflates after orbital insertion. A raised outer layer and elastic buffer create a protective gap: on impact, they spread and weaken the collision energy before it reaches the pressure hull. The fragments are then broken apart and reflected outward, while the inner habitable volume remains intact.</p>
+  </div>
+  <div class="shield-sequence-grid" aria-label="Six-stage expandable shield concept">
+    <article class="shield-stage"><img src="./settlement/shield-stage-01.png" alt="Folded habitat module inside a rocket payload fairing"><div class="shield-stage-copy"><small>FOLDS FOR LAUNCH</small><h3>Flexible fabric fits inside the fairing.</h3></div></article>
+    <article class="shield-stage"><img src="./settlement/shield-stage-02.png" alt="Habitat module inflating in Earth orbit"><div class="shield-stage-copy"><small>DEPLOYS IN ORBIT</small><h3>Establishes the required standoff geometry.</h3></div></article>
+    <article class="shield-stage"><img src="./settlement/shield-stage-03.png" alt="Micrometeoroid approaching the habitat"><div class="shield-stage-copy"><small>INCOMING</small><h3>Hypervelocity micrometeoroid.</h3></div></article>
+    <article class="shield-stage"><img src="./settlement/shield-stage-04.png" alt="Micrometeoroid makes first contact with the outer protective layer"><div class="shield-stage-copy"><small>HARD OUTER LAYER</small><h3>Breaks the incoming particle apart.</h3></div></article>
+    <article class="shield-stage"><img src="./settlement/shield-stage-05.png" alt="Buffer layers spread and weaken impact energy"><div class="shield-stage-copy"><small>ELASTIC BUFFER</small><h3>Spreads and weakens residual energy.</h3></div></article>
+    <article class="shield-stage"><img src="./settlement/shield-stage-06.png" alt="Fragments reflect outward while pressure hull remains intact"><div class="shield-stage-copy"><small>PRESSURE HULL</small><h3>Habitable volume remains intact.</h3></div></article>
+  </div>
+  <p class="shield-sequence-note">Stuffed Whipple Shield + expandable multilayer fabric.</p>
+</section>
+<section class="section"><div class="section-head"><div><p class="eyebrow">WHAT THE DESIGN TAUGHT ME</p><h2>A settlement is not one invention.</h2></div><p>It is a network of interdependent systems. Each system creates concrete problems that have to be solved—water, sensing, materials, control, communication, human wellbeing, governance, and more. Those problems became the starting points for my research.</p></div><div class="logic"><article class="card"><small>01 / SURVIVE</small><h3>Resources + infrastructure</h3><p>Water, energy, safety, environmental control, and resilient materials.</p></article><article class="card"><small>02 / SENSE</small><h3>Perception + communication</h3><p>Optics, sensing, imaging, networks, and data that tell a city what is happening.</p></article><article class="card"><small>03 / ACT</small><h3>Mobility + control</h3><p>Robots, transport, feedback, and engineered systems that turn information into action.</p></article><article class="card"><small>04 / LIVE</small><h3>People + institutions</h3><p>Privacy, mental health, responsibility, governance, and a community worth sustaining.</p></article></div></section>
+<section class="section network-section">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">THE SETTLEMENT AS A NETWORK</p>
+      <h2>What the city actually looks like.</h2>
+    </div>
+    <p>Surface facilities connect research, communication, recreation, energy, transport, and access to the underground base. The city works as a connected system rather than a collection of isolated buildings.</p>
+  </div>
+
+  <div class="network-feature">
+    <div class="network-collage">
+      <div class="network-side">
+        <img src="network-facility-montage.png" alt="Surface facilities including communication, reactor, research lab and vehicle garage">
+        <img src="network-operations-view.png" alt="Research, rover, drone and recreation facilities">
+      </div>
+    </div>
+
+    <div class="network-copy">
+      <p class="eyebrow">A CONNECTED CITY</p>
+      <h3>Every facility has a role in a larger system.</h3>
+      <p>Research, communication, mobility, energy, recreation, and access are physically linked. One view shows the facilities themselves; the other maps how those nodes connect across the surface. Together, they turn the settlement from a collection of objects into an operating system.</p>
+    </div>
+  </div>
+</section>
+<section class="section human card">
+      <div><p class="eyebrow">A CITY FOR PEOPLE</p></div>
+      <div><h2>Engineering a place to belong.</h2>
+      <p>Habitats and machines keep a settlement operating; social design determines whether people can actually build a life there. I therefore treated privacy, recreation, healthcare, shared responsibility, psychological support, and community as design requirements rather than decorative extras.</p></div>
+      <div class="human-steps">
+        <span><b>PRIVATE</b> · personal space · rest · autonomy</span>
+        <span><b>SHARED</b> · recreation · healthcare · cooperation</span>
+        <span><b>RESPONSIBLE</b> · judgment · governance · human intervention</span>
+      </div>
+    </section>
+<section class="section modeling-library">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">3D MODELING / GROUP DESIGN</p>
+          <h2>32 selected views from the settlement.</h2>
+        </div>
+        <p>These are 32 representative views selected from the team’s broader 3D design work. Explore the sample by MASTERPLAN, HABITAT, SURFACE, MOBILITY, ROBOTICS, and OBJECTS.</p>
+      </div>
+      <details class="library" open><summary>3D MODEL LIBRARY · 32 VIEWS</summary>
+      <div class="model-filters" role="group" aria-label="Filter 3D models">
+        <button class="filter-btn active" data-filter="ALL">ALL</button>
+        <button class="filter-btn" data-filter="MASTERPLAN">MASTERPLAN</button>
+        <button class="filter-btn" data-filter="HABITAT">HABITAT</button>
+        <button class="filter-btn" data-filter="SURFACE">SURFACE</button>
+        <button class="filter-btn" data-filter="MOBILITY">MOBILITY</button>
+        <button class="filter-btn" data-filter="ROBOTICS">ROBOTICS</button>
+        <button class="filter-btn" data-filter="OBJECTS">OBJECTS</button>
+      </div><div class="models"><button class="model" data-category="MASTERPLAN" data-src="./settlement/image3.webp" data-title="Surface Masterplan" data-desc="Settlement-wide surface layout"><img loading="lazy" src="./settlement/image3.webp" alt="Surface Masterplan"><span><small>MASTERPLAN</small><b>Surface Masterplan</b><em>Settlement-wide surface layout</em></span></button><button class="model" data-category="MASTERPLAN" data-src="./settlement/image12.webp" data-title="Central Platform" data-desc="Infrastructure arrangement"><img loading="lazy" src="./settlement/image12.webp" alt="Central Platform"><span><small>MASTERPLAN</small><b>Central Platform</b><em>Infrastructure arrangement</em></span></button><button class="model" data-category="MASTERPLAN" data-src="./settlement/image38.webp" data-title="Surface Network" data-desc="Expanded site organization"><img loading="lazy" src="./settlement/image38.webp" alt="Surface Network"><span><small>MASTERPLAN</small><b>Surface Network</b><em>Expanded site organization</em></span></button><button class="model" data-category="MASTERPLAN" data-src="./settlement/image50.webp" data-title="Platform Plan" data-desc="Top-view spatial planning"><img loading="lazy" src="./settlement/image50.webp" alt="Platform Plan"><span><small>MASTERPLAN</small><b>Platform Plan</b><em>Top-view spatial planning</em></span></button><button class="model" data-category="HABITAT" data-src="./settlement/image14.webp" data-title="Gateway Habitat" data-desc="Connected entrance modules"><img loading="lazy" src="./settlement/image14.webp" alt="Gateway Habitat"><span><small>HABITAT</small><b>Gateway Habitat</b><em>Connected entrance modules</em></span></button><button class="model" data-category="HABITAT" data-src="./settlement/image25.webp" data-title="Habitat Junction" data-desc="Modular surface connection"><img loading="lazy" src="./settlement/image25.webp" alt="Habitat Junction"><span><small>HABITAT</small><b>Habitat Junction</b><em>Modular surface connection</em></span></button><button class="model" data-category="HABITAT" data-src="./settlement/image39.webp" data-title="Habitat Cluster" data-desc="Linked living modules"><img loading="lazy" src="./settlement/image39.webp" alt="Habitat Cluster"><span><small>HABITAT</small><b>Habitat Cluster</b><em>Linked living modules</em></span></button><button class="model" data-category="HABITAT" data-src="./settlement/image40.webp" data-title="Underground Access" data-desc="Subsurface habitat concept"><img loading="lazy" src="./settlement/image40.webp" alt="Underground Access"><span><small>HABITAT</small><b>Underground Access</b><em>Subsurface habitat concept</em></span></button><button class="model" data-category="HABITAT" data-src="./settlement/image41.webp" data-title="Subsurface Modules" data-desc="Linear underground system"><img loading="lazy" src="./settlement/image41.webp" alt="Subsurface Modules"><span><small>HABITAT</small><b>Subsurface Modules</b><em>Linear underground system</em></span></button><button class="model" data-category="HABITAT" data-src="./settlement/image42.webp" data-title="Underground Network" data-desc="Sectional module sequence"><img loading="lazy" src="./settlement/image42.webp" alt="Underground Network"><span><small>HABITAT</small><b>Underground Network</b><em>Sectional module sequence</em></span></button><button class="model" data-category="HABITAT" data-src="./settlement/image48.webp" data-title="Civic Habitat" data-desc="Residential / civic architecture"><img loading="lazy" src="./settlement/image48.webp" alt="Civic Habitat"><span><small>HABITAT</small><b>Civic Habitat</b><em>Residential / civic architecture</em></span></button><button class="model" data-category="HABITAT" data-src="./settlement/image49.webp" data-title="Surface Facility" data-desc="Functional building module"><img loading="lazy" src="./settlement/image49.webp" alt="Surface Facility"><span><small>HABITAT</small><b>Surface Facility</b><em>Functional building module</em></span></button><button class="model" data-category="SURFACE" data-src="./settlement/image4.webp" data-title="Surface Complex" data-desc="Infrastructure close-up"><img loading="lazy" src="./settlement/image4.webp" alt="Surface Complex"><span><small>SURFACE</small><b>Surface Complex</b><em>Infrastructure close-up</em></span></button><button class="model" data-category="SURFACE" data-src="./settlement/image26.webp" data-title="Protected Zone" data-desc="Enclosed settlement concept"><img loading="lazy" src="./settlement/image26.webp" alt="Protected Zone"><span><small>SURFACE</small><b>Protected Zone</b><em>Enclosed settlement concept</em></span></button><button class="model" data-category="SURFACE" data-src="./settlement/image43.webp" data-title="Mars Landscape" data-desc="Settlement environment study"><img loading="lazy" src="./settlement/image43.webp" alt="Mars Landscape"><span><small>SURFACE</small><b>Mars Landscape</b><em>Settlement environment study</em></span></button><button class="model" data-category="SURFACE" data-src="./settlement/image44.webp" data-title="Industrial Complex" data-desc="Large surface facility"><img loading="lazy" src="./settlement/image44.webp" alt="Industrial Complex"><span><small>SURFACE</small><b>Industrial Complex</b><em>Large surface facility</em></span></button><button class="model" data-category="SURFACE" data-src="./settlement/image47.webp" data-title="Communication Structure" data-desc="Surface communications element"><img loading="lazy" src="./settlement/image47.webp" alt="Communication Structure"><span><small>SURFACE</small><b>Communication Structure</b><em>Surface communications element</em></span></button><button class="model" data-category="SURFACE" data-src="./settlement/image51.webp" data-title="Utility Node" data-desc="Compact surface infrastructure"><img loading="lazy" src="./settlement/image51.webp" alt="Utility Node"><span><small>SURFACE</small><b>Utility Node</b><em>Compact surface infrastructure</em></span></button><button class="model" data-category="MOBILITY" data-src="./settlement/image73.webp" data-title="Personal Mobility" data-desc="Human-scale transport concept"><img loading="lazy" src="./settlement/image73.webp" alt="Personal Mobility"><span><small>MOBILITY</small><b>Personal Mobility</b><em>Human-scale transport concept</em></span></button><button class="model" data-category="MOBILITY" data-src="./settlement/image75.webp" data-title="Tracked Transport" data-desc="All-terrain settlement vehicle"><img loading="lazy" src="./settlement/image75.webp" alt="Tracked Transport"><span><small>MOBILITY</small><b>Tracked Transport</b><em>All-terrain settlement vehicle</em></span></button><button class="model" data-category="MOBILITY" data-src="./settlement/image138.webp" data-title="Exploration Rover" data-desc="Heavy-duty rover concept"><img loading="lazy" src="./settlement/image138.webp" alt="Exploration Rover"><span><small>MOBILITY</small><b>Exploration Rover</b><em>Heavy-duty rover concept</em></span></button><button class="model" data-category="MOBILITY" data-src="./settlement/image139.webp" data-title="Utility Vehicle" data-desc="Robotic service platform"><img loading="lazy" src="./settlement/image139.webp" alt="Utility Vehicle"><span><small>MOBILITY</small><b>Utility Vehicle</b><em>Robotic service platform</em></span></button><button class="model" data-category="ROBOTICS" data-src="./settlement/image134.webp" data-title="Robotic Module" data-desc="Compact autonomous unit"><img loading="lazy" src="./settlement/image134.webp" alt="Robotic Module"><span><small>ROBOTICS</small><b>Robotic Module</b><em>Compact autonomous unit</em></span></button><button class="model" data-category="ROBOTICS" data-src="./settlement/image136.webp" data-title="Wheel Mechanism" data-desc="Mobility mechanism study"><img loading="lazy" src="./settlement/image136.webp" alt="Wheel Mechanism"><span><small>ROBOTICS</small><b>Wheel Mechanism</b><em>Mobility mechanism study</em></span></button><button class="model" data-category="ROBOTICS" data-src="./settlement/image137.webp" data-title="Field Robot" data-desc="Multi-function robotic concept"><img loading="lazy" src="./settlement/image137.webp" alt="Field Robot"><span><small>ROBOTICS</small><b>Field Robot</b><em>Multi-function robotic concept</em></span></button><button class="model" data-category="ROBOTICS" data-src="./settlement/image140.webp" data-title="Deployable Arm" data-desc="Articulated service mechanism"><img loading="lazy" src="./settlement/image140.webp" alt="Deployable Arm"><span><small>ROBOTICS</small><b>Deployable Arm</b><em>Articulated service mechanism</em></span></button><button class="model" data-category="ROBOTICS" data-src="./settlement/image141.webp" data-title="Manipulator Rover" data-desc="Robotic operation platform"><img loading="lazy" src="./settlement/image141.webp" alt="Manipulator Rover"><span><small>ROBOTICS</small><b>Manipulator Rover</b><em>Robotic operation platform</em></span></button><button class="model" data-category="ROBOTICS" data-src="./settlement/image142.webp" data-title="Service Robot" data-desc="Mobile manipulation concept"><img loading="lazy" src="./settlement/image142.webp" alt="Service Robot"><span><small>ROBOTICS</small><b>Service Robot</b><em>Mobile manipulation concept</em></span></button><button class="model" data-category="OBJECTS" data-src="./settlement/image66.webp" data-title="Orbital / Device Study" data-desc="Independent object modeling"><img loading="lazy" src="./settlement/image66.webp" alt="Orbital / Device Study"><span><small>OBJECTS</small><b>Orbital / Device Study</b><em>Independent object modeling</em></span></button><button class="model" data-category="OBJECTS" data-src="./settlement/image70.webp" data-title="Spherical Structure" data-desc="Form and geometry study"><img loading="lazy" src="./settlement/image70.webp" alt="Spherical Structure"><span><small>OBJECTS</small><b>Spherical Structure</b><em>Form and geometry study</em></span></button><button class="model" data-category="OBJECTS" data-src="./settlement/image82.webp" data-title="Cargo Module CASSC" data-desc="Container design"><img loading="lazy" src="./settlement/image82.webp" alt="Cargo Module CASSC"><span><small>OBJECTS</small><b>Cargo Module CASSC</b><em>Container design</em></span></button><button class="model" data-category="OBJECTS" data-src="./settlement/image83.webp" data-title="Cargo Module A0001" data-desc="Container variation"><img loading="lazy" src="./settlement/image83.webp" alt="Cargo Module A0001"><span><small>OBJECTS</small><b>Cargo Module A0001</b><em>Container variation</em></span></button><button class="model" data-category="OBJECTS" data-src="./settlement/image135.webp" data-title="Equipment Housing" data-desc="Mechanical enclosure study"><img loading="lazy" src="./settlement/image135.webp" alt="Equipment Housing"><span><small>OBJECTS</small><b>Equipment Housing</b><em>Mechanical enclosure study</em></span></button></div></details>
+    </section></section>
+</main><div class="modal" id="modal"><div class="modal-box"><img id="modalImg" alt=""><div class="modal-meta"><div><b id="modalTitle"></b><p id="modalDesc"></p></div><button class="close" id="close">CLOSE</button></div></div></div><script>const m=document.getElementById('modal'),mi=document.getElementById('modalImg'),mt=document.getElementById('modalTitle'),md=document.getElementById('modalDesc');document.querySelectorAll('.model').forEach(b=>b.addEventListener('click',()=>{mi.src=b.dataset.src;mt.textContent=b.dataset.title;md.textContent=b.dataset.desc;m.classList.add('open')}));document.getElementById('close').onclick=()=>m.classList.remove('open');m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open')});</script>
+<script id="v03-interactions">
+document.querySelectorAll('.hero-tab').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.hero-tab').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('heroView').src=btn.dataset.src;
+    document.getElementById('heroView').alt=btn.dataset.label+' view of the settlement';
+  });
+});
+document.querySelectorAll('.filter-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const f=btn.dataset.filter;
+    document.querySelectorAll('details.library .model').forEach(card=>{
+      card.classList.toggle('filtered-out', f!=='ALL' && card.dataset.category!==f);
+    });
+  });
+});
+</script>
+<script id="shield-story-interactions">
+(() => {
+  const frames=[...document.querySelectorAll('#shieldStory .shield-frame')];
+  const steps=document.getElementById('shieldSteps');
+  const count=document.getElementById('shieldCount');
+  const play=document.getElementById('shieldPlay');
+  if(!frames.length || !steps || !count || !play)return;
+  let current=0, playing=true, timer;
+  frames.forEach((_,index)=>{
+    const step=document.createElement('i');
+    step.className='shield-step'+(index===0?' active':'');
+    step.setAttribute('aria-label','Show stage '+(index+1));
+    step.addEventListener('click',()=>show(index));
+    steps.appendChild(step);
+  });
+  const show=(index)=>{
+    current=index;
+    frames.forEach((frame,n)=>frame.classList.toggle('active',n===current));
+    [...steps.children].forEach((step,n)=>step.classList.toggle('active',n===current));
+    count.textContent=String(current+1).padStart(2,'0')+' / 05';
+    clearTimeout(timer);
+    if(playing)timer=setTimeout(()=>show((current+1)%frames.length),4400);
+  };
+  play.addEventListener('click',()=>{
+    playing=!playing;
+    play.innerHTML=playing?'Ⅱ &nbsp; PAUSE':'▶ &nbsp; PLAY';
+    if(playing)show(current);else clearTimeout(timer);
+  });
+  show(0);
+})();
+</script>
+<script id="v1107-gallery-additions">
+(() => {
+  const modal=document.getElementById('modal'), image=document.getElementById('modalImg'), title=document.getElementById('modalTitle'), description=document.getElementById('modalDesc');
+  const open=(src,heading,copy)=>{image.src=src;title.textContent=heading;description.textContent=copy;modal.classList.add('open')};
+  document.querySelectorAll('.contribution-zoom').forEach(img=>img.addEventListener('click',()=>open(img.src,img.dataset.title,img.dataset.desc)));
+  const models=document.querySelector('details.library .models');
+  const additions=[
+    ['HABITAT','asia-image25.png','Habitat Junction','Linked living modules'],
+    ['HABITAT','asia-image26.png','Protected Habitat','Enclosed settlement concept'],
+    ['HABITAT','asia-image4.png','Habitat Interior','Living-space study'],
+    ['HABITAT','asia-image7.png','Modular Habitat','Pressurised module concept'],
+    ['HABITAT','asia-image18.png','Habitat Corridor','Connected dwelling system'],
+    ['HABITAT','asia-image28.png','Pressure Module','Cylindrical habitat study'],
+    ['HABITAT','asia-image29.png','Habitat Module','Exterior module design'],
+    ['HABITAT','asia-image36.png','Circular Habitat','Sectional spatial study'],
+    ['HABITAT','asia-image41.png','Subsurface Habitat','Underground module sequence'],
+    ['HABITAT','asia-image42.png','Underground Network','Connected habitat section'],
+    ['SURFACE','asia-image3.png','Surface Infrastructure','Road and utility network'],
+    ['SURFACE','asia-image11.png','Surface Construction','Martian site study'],
+    ['SURFACE','asia-image12.png','Surface Platform','Facility layout study'],
+    ['SURFACE','asia-image16.png','Landing Facility','Surface access concept'],
+    ['SURFACE','asia-image43.png','Mars Access Structure','Elevated surface system'],
+    ['SURFACE','asia-image49.png','Surface Utility Zone','Operations-area study'],
+    ['MOBILITY','asia-image24.png','Settlement Rover','All-terrain transport concept'],
+    ['MOBILITY','asia-image17.png','Cargo Route','Long-range surface transport'],
+    ['MOBILITY','asia-image58.jpeg','Utility Vehicle Study','Vehicle engineering concept'],
+    ['MOBILITY','asia-image60.png','Transport Rover','Multi-purpose vehicle'],
+    ['MOBILITY','asia-image75.jpeg','Settlement Transit','Passenger transport system'],
+    ['ROBOTICS','asia-image141.png','Manipulator Rover','Autonomous service platform'],
+    ['ROBOTICS','asia-image23.jpg','Construction Drone','Aerial construction system'],
+    ['ROBOTICS','asia-image146.png','Service Robot','Compact robotic assistant'],
+    ['OBJECTS','asia-final-solar-overview.jpg','Solar-Sail Settlement','Overall settlement concept'],
+    ['OBJECTS','asia-final-solar-sail.jpg','Solar Sail System','Deployment and stowage study'],
+    ['OBJECTS','asia-final-sail-sequence-07.jpg','Sail Automation','Directional-control sequence'],
+    ['OBJECTS','asia-image2.png','Frame Structure','Structural form study'],
+    ['OBJECTS','asia-image20.png','Solar Array','Energy-collection surface'],
+    ['OBJECTS','asia-image22.png','Orbital Module','Independent systems concept']
+  ];
+  /* 32 selected models: repeated planning, facility, vehicle, and container angles are omitted. */
+  const duplicateViews=new Set(['Platform Plan','Surface Facility','Utility Vehicle','Cargo Module CASSC']);
+  models.querySelectorAll('.model').forEach(card=>{if(duplicateViews.has(card.dataset.title))card.remove()});
+  additions.splice(0, additions.length,
+    ['OBJECTS','asia-final-solar-sail.jpg','Solar Sail System','Deployment and stowage study'],
+    ['ROBOTICS','asia-image23.jpg','Construction Drone','Aerial construction system'],
+    ['OBJECTS','asia-image2.png','Frame Structure','Structural form study']
+  );
+  additions.forEach(([category,file,heading,caption])=>{
+    const card=document.createElement('button');
+    card.className='model';card.dataset.category=category;card.dataset.src='./settlement/'+file;card.dataset.title=heading;card.dataset.desc=caption;
+    card.innerHTML=`<img loading="lazy" src="./settlement/${file}" alt="${heading}"><span><small>${category}</small><b>${heading}</b><em>${caption}</em></span>`;
+    card.addEventListener('click',()=>open(card.dataset.src,card.dataset.title,card.dataset.desc));
+    models.appendChild(card);
+  });
+})();
+</script>
+</body></html>

@@ -1,0 +1,284 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DAN'S SPACE SETTLEMENT · Research</title><style>*{box-sizing:border-box}body{margin:0;background:#f8f4ec;color:#153344;font-family:Arial,Helvetica,sans-serif}header{padding:18px 24px;border-bottom:1px solid #d5dcd8;display:flex;gap:24px;align-items:center;justify-content:space-between}header strong{letter-spacing:.12em}h1{font-size:24px;margin:0}.intro{padding:20px 24px;display:flex;align-items:center;gap:24px}.intro p{margin:0;font-size:16px}.layout{display:grid;grid-template-columns:minmax(0,1fr) 330px}.scene-wrap{overflow:auto;background:#061423}.scene{position:relative;min-width:960px;aspect-ratio:1312/813;color:#edf9fa;isolation:isolate}.scene>img{width:100%;height:100%;display:block;object-fit:cover;pointer-events:none}.map-title{position:absolute;top:2%;left:2%;font-size:18px;letter-spacing:.2em}.map-title small{display:block;font-size:13px;letter-spacing:0;margin-top:8px}.marker{position:absolute;display:flex;align-items:flex-start;gap:9px;width:20%;z-index:3}.icon{color:var(--color);border:1px solid currentColor;background:#082333dc;border-radius:50%;width:48px;height:48px;flex:0 0 48px;display:grid;place-items:center;box-shadow:0 0 14px color-mix(in srgb,var(--color) 45%,transparent);cursor:pointer}.icon svg{width:27px;height:27px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.icon:hover,.icon.active{background:#27536b;outline:2px solid #fff}.marker .label{font-size:14px;line-height:1.24;padding:2px 5px;background:#0418289c;border-radius:6px;text-shadow:0 1px 3px #000}.marker small{display:block;font-size:11px;line-height:1.35;margin-top:6px;color:#d7e8ef}.panel{position:absolute;left:1.7%;bottom:2%;width:40%;height:24%;z-index:4;background:linear-gradient(125deg,#08293bef,#051927f7);border:1px solid #72ccd3;border-radius:18px 48px 18px 18px;padding:13px 16px;overflow:auto;scrollbar-width:thin}.panel h3{font-size:19px;margin:4px 20px 8px 0}.eyebrow,.panel h4{color:#7de3da;font-size:11px;letter-spacing:.06em;margin:7px 0 3px}.panel p{font-size:13px;line-height:1.45;margin:0 0 6px}.close{float:right;color:#fff;background:none;border:0;font-size:22px;cursor:pointer}.links{display:flex;flex-wrap:wrap;gap:5px}.links button{background:#1c424e;color:#ffbf7c;border:1px solid #4e808a;border-radius:5px;padding:5px;cursor:pointer}.works{padding:16px;background:#fcf9f2}.works h2{font-size:19px;margin:0 0 12px}.work{width:100%;min-height:65px;display:grid;grid-template-columns:24px 1fr 45px;gap:7px;align-items:center;background:#fffdf7;border:1px solid #dbe2df;border-radius:9px;text-align:left;padding:6px;margin-bottom:7px;color:#153344;cursor:pointer}.work b{font-size:17px;color:#128b8d}.work span{font-size:12px;line-height:1.2;font-weight:700}.work small{display:block;font-size:10px;margin-top:4px;font-weight:400}.work img{width:45px;height:44px;object-fit:contain}.work.connected{background:#fff0d9;border-color:#eaa45d}.work.selected{outline:2px solid #168c91}button:focus-visible{outline:3px solid #ffb065;outline-offset:2px}.toolbar{display:flex;gap:8px}.toolbar button{padding:8px 12px;border:1px solid #b8c9c8;background:white;color:#153344;border-radius:6px;cursor:pointer}.editing [contenteditable=true]{outline:1px dashed #ffd286;cursor:text}.editing .marker{outline:1px dashed #76d2cc}.editing .icon{cursor:move;touch-action:none}.edit-note{display:none;font-size:13px;padding:8px 24px;background:#fff0d9}.editing .edit-note{display:block}.pulse{animation:appear .2s ease-out}@keyframes appear{from{opacity:.3}to{opacity:1}}@media(max-width:850px){.layout{grid-template-columns:1fr}.works{display:grid;grid-template-columns:1fr 1fr;gap:8px}.works h2{grid-column:1/-1}.intro{display:block}.intro p{margin-top:8px}header{flex-wrap:wrap}.work{margin:0}}@media(prefers-reduced-motion:reduce){.pulse{animation:none}}.icon-editor{display:none}.editing .icon-editor{display:flex;gap:3px;margin-top:6px}.icon-editor select{max-width:105px}.icon-editor input{width:28px;height:23px;padding:0;border:0}.marker{cursor:pointer;border-radius:12px}.marker:hover .label,.marker.active .label{background:#123e50ed;box-shadow:0 0 0 1px var(--color)}.marker .label:focus-visible{outline:2px solid #ffd092;outline-offset:3px}.location-name{display:block;margin-top:6px;font-size:10px;line-height:1.25;text-transform:uppercase;letter-spacing:.035em;color:var(--color);font-weight:700}.location-lines{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;overflow:visible}.leader{fill:none;stroke:currentColor;stroke-width:1.2;opacity:.66;vector-effect:non-scaling-stroke}.location-halo{fill:currentColor;fill-opacity:.12;stroke:currentColor;stroke-width:1;opacity:.7}.location-dot{fill:currentColor;stroke:#fff;stroke-width:.7}.location-lines g.selected .leader{stroke-width:2.6;opacity:1}.location-lines g.selected .location-halo{fill-opacity:.35;stroke-width:2}.panel .place{font-size:12px;color:#ffc781;border-bottom:1px solid #3e6773;padding-bottom:6px}.editing .marker{cursor:default}.editing .label{cursor:text}.panel[hidden]{display:none!important}.panel.work-panel{position:fixed;left:auto;right:20px;bottom:20px;width:min(420px,calc(100vw - 32px));height:auto;max-height:48vh;z-index:50;border-radius:22px 22px 22px 40px;box-shadow:0 12px 48px #00131f80}.work{grid-template-columns:24px 1fr 56px}.work img{width:56px;height:44px;object-fit:contain;border-radius:6px}@media(max-width:600px){.panel.work-panel{right:12px;bottom:12px;width:calc(100vw - 24px);max-height:44vh}}</style>
+<style id="v107-upgrade">
+/* Need panel: keep at lower-left, add a cinematic scientific visual. */
+.panel:not(.work-panel) .need-visual{
+  width:34%;height:104px;object-fit:cover;float:left;margin:2px 12px 7px 0;
+  border-radius:11px;border:1px solid rgba(119,224,217,.46);
+  box-shadow:0 8px 24px rgba(0,0,0,.23)
+}
+.panel:not(.work-panel) h3{margin-top:2px}
+.panel:not(.work-panel) .place{font-size:11px;color:#a9c7ca}
+
+/* Research Work panel lives inside the big map, at its lower-right corner. */
+.panel.work-panel{
+  position:absolute!important;left:auto!important;right:1.6%!important;bottom:2.0%!important;
+  width:38%!important;max-width:none!important;height:auto!important;max-height:42vh!important;
+  z-index:8!important;border-radius:22px 22px 40px 22px!important;
+  box-shadow:0 14px 46px rgba(0,8,18,.56)!important;
+  overflow:auto!important
+}
+.panel.work-panel .work-detail-image{
+  width:36%;height:118px;object-fit:contain;float:left;margin:2px 12px 7px 0;
+  background:#f5f0e8;border-radius:10px;border:1px solid rgba(255,255,255,.16)
+}
+.panel.work-panel h3{font-size:18px}
+.panel.work-panel p{font-size:12px;line-height:1.4}
+
+/* Navigation thumbnails are a separate illustrative image set. */
+.work{grid-template-columns:24px 1fr 62px!important}
+.work img{
+  width:62px!important;height:48px!important;object-fit:contain!important;border-radius:8px!important;
+  border:1px solid rgba(18,139,141,.18);background:#eaf1ef
+}
+@media(max-width:850px){
+  .panel.work-panel{right:1.5%!important;width:43%!important;height:34%!important}
+}
+</style>
+
+<style id="v1073-adaptive-work-panel">
+/* Research Work detail panel adapts to content and viewport size */
+.panel.work-panel{
+  height:auto!important;
+  min-height:180px!important;
+  max-height:42vh!important;
+  width:min(40vw,720px)!important;
+  overflow-y:auto!important;
+  padding-bottom:18px!important;
+}
+.panel.work-panel .work-detail-image{
+  width:clamp(150px,18vw,260px)!important;
+  height:auto!important;
+  max-height:180px!important;
+  object-fit:contain!important;
+}
+.panel.work-panel h3{
+  font-size:clamp(16px,1.5vw,24px)!important;
+}
+.panel.work-panel p{
+  font-size:clamp(11px,.95vw,15px)!important;
+  line-height:1.45!important;
+}
+.panel.work-panel .links button{
+  margin-top:6px;
+}
+@media(max-width:1100px){
+ .panel.work-panel{
+   width:48vw!important;
+   max-height:45vh!important;
+ }
+}
+</style>
+
+<style id="v1074-adaptive-need-panel">
+/* Research Need detail panel adapts to content and viewport */
+.panel:not(.work-panel){
+  height:auto!important;
+  min-height:160px!important;
+  max-height:38vh!important;
+  width:min(38vw,620px)!important;
+  overflow-y:auto!important;
+  padding-bottom:16px!important;
+}
+.panel:not(.work-panel) .need-visual{
+  width:clamp(120px,14vw,220px)!important;
+  height:auto!important;
+  max-height:150px!important;
+  object-fit:contain!important;
+}
+.panel:not(.work-panel) h3{
+  font-size:clamp(15px,1.35vw,22px)!important;
+}
+.panel:not(.work-panel) p{
+  font-size:clamp(10px,.9vw,14px)!important;
+  line-height:1.45!important;
+}
+@media(max-width:1100px){
+  .panel:not(.work-panel){
+    width:46vw!important;
+    max-height:42vh!important;
+  }
+}
+</style>
+
+<style id="v1075-work-detail-image-clean">
+/* Research Work detail image: no white card, no padding, no border. */
+.panel.work-panel .work-detail-image{
+  background:transparent!important;
+  padding:0!important;
+  border:0!important;
+  box-shadow:none!important;
+  object-fit:contain!important;
+  width:clamp(160px,18vw,260px)!important;
+  height:clamp(110px,12vw,175px)!important;
+  border-radius:10px!important;
+  display:block!important;
+}
+/* Work panel remains content-adaptive. */
+.panel.work-panel{
+  height:auto!important;
+  min-height:0!important;
+  max-height:42vh!important;
+  overflow-y:auto!important;
+}
+</style>
+
+<style id="v1076-detail-image-final">
+.panel.work-panel .work-detail-image{
+  background:transparent!important;
+  padding:0!important;
+  border:0!important;
+  box-shadow:none!important;
+  object-fit:contain!important;
+  width:clamp(170px,20vw,300px)!important;
+  height:clamp(130px,16vw,220px)!important;
+  display:block!important;
+  border-radius:8px!important;
+}
+/* Remove related research needs section, reserve bottom area for future PDF links */
+.panel.work-panel .related-research-needs,
+.panel.work-panel [data-section="related-research-needs"]{
+  display:none!important;
+}
+.panel.work-panel .pdf-interface-placeholder{
+  margin-top:10px;
+  padding-top:8px;
+  border-top:1px solid rgba(255,255,255,.12);
+  color:rgba(220,235,235,.65);
+  font-size:11px;
+}
+</style>
+
+<style id="v1093-image-clean">
+.panel.work-panel .work-detail-image,
+.panel.work-panel img.work-detail-image{
+    background:transparent!important;
+    border:none!important;
+    box-shadow:none!important;
+    padding:0!important;
+    mix-blend-mode:normal!important;
+    object-fit:contain!important;
+}
+</style>
+<style id="v1096-research-header">
+/* Match the Home header without importing page-wide image/layout rules. */
+.research-site-header{height:92px;min-height:0;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;justify-content:normal;gap:0;padding:0 3.2vw;background:rgba(255,251,244,.96);border-bottom:1px solid rgba(120,95,75,.12);font-family:"Aptos","Segoe UI Variable Text","Segoe UI","Helvetica Neue",Arial,sans-serif}
+.research-site-header .brand{font-size:22px;font-weight:760;letter-spacing:.03em;color:#d16b10;white-space:nowrap}
+.research-site-header .merged-nav{grid-column:2;display:flex;gap:10px;justify-content:center;align-items:center}
+.research-site-header .merged-nav a{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:850;letter-spacing:.045em;padding:9px 15px;border:1px solid transparent;border-radius:999px;color:#075e68;text-decoration:none;white-space:nowrap}
+.research-site-header .merged-nav a.active{background:#0d7e84;color:#fff;box-shadow:0 4px 12px rgba(13,126,132,.16)}
+@media(max-width:1180px){.research-site-header{grid-template-columns:auto 1fr;height:auto;min-height:72px;padding:12px 24px}.research-site-header .brand{font-size:18px}.research-site-header .merged-nav{justify-content:flex-end}}
+@media(max-width:900px){.research-site-header{grid-template-columns:1fr;gap:9px}.research-site-header .brand{text-align:center}.research-site-header .merged-nav{grid-column:1;width:100%;justify-content:center;flex-wrap:wrap;gap:7px}.research-site-header .merged-nav a{font-size:14.5px;padding:8px 12px}}
+@media(max-width:600px){.research-site-header .merged-nav{gap:5px}.research-site-header .merged-nav a{font-size:13.5px;padding:7px 9px;letter-spacing:.025em}}
+@media(max-width:390px){.research-site-header .merged-nav a{font-size:12.5px;padding:6px 7px}}
+</style>
+<style id="v1099-fit-research-page">
+.layout{align-items:start}
+.scene-wrap{background:transparent;align-self:start}
+@media(min-width:851px){
+ .layout{height:calc(100dvh - var(--research-header-height,92px));min-height:540px;grid-template-columns:minmax(0,1fr) clamp(290px,24vw,350px);grid-template-rows:auto minmax(0,1fr);column-gap:0}
+ .intro{grid-column:1;grid-row:1;padding:16px 22px 12px;display:block;min-width:0}
+ .intro h1{font-size:24px;line-height:1.2}
+ .intro p{font-size:14px;line-height:1.4;margin-top:6px}
+ .scene-wrap{grid-column:1;grid-row:2;min-width:0;min-height:0;width:100%;height:100%;display:flex;justify-content:center;align-items:flex-start;overflow:visible}
+ .scene{min-width:0;flex:none;container-type:inline-size}
+ .scene .marker{gap:6px}
+ .scene .icon{width:clamp(30px,4.8cqw,48px);height:clamp(30px,4.8cqw,48px);flex-basis:clamp(30px,4.8cqw,48px)}
+ .scene .icon svg{width:60%;height:60%}
+ .scene .label{font-size:clamp(11px,1.4cqw,14px)}
+ .scene .marker small{font-size:clamp(10px,1.1cqw,11px);margin-top:4px}
+ .scene .location-name{font-size:clamp(9px,1cqw,10px);margin-top:4px}
+ .scene .map-title{font-size:clamp(13px,1.8cqw,18px)}
+ .scene .map-title small{font-size:clamp(10px,1.3cqw,13px)}
+ .works{grid-column:2;grid-row:1 / 3;align-self:stretch;min-height:0;padding:16px 14px 12px;display:grid;grid-template-rows:29px repeat(11,minmax(0,1fr));gap:4px}
+ .works h2{margin:0;font-size:19px;line-height:24px;align-self:start}
+ .works .work{min-height:0;margin:0;padding:4px 6px;gap:6px;grid-template-columns:24px minmax(0,1fr) 52px!important}
+ .works .work span{font-size:12px;line-height:1.15}
+ .works .work small{font-size:10px;line-height:1.1;margin-top:3px}
+ .works .work img{width:52px!important;height:40px!important;max-height:100%;object-fit:contain!important}
+}
+@media(max-width:850px){.intro{grid-column:1}.scene-wrap{grid-column:1}.works{grid-column:1}}
+</style>
+</head><body><header class="research-site-header">
+  <div class="brand">DAN'S SPACE SETTLEMENT</div>
+  <nav class="merged-nav"><a href="index.html">HOME</a><a href="settlement.html">SETTLEMENT</a><a class="active" aria-current="page" href="research.html">RESEARCH</a><a href="next.html">NEXT</a></nav>
+</header><div class="edit-note">Edit any map label directly. Drag an icon to reposition its group. Save edited page to keep your changes.</div><main class="layout"><section class="intro"><h1>What would a new home need?</h1><p>Explore the settlement’s research needs and their connections to eleven research works.</p></section><div class="scene-wrap"><div class="scene" id="scene"><img src="space-city-clean.png" alt="Space settlement with a central glass dome, orbital rings, spacecraft and planets"><svg class="location-lines" viewBox="0 0 1000 620" preserveAspectRatio="none" aria-hidden="true"><g data-location="need-human" style="color:#72ddd0"><path class="leader" d="M 314.0 174.22000000000003 L 314.0 174.22000000000003"/><circle class="location-halo" cx="314.0" cy="174.22000000000003" r="10"/><circle class="location-dot" cx="314.0" cy="174.22000000000003" r="3.5"/></g><g data-location="need-why" style="color:#ff7d78"><path class="leader" d="M 804.0 295.12 L 804.0 295.12"/><circle class="location-halo" cx="804.0" cy="295.12" r="10"/><circle class="location-dot" cx="804.0" cy="295.12" r="3.5"/></g><g data-location="need-resource" style="color:#ffad66"><path class="leader" d="M 622.0 461.28000000000003 L 622.0 461.28000000000003"/><circle class="location-halo" cx="622.0" cy="461.28000000000003" r="10"/><circle class="location-dot" cx="622.0" cy="461.28000000000003" r="3.5"/></g><g data-location="need-habitat" style="color:#78bff2"><path class="leader" d="M 674.0 199.64000000000001 L 674.0 199.64000000000001"/><circle class="location-halo" cx="674.0" cy="199.64000000000001" r="10"/><circle class="location-dot" cx="674.0" cy="199.64000000000001" r="3.5"/></g><g data-location="need-transport" style="color:#64d3bf"><path class="leader" d="M 911.0 461.28000000000003 L 911.0 461.28000000000003"/><circle class="location-halo" cx="911.0" cy="461.28000000000003" r="10"/><circle class="location-dot" cx="911.0" cy="461.28000000000003" r="3.5"/></g><g data-location="need-autonomy" style="color:#c49af7"><path class="leader" d="M 144.0 322.40000000000003 L 144.0 322.40000000000003"/><circle class="location-halo" cx="144.0" cy="322.40000000000003" r="10"/><circle class="location-dot" cx="144.0" cy="322.40000000000003" r="3.5"/></g><g data-location="need-governance" style="color:#f5c57c"><path class="leader" d="M 477.0 166.16 L 477.0 166.16"/><circle class="location-halo" cx="477.0" cy="166.16" r="10"/><circle class="location-dot" cx="477.0" cy="166.16" r="3.5"/></g><g data-location="need-food" style="color:#ef9aca"><path class="leader" d="M 358.0 307.52000000000004 L 358.0 307.52000000000004"/><circle class="location-halo" cx="358.0" cy="307.52000000000004" r="10"/><circle class="location-dot" cx="358.0" cy="307.52000000000004" r="3.5"/></g><g data-location="need-environment" style="color:#66d7df"><path class="leader" d="M 484.0 386.88 L 484.0 386.88"/><circle class="location-halo" cx="484.0" cy="386.88" r="10"/><circle class="location-dot" cx="484.0" cy="386.88" r="3.5"/></g></svg><div class="map-title" contenteditable="false">NEW HOME / SYSTEMS MAP<small>Select an icon or its text. Follow the line to its location.</small></div><div class="marker" data-key="need-human" style="left:19.893%;top:10.209%;--color:#72ddd0"><button class="icon" data-need="need-human" aria-label="Human Life and Culture" aria-controls="panel" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4C9 2 3 7 5 15c2 8 15 5 15-11ZM5 21 16 10"/></svg></button><div class="label" role="button" tabindex="0" aria-controls="panel" aria-label="Human Life and Culture"><div class="need-title" contenteditable="false">Human Life and Culture</div><small contenteditable="false">Health, well-being and culture</small><span class="location-name">Habitation Dome</span><div class="icon-editor"><select aria-label="Icon shape"><option value="0" selected>Leaf</option><option value="1">Rocket</option><option value="2">Resources</option><option value="3">Shield</option><option value="4">Transport</option><option value="5">Robot</option><option value="6">Governance</option><option value="7">Plant</option><option value="8">Water</option></select><input type="color" aria-label="Icon color" value="#72ddd0"></div></div></div><div class="marker" data-key="need-why" style="left:79%;top:35.424%;--color:#ff7d78"><button class="icon" data-need="need-why" aria-label="Why Settle Space?" aria-controls="panel" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 5 20 3 21 9 13 17 7 11 14 5ZM7 11 3 12 3 17 8 16M13 17 12 21 17 21 18 16M5 19 3 21"/></svg></button><div class="label" role="button" tabindex="0" aria-controls="panel" aria-label="Why Settle Space?"><div class="need-title" contenteditable="false">Why Settle Space?</div><small contenteditable="false">Priorities and responsibility</small><span class="location-name">Deep Space Gateway</span><div class="icon-editor"><select aria-label="Icon shape"><option value="0">Leaf</option><option value="1" selected>Rocket</option><option value="2">Resources</option><option value="3">Shield</option><option value="4">Transport</option><option value="5">Robot</option><option value="6">Governance</option><option value="7">Plant</option><option value="8">Water</option></select><input type="color" aria-label="Icon color" value="#72ddd0"></div></div></div><div class="marker" data-key="need-resource" style="left:61.204%;top:53.506%;--color:#ffad66"><button class="icon" data-need="need-resource" aria-label="In-Situ Resource Utilization" aria-controls="panel" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 21 8 21 17 12 22 3 17 3 8 12 3ZM3 8 12 13 21 8M12 13V22M7 5 16 10"/></svg></button><div class="label" role="button" tabindex="0" aria-controls="panel" aria-label="In-Situ Resource Utilization"><div class="need-title" contenteditable="false">In-Situ Resource Utilization</div><small contenteditable="false">Local materials and resources</small><span class="location-name">ISRU Processing Plant</span><div class="icon-editor"><select aria-label="Icon shape"><option value="0">Leaf</option><option value="1">Rocket</option><option value="2" selected>Resources</option><option value="3">Shield</option><option value="4">Transport</option><option value="5">Robot</option><option value="6">Governance</option><option value="7">Plant</option><option value="8">Water</option></select><input type="color" aria-label="Icon color" value="#72ddd0"></div></div></div><div class="marker" data-key="need-habitat" style="left:69.512%;top:11.316%;--color:#78bff2"><button class="icon" data-need="need-habitat" aria-label="Habitat Health and Infrastructure" aria-controls="panel" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 21 7V12C21 17 17 20 12 22 7 20 3 17 3 12V7L12 3Z"/></svg></button><div class="label" role="button" tabindex="0" aria-controls="panel" aria-label="Habitat Health and Infrastructure"><div class="need-title" contenteditable="false">Habitat Health and Infrastructure</div><small contenteditable="false">Structural health and inspection</small><span class="location-name">Radiation Shield Ring</span><div class="icon-editor"><select aria-label="Icon shape"><option value="0">Leaf</option><option value="1">Rocket</option><option value="2">Resources</option><option value="3" selected>Shield</option><option value="4">Transport</option><option value="5">Robot</option><option value="6">Governance</option><option value="7">Plant</option><option value="8">Water</option></select><input type="color" aria-label="Icon color" value="#72ddd0"></div></div></div><div class="marker" data-key="need-transport" style="left:79%;top:55.843%;--color:#64d3bf"><button class="icon" data-need="need-transport" aria-label="Space Transportation" aria-controls="panel" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 15H21L18 9H6L3 15ZM7 15V19M17 15V19M2 19H22M7 6H17"/></svg></button><div class="label" role="button" tabindex="0" aria-controls="panel" aria-label="Space Transportation"><div class="need-title" contenteditable="false">Space Transportation</div><small contenteditable="false">Reliable movement and logistics</small><span class="location-name">Shipyard & Launch Port</span><div class="icon-editor"><select aria-label="Icon shape"><option value="0">Leaf</option><option value="1">Rocket</option><option value="2">Resources</option><option value="3">Shield</option><option value="4" selected>Transport</option><option value="5">Robot</option><option value="6">Governance</option><option value="7">Plant</option><option value="8">Water</option></select><input type="color" aria-label="Icon color" value="#72ddd0"></div></div></div><div class="marker" data-key="need-autonomy" style="left:2.515%;top:35.424%;--color:#c49af7"><button class="icon" data-need="need-autonomy" aria-label="Autonomous Systems and Perception" aria-controls="panel" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8H19V20H5ZM12 8V3M9 3H15M8 12H9M15 12H16M9 16H15M2 11V17M22 11V17"/></svg></button><div class="label" role="button" tabindex="0" aria-controls="panel" aria-label="Autonomous Systems and Perception"><div class="need-title" contenteditable="false">Autonomous Systems and Perception</div><small contenteditable="false">Perception, robotics and accountability</small><span class="location-name">Docking & Robotic Hub</span><div class="icon-editor"><select aria-label="Icon shape"><option value="0">Leaf</option><option value="1">Rocket</option><option value="2">Resources</option><option value="3">Shield</option><option value="4">Transport</option><option value="5" selected>Robot</option><option value="6">Governance</option><option value="7">Plant</option><option value="8">Water</option></select><input type="color" aria-label="Icon color" value="#72ddd0"></div></div></div><div class="marker" data-key="need-governance" style="left:47.332%;top:6.396%;--color:#f5c57c"><button class="icon" data-need="need-governance" aria-label="Science, Ethics and Governance" aria-controls="panel" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9 12 3 21 9H3ZM5 11V19M10 11V19M15 11V19M20 11V19M2 22H22"/></svg></button><div class="label" role="button" tabindex="0" aria-controls="panel" aria-label="Science, Ethics and Governance"><div class="need-title" contenteditable="false">Science, Ethics and Governance</div><small contenteditable="false">Responsible scientific decisions</small><span class="location-name">Command & Civic Core</span><div class="icon-editor"><select aria-label="Icon shape"><option value="0">Leaf</option><option value="1">Rocket</option><option value="2">Resources</option><option value="3">Shield</option><option value="4">Transport</option><option value="5">Robot</option><option value="6" selected>Governance</option><option value="7">Plant</option><option value="8">Water</option></select><input type="color" aria-label="Icon color" value="#72ddd0"></div></div></div><div class="marker" data-key="need-food" style="left:10.671%;top:58.549%;--color:#ef9aca"><button class="icon" data-need="need-food" aria-label="Extraterrestrial Food Production" aria-controls="panel" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22V10M12 15C4 16 3 11 3 7 9 7 12 9 12 15ZM12 10C12 4 16 3 21 3 21 8 17 11 12 10Z"/></svg></button><div class="label" role="button" tabindex="0" aria-controls="panel" aria-label="Extraterrestrial Food Production"><div class="need-title" contenteditable="false">Extraterrestrial Food Production</div><small contenteditable="false">Food and closed-loop resources</small><span class="location-name">Agriculture Ring</span><div class="icon-editor"><select aria-label="Icon shape"><option value="0">Leaf</option><option value="1">Rocket</option><option value="2">Resources</option><option value="3">Shield</option><option value="4">Transport</option><option value="5">Robot</option><option value="6">Governance</option><option value="7" selected>Plant</option><option value="8">Water</option></select><input type="color" aria-label="Icon color" value="#72ddd0"></div></div></div><div class="marker" data-key="need-environment" style="left:38.567%;top:67.528%;--color:#66d7df"><button class="icon" data-need="need-environment" aria-label="Environmental Monitoring" aria-controls="panel" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C10 7 4 12 4 16a8 8 0 0 0 16 0C20 12 14 7 12 2ZM8 16C8 19 10 20 12 20"/></svg></button><div class="label" role="button" tabindex="0" aria-controls="panel" aria-label="Environmental Monitoring"><div class="need-title" contenteditable="false">Environmental Monitoring</div><small contenteditable="false">Water quality and continuous sensing</small><span class="location-name">Environmental Monitoring Node</span><div class="icon-editor"><select aria-label="Icon shape"><option value="0">Leaf</option><option value="1">Rocket</option><option value="2">Resources</option><option value="3">Shield</option><option value="4">Transport</option><option value="5">Robot</option><option value="6">Governance</option><option value="7">Plant</option><option value="8" selected>Water</option></select><input type="color" aria-label="Icon color" value="#72ddd0"></div></div></div><section class="panel" id="panel" hidden aria-label="Research details"><button class="close" id="close" aria-label="Close details">×</button><div id="details" aria-live="polite" aria-atomic="true"></div></section></div></div><aside class="works"><h2>11 RESEARCH WORKS</h2><button class="work" data-work="1"><b>01</b><span>Femtosecond-Laser Color Centers in 4H-SiC<small>MATERIALS</small></span><img src="navigation-thumbnails/work-01.png?v=1072" alt=""></button><button class="work" data-work="2"><b>02</b><span>Academic Rankings, Performance + Mental Health<small>HUMAN SYSTEMS</small></span><img src="navigation-thumbnails/work-02.png?v=1072" alt=""></button><button class="work" data-work="3"><b>03</b><span>Sweet Monochromator<small>OPTICS</small></span><img src="navigation-thumbnails/work-03.png?v=1072" alt=""></button><button class="work" data-work="4"><b>04</b><span>Photothermal Control of Diamagnetic Levitation<small>CONTROL</small></span><img src="navigation-thumbnails/work-04.png?v=1072" alt=""></button><button class="work" data-work="5"><b>05</b><span>AI-Assisted Salinity Sensing from Diffraction<small>AI SENSING</small></span><img src="navigation-thumbnails/work-05.png?v=1075?v=1072" alt=""></button><button class="work" data-work="6"><b>06</b><span>Metasurface Structured-Light 3D Imaging<small>3D PERCEPTION</small></span><img src="navigation-thumbnails/work-06.png?v=1072" alt=""></button><button class="work" data-work="7"><b>07</b><span>Integrated Photonic Chip for WFBG Interrogation<small>PHOTONICS</small></span><img src="navigation-thumbnails/work-07.png?v=1072" alt=""></button><button class="work" data-work="8"><b>08</b><span>Audio Characteristics and Music Popularity<small>STATISTICS</small></span><img src="navigation-thumbnails/work-08.png?v=1072" alt=""></button><button class="work" data-work="9"><b>09</b><span>Is Space Exploration a Necessity or an Indulgence?<small>PRIORITIES</small></span><img src="navigation-thumbnails/work-09.png?v=1072" alt=""></button><button class="work" data-work="10"><b>10</b><span>Philosophy of Scientific Practice<small>SCIENTIFIC PRACTICE</small></span><img src="navigation-thumbnails/work-10.png?v=1072" alt=""></button><button class="work" data-work="11"><b>11</b><span>Robots in Human Society<small>ROBOT ETHICS</small></span><img src="navigation-thumbnails/work-11.png?v=1072" alt=""></button></aside></main><script>
+const PROJECTS=[{"n":1,"tag":"MATERIALS","title":"Femtosecond-Laser Color Centers in 4H-SiC","summary":"This research explores femtosecond laser writing of optically active color centers in 4H-SiC, creating stable defects with potential for quantum sensing and photonic applications. It provides a pathway toward robust materials for future extreme environments.","problem":"Robust functional materials and compact optical or quantum devices for long-duration infrastructure.","img":"research-assets/research-01.jpg","summary_long":"This research explores femtosecond laser writing of optically active color centers in 4H-SiC, creating stable defects with potential for quantum sensing and photonic applications. It provides a pathway toward robust materials for future extreme environments.","pdf":"archive-pdfs/01-femtosecond-laser-color-centers.pdf"},{"n":2,"tag":"HUMAN SYSTEMS","title":"Academic Rankings, Performance + Mental Health","summary":"This research examines how academic ranking systems and performance evaluation influence motivation, achievement, and mental wellbeing. It explores how future human systems can use measurement without reducing people to simple numerical indicators.","problem":"Evaluation and education systems that sustain performance without damaging mental health or community.","img":"research-assets/research-02.jpg","summary_long":"This research examines how academic ranking systems and performance evaluation influence motivation, achievement, and mental wellbeing. It explores how future human systems can use measurement without reducing people to simple numerical indicators.","pdf":"archive-pdfs/02-academic-rankings-mental-health.pdf"},{"n":3,"tag":"OPTICS","title":"Sweet Monochromator","summary":"This research develops a compact optical wavelength-selection concept using optical rotation and polarization control. The work demonstrates how fundamental optical principles can inspire lightweight sensing instruments for resource-limited environments.","problem":"Compact wavelength selection for sensing, analysis and optical systems.","img":"research-assets/research-03.jpg","summary_long":"This research develops a compact optical wavelength-selection concept using optical rotation and polarization control. The work demonstrates how fundamental optical principles can inspire lightweight sensing instruments for resource-limited environments.","pdf":"archive-pdfs/03-sweet-monochromator.pdf"},{"n":4,"tag":"CONTROL","title":"Photothermal Control of Diamagnetic Levitation","summary":"This research studies contactless control of diamagnetic levitation through photothermal effects. The approach provides insights for future autonomous transport, precision control, and low-maintenance robotic systems.","problem":"Precision, contactless actuation for sealed laboratories and microgravity environments.","img":"research-assets/research-04.jpg","summary_long":"This research studies contactless control of diamagnetic levitation through photothermal effects. The approach provides insights for future autonomous transport, precision control, and low-maintenance robotic systems.","pdf":"archive-pdfs/04-photothermal-levitation-control.pdf"},{"n":5,"tag":"AI SENSING","title":"AI-Assisted Salinity Sensing from Diffraction","summary":"This research combines diffraction-based optical sensing with artificial intelligence to estimate salinity and refractive-index changes. The method supports continuous monitoring of water quality and environmental stability in closed-loop habitats.","problem":"Continuous water-quality monitoring in a closed habitat.","img":"research-assets/research-05.jpg","summary_long":"This research combines diffraction-based optical sensing with artificial intelligence to estimate salinity and refractive-index changes. The method supports continuous monitoring of water quality and environmental stability in closed-loop habitats.","pdf":"archive-pdfs/05-ai-salinity-diffraction-sensing.pdf"},{"n":6,"tag":"3D PERCEPTION","title":"Metasurface Structured-Light 3D Imaging","summary":"This research develops metasurface-based structured-light 3D imaging for compact depth perception. The technology supports future robots and autonomous systems performing construction, inspection, and navigation.","problem":"Autonomous construction, inspection, navigation and maintenance.","img":"research-assets/research-06.jpg","summary_long":"This research develops metasurface-based structured-light 3D imaging for compact depth perception. The technology supports future robots and autonomous systems performing construction, inspection, and navigation.","pdf":"archive-pdfs/06-metasurface-structured-light-3d-imaging.pdf"},{"n":7,"tag":"PHOTONICS","title":"Integrated Photonic Chip for WFBG Interrogation","summary":"This research develops integrated photonic technology for interrogating weak fiber Bragg grating sensor networks. The approach enables scalable monitoring of future spacecraft, stations, and large infrastructure.","problem":"Distributed structural monitoring across large habitat infrastructure.","img":"research-assets/research-07.jpg","summary_long":"This research develops integrated photonic technology for interrogating weak fiber Bragg grating sensor networks. The approach enables scalable monitoring of future spacecraft, stations, and large infrastructure.","pdf":"archive-pdfs/07-integrated-photonic-wfbg-chip.pdf"},{"n":8,"tag":"STATISTICS","title":"Audio Characteristics and Music Popularity","summary":"This research analyzes large-scale music data to understand relationships between audio characteristics and popularity. It explores how AI systems can interpret complex human preferences and cultural behavior.","problem":"Culture and preference cannot be reduced to a few measurable variables; future societies need algorithmic humility.","img":"research-assets/research-08.jpg","summary_long":"This research analyzes large-scale music data to understand relationships between audio characteristics and popularity. It explores how AI systems can interpret complex human preferences and cultural behavior.","pdf":"archive-pdfs/08-audio-characteristics-music-popularity.pdf"},{"n":9,"tag":"PRIORITIES","title":"Is Space Exploration a Necessity or an Indulgence?","summary":"This research examines whether space exploration should be viewed as necessity or indulgence. It discusses the balance between technological ambition, human curiosity, and responsibilities on Earth.","problem":"A settlement must justify its cost and responsibility rather than assuming expansion is automatically good.","img":"research-assets/research-09.jpg","summary_long":"This research examines whether space exploration should be viewed as necessity or indulgence. It discusses the balance between technological ambition, human curiosity, and responsibilities on Earth.","pdf":"archive-pdfs/09-space-exploration-necessity-or-indulgence.pdf"},{"n":10,"tag":"SCIENTIFIC PRACTICE","title":"Philosophy of Scientific Practice","summary":"This research investigates how scientific knowledge is produced, communicated, and connected with society. It highlights the importance of responsibility and values in future scientific systems.","problem":"Responsible scientific decision-making under uncertainty in a new society.","img":"research-assets/research-10.jpg","summary_long":"This research investigates how scientific knowledge is produced, communicated, and connected with society. It highlights the importance of responsibility and values in future scientific systems.","pdf":"archive-pdfs/10-philosophy-of-scientific-practice.pdf"},{"n":11,"tag":"ROBOT ETHICS","title":"Robots in Human Society","summary":"This research examines how robots can responsibly coexist with human society. It focuses on trust, cooperation, responsibility, and the role of intelligent machines in future environments.","problem":"Robotic systems must be embedded in accountable human institutions rather than treated as autonomous moral agents.","img":"research-assets/research-11.jpg","summary_long":"This research examines how robots can responsibly coexist with human society. It focuses on trust, cooperation, responsibility, and the role of intelligent machines in future environments.","pdf":"archive-pdfs/11-robots-in-human-society.pdf"}];
+const NEEDS={"need-human": {"code": "N01", "title": "Human Life and Culture", "projects": [2, 8, 11], "problem": "Inside the habitation dome, isolation and competitive evaluation can undermine mental health, motivation and community life.", "research": "Study fair evaluation, psychological wellbeing, cultural preferences and responsible human\u2013robot coexistence in shared living spaces.", "location": "Habitation Dome", "anchor": [31.4, 28.1]}, "need-why": {"code": "N02", "title": "Why Settle Space?", "projects": [9, 10], "problem": "At the gateway for outward missions, decision-makers must decide whether expansion justifies its cost while urgent needs on Earth remain unmet.", "research": "Evaluate mission priorities, ethical responsibilities and the evidence used to authorize further exploration.", "location": "Deep Space Gateway", "anchor": [80.4, 47.6]}, "need-resource": {"code": "N03", "title": "In-Situ Resource Utilization", "projects": [1, 3, 4], "problem": "The local-resource processing facility needs reliable material characterization and precise handling so it can reduce dependence on supplies from Earth.", "research": "Explore optical analysis, functional materials and contactless control as relevant methods; the listed studies are connections to this need, not a demonstrated ISRU system.", "location": "ISRU Processing Plant", "anchor": [62.2, 74.4]}, "need-habitat": {"code": "N04", "title": "Habitat Health and Infrastructure", "projects": [1, 6, 7], "problem": "Damage or gaps in the protective outer ring can weaken habitat protection. Inspection must identify structural deterioration before shielding continuity is compromised.", "research": "Develop 3D inspection and distributed structural sensing. Radiation attenuation and dose testing would require additional dedicated research beyond the listed projects.", "location": "Radiation Shield Ring", "anchor": [67.4, 32.2]}, "need-transport": {"code": "N05", "title": "Space Transportation", "projects": [4, 6, 7], "problem": "At the shipyard and launch port, docking misalignment, equipment faults and undetected structural damage can interrupt safe movement of people and cargo.", "research": "Investigate precision control, 3D perception and distributed infrastructure monitoring for inspection and maintenance.", "location": "Shipyard & Launch Port", "anchor": [91.1, 74.4]}, "need-autonomy": {"code": "N06", "title": "Autonomous Systems and Perception", "projects": [5, 6, 11], "problem": "Robots at the docking and maintenance hub must inspect and repair exposed equipment while people remain inside protected areas.", "research": "Study intelligent sensing, 3D perception and accountable human\u2013robot operation for maintenance tasks.", "location": "Docking & Robotic Hub", "anchor": [14.4, 52.0]}, "need-governance": {"code": "N07", "title": "Science, Ethics and Governance", "projects": [9, 10, 11], "problem": "The command and civic core must decide which technologies to deploy, which risks are acceptable and who is accountable when systems affect residents.", "research": "Examine scientific judgment, ethical priorities and human responsibility in technology governance.", "location": "Command & Civic Core", "anchor": [47.7, 26.8]}, "need-food": {"code": "N08", "title": "Extraterrestrial Food Production", "projects": [3, 5, 7], "problem": "In the agriculture ring, changes in recycled-water salinity and growing conditions can threaten crop health and dependable food production.", "research": "Explore optical measurements, AI-assisted salinity sensing and distributed monitoring as tools for controlled growing environments.", "location": "Agriculture Ring", "anchor": [35.8, 49.6]}, "need-environment": {"code": "N09", "title": "Environmental Monitoring", "projects": [3, 5, 7], "problem": "At the monitoring node below the central tower, measurements must reveal water-quality and environmental drift across the closed habitat before it becomes a system-wide problem.", "research": "Combine optical sensing, AI-assisted interpretation and distributed monitoring to detect change and support timely intervention.", "location": "Environmental Monitoring Node", "anchor": [48.4, 62.4]}};
+const NEED_IMAGES={"need-human": "need-visuals/need-human.jpg", "need-why": "need-visuals/need-why.jpg", "need-resource": "need-visuals/need-resource.jpg", "need-habitat": "need-visuals/need-habitat.jpg", "need-transport": "need-visuals/need-transport.jpg", "need-autonomy": "need-visuals/need-autonomy.jpg", "need-governance": "need-visuals/need-governance.jpg", "need-food": "need-visuals/need-food.jpg", "need-environment": "need-visuals/need-environment.jpg"};
+let editing=false;
+const details=document.getElementById('details');
+const panel=document.getElementById('panel');
+let currentNeed=null;
+const pad=n=>String(n).padStart(2,'0');
+function paintNeeds(key){document.querySelectorAll('[data-need]').forEach(b=>{const on=b.dataset.need===key;b.classList.toggle('active',on);b.setAttribute('aria-pressed',String(on));});}
+function paintWorks(ids,selected=null){document.querySelectorAll('[data-work]').forEach(b=>{b.classList.toggle('connected',ids.includes(Number(b.dataset.work)));b.classList.toggle('selected',Number(b.dataset.work)===selected);});}
+function show(html){panel.hidden=false;details.innerHTML=html;panel.scrollTop=0;details.classList.remove('pulse');requestAnimationFrame(()=>details.classList.add('pulse'));}
+function openNeed(key){if(editing)return;const n=NEEDS[key];if(!n)return;n.title=document.querySelector('.marker[data-key="'+key+'"] .need-title').textContent;currentNeed=key;panel.classList.remove("work-panel");paintNeeds(key);paintWorks(n.projects);paintLocation(key);show(`<div class="eyebrow">RESEARCH NEED</div><h3>${n.title}</h3><img class="need-visual" src="${NEED_IMAGES[key]}" alt="${n.title} scientific problem illustration"><p class="place">LOCATION · ${n.location}</p><h4>SETTLEMENT PROBLEM</h4><p>${n.problem}</p><h4>RESEARCH NEEDED</h4><p>${n.research}</p><div style="clear:both"></div><h4>CONNECTED RESEARCH WORKS</h4><div class="links">${n.projects.map(id=>`<button data-open-work="${id}" title="${PROJECTS[id-1].title}">${pad(id)} · ${PROJECTS[id-1].tag}</button>`).join('')}</div>`);}
+function openWork(id){const p=PROJECTS.find(p=>p.n===id);if(!p)return;panel.classList.add("work-panel");const keys=Object.keys(NEEDS).filter(k=>NEEDS[k].projects.includes(id));paintWorks(currentNeed?NEEDS[currentNeed].projects:[id],id);show(`<div class="eyebrow work-eyebrow"><span>${pad(id)} / ${p.tag}</span><a class="pdf-source-link" href="${p.pdf}" target="_blank" rel="noopener">VIEW PDF SOURCE ↗</a></div><h3>${p.title}</h3><img class="work-detail-image" src="${p.img}" alt="${p.title} research image"><h4>RESEARCH WORK</h4><p>${p.summary}</p><h4>CONNECTION TO THE SETTLEMENT</h4><p>${p.problem}</p><div style="clear:both"></div>`);}
+function reset(){currentNeed=null;panel.hidden=true;panel.classList.remove('work-panel');paintNeeds(null);paintWorks([]);paintLocation(null);}
+
+document.querySelectorAll('.marker').forEach(marker=>{marker.addEventListener('click',()=>{if(!editing)openNeed(marker.dataset.key);});const label=marker.querySelector('.label');label.addEventListener('keydown',e=>{if(!editing&&(e.key==='Enter'||e.key===' ')){e.preventDefault();openNeed(marker.dataset.key);}});});
+document.querySelectorAll('[data-work]').forEach(b=>b.addEventListener('click',()=>openWork(Number(b.dataset.work))));
+details.addEventListener('click',e=>{const work=e.target.closest('[data-open-work]');const need=e.target.closest('[data-open-need]');if(work)openWork(Number(work.dataset.openWork));if(need)openNeed(need.dataset.openNeed);});
+document.getElementById('close').addEventListener('click',reset);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')reset();});
+document.addEventListener('click',e=>{if(!panel.hidden && !e.target.closest('#panel, .marker, .work'))reset();});
+reset();
+
+const scene=document.getElementById('scene');
+document.getElementById('editToggle')?.addEventListener('click',()=>{editing=!editing;document.body.classList.toggle('editing',editing);document.querySelectorAll('[contenteditable]').forEach(e=>e.contentEditable=String(editing));document.getElementById('editToggle').textContent=editing?'Finish editing':'Edit map';});
+document.querySelectorAll('.icon').forEach(button=>{let drag=null;button.addEventListener('pointerdown',e=>{if(!editing)return;e.preventDefault();const marker=button.closest('.marker');drag={marker,x:e.clientX,y:e.clientY,left:parseFloat(marker.style.left),top:parseFloat(marker.style.top)};button.setPointerCapture(e.pointerId);});button.addEventListener('pointermove',e=>{if(!drag)return;const box=scene.getBoundingClientRect();drag.marker.style.left=Math.max(0,Math.min(80,drag.left+(e.clientX-drag.x)/box.width*100))+'%';drag.marker.style.top=Math.max(0,Math.min(91,drag.top+(e.clientY-drag.y)/box.height*100))+'%';updateLeaders();});button.addEventListener('pointerup',()=>drag=null);button.addEventListener('pointercancel',()=>drag=null);});
+document.getElementById('exportPage')?.addEventListener('click',()=>{const clone=document.documentElement.cloneNode(true);clone.querySelector('body').classList.remove('editing');clone.querySelectorAll('[contenteditable]').forEach(e=>e.setAttribute('contenteditable','false'));clone.querySelector('#editToggle').textContent='Edit map';const blob=new Blob(['<!doctype html>'+clone.outerHTML],{type:'text/html'});const url=URL.createObjectURL(blob);const link=document.createElement('a');link.href=url;link.download='research-edited.html';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
+
+const iconPaths=["M20 4C9 2 3 7 5 15c2 8 15 5 15-11ZM5 21 16 10", "M14 5 20 3 21 9 13 17 7 11 14 5ZM7 11 3 12 3 17 8 16M13 17 12 21 17 21 18 16M5 19 3 21", "M12 3 21 8 21 17 12 22 3 17 3 8 12 3ZM3 8 12 13 21 8M12 13V22M7 5 16 10", "M12 3 21 7V12C21 17 17 20 12 22 7 20 3 17 3 12V7L12 3Z", "M3 15H21L18 9H6L3 15ZM7 15V19M17 15V19M2 19H22M7 6H17", "M5 8H19V20H5ZM12 8V3M9 3H15M8 12H9M15 12H16M9 16H15M2 11V17M22 11V17", "M3 9 12 3 21 9H3ZM5 11V19M10 11V19M15 11V19M20 11V19M2 22H22", "M12 22V10M12 15C4 16 3 11 3 7 9 7 12 9 12 15ZM12 10C12 4 16 3 21 3 21 8 17 11 12 10Z", "M12 2C10 7 4 12 4 16a8 8 0 0 0 16 0C20 12 14 7 12 2ZM8 16C8 19 10 20 12 20"];
+document.querySelectorAll('.icon-editor').forEach(editor=>{const marker=editor.closest('.marker');const select=editor.querySelector('select');const color=editor.querySelector('input');color.value=marker.style.getPropertyValue('--color');select.addEventListener('change',()=>{marker.querySelector('path').setAttribute('d',iconPaths[Number(select.value)]);Array.from(select.options).forEach(o=>o.toggleAttribute('selected',o.value===select.value));});color.addEventListener('input',()=>{marker.style.setProperty('--color',color.value);document.querySelector('[data-location="'+marker.dataset.key+'"]').style.color=color.value;color.setAttribute('value',color.value);});});
+
+function paintLocation(key){document.querySelectorAll('[data-location]').forEach(g=>g.classList.toggle('selected',g.dataset.location===key));document.querySelectorAll('.marker').forEach(m=>m.classList.toggle('active',m.dataset.key===key));}
+function updateLeaders(){const bounds=scene.getBoundingClientRect();document.querySelectorAll('.marker').forEach(marker=>{const icon=marker.querySelector('.icon').getBoundingClientRect();const x=(icon.left+icon.width/2-bounds.left)/bounds.width*1000;const y=(icon.top+icon.height/2-bounds.top)/bounds.height*620;const end=NEEDS[marker.dataset.key].anchor;document.querySelector('[data-location="'+marker.dataset.key+'"] .leader').setAttribute('d',`M ${x} ${y} L ${end[0]*10} ${end[1]*6.2}`);});}
+window.addEventListener('resize',updateLeaders);
+updateLeaders();
+
+// Fit the complete map to the remaining viewport; never stretch the wrapper into a black band.
+function fitResearchPage(){
+ const header=document.querySelector('.research-site-header');
+ document.documentElement.style.setProperty('--research-header-height',header.getBoundingClientRect().height+'px');
+ if(window.innerWidth>850){const wrap=scene.parentElement;const bounds=wrap.getBoundingClientRect();const width=Math.min(bounds.width,bounds.height*1312/813);scene.style.width=Math.max(0,width)+'px';scene.style.height=Math.max(0,width*813/1312)+'px';}
+ else{scene.style.removeProperty('width');scene.style.removeProperty('height');}
+ updateLeaders();
+}
+window.addEventListener('resize',fitResearchPage);
+window.addEventListener('load',fitResearchPage);
+if(document.fonts)document.fonts.ready.then(fitResearchPage);
+fitResearchPage();
+</script></body></html>
+
+
+<style id="v1102-pdf-source-link">
+.panel.work-panel .work-eyebrow{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.panel.work-panel .pdf-source-link{display:inline-flex;align-items:center;white-space:nowrap;padding:4px 7px;border:1px solid rgba(120,225,225,.42);border-radius:5px;color:#bffcff!important;text-decoration:none;font-size:9px;font-weight:850;letter-spacing:.055em;line-height:1.1}
+.panel.work-panel .pdf-source-link:hover{background:rgba(65,199,205,.18);color:#fff!important}
+</style>
+
+<style id="v1103-compact-research-heading">
+@media(min-width:851px){
+  .intro{display:flex;align-items:baseline;gap:16px;padding-bottom:8px}
+  .intro h1{margin:0;flex:0 0 auto}
+  .intro p{margin:0;max-width:none;min-width:0}
+}
+.panel.work-panel .work-eyebrow{justify-content:flex-start}
+.panel.work-panel .pdf-source-link{margin-left:3px}
+</style>
+<script id="v120-pdf-sources">
+/* Nine supplied sources open in Google Drive's restricted browser preview. */
+const PDF_SOURCES={1:"https://drive.google.com/file/d/1InUCUHXVcKdijpUIfOrnImhqZwaG1e46/view?usp=sharing",2:"https://drive.google.com/file/d/1av15NpfjwppzN4Xq_U0ioxIy1FGP9UAl/view?usp=sharing",3:"https://drive.google.com/file/d/1gEIjOE8S10RHoqBaElZaItCpDsRsX-2X/view?usp=sharing",4:"https://drive.google.com/file/d/1MsPIOuVunbYg7PhuBtTwfHqoTaN_FRBX/view?usp=sharing",5:"https://drive.google.com/file/d/1GJfvI5EN1Bz_s84hNI55lQQt3479JwQq/view?usp=sharing",6:"https://drive.google.com/file/d/17LePgUi_tEK86NUiI4d5h-ycpU8in-tq/view?usp=sharing",7:"https://drive.google.com/file/d/1asYHATAY9-LwaL2tHQHvYw8B-4VMirDN/view?usp=sharing",8:"https://drive.google.com/file/d/1xzdMPBGsXK5ekGKsb22Pm_-Re2AZkefw/view?usp=sharing",9:"https://drive.google.com/file/d/1qmOOmr5ijBnyKvaylG4E3Ex_L8KSi_wI/view?usp=sharing"};
+PROJECTS.forEach(project=>{project.pdf=PDF_SOURCES[project.n]||null;});
+function openWork(id){const p=PROJECTS.find(p=>p.n===id);if(!p)return;panel.classList.add("work-panel");paintWorks(currentNeed?NEEDS[currentNeed].projects:[id],id);const pdfLink=p.pdf?`<a class="pdf-source-link" href="${p.pdf}" target="_blank" rel="noopener">VIEW PDF SOURCE ↗</a>`:"";show(`<div class="eyebrow work-eyebrow"><span>${pad(id)} / ${p.tag}</span>${pdfLink}</div><h3>${p.title}</h3><img class="work-detail-image" src="${p.img}" alt="${p.title} research image"><h4>RESEARCH WORK</h4><p>${p.summary}</p><h4>CONNECTION TO THE SETTLEMENT</h4><p>${p.problem}</p><div style="clear:both"></div>`);}
+</script>
+<style id="v122-preprint-link">
+.panel.work-panel .preprint-link{display:inline-flex;align-items:center;white-space:nowrap;margin-left:8px;color:#ffd79b!important;text-decoration:none;font-size:9px;font-weight:850;letter-spacing:.045em;line-height:1.1}
+.panel.work-panel .preprint-link:hover{color:#fff!important;text-decoration:underline}
+.panel.work-panel .research-context-note{clear:both;margin:8px 0 10px;padding:6px 8px;border-left:2px solid rgba(128,229,225,.72);background:rgba(84,180,185,.10);color:#d8f8f8;font-size:10px;line-height:1.38;font-style:italic}
+</style>
+<script id="v122-preprint-source">
+function openWork(id){const p=PROJECTS.find(p=>p.n===id);if(!p)return;panel.classList.add("work-panel");paintWorks(currentNeed?NEEDS[currentNeed].projects:[id],id);const pdfLink=p.pdf?`<a class="pdf-source-link" href="${p.pdf}" target="_blank" rel="noopener">VIEW PDF SOURCE ↗</a>`:"";const preprintLink=id===6?`<a class="preprint-link" href="https://arxiv.org/abs/2610.26956" target="_blank" rel="noopener">PREPRINT · arXiv:2610.26956 ↗</a>`:"";const summerSchoolNote=id===5?`<p class="research-context-note">Research conducted during the 2025 Cambridge Summer School under the guidance of Prof. Colm Durkan, University of Cambridge.</p>`:"";show(`<div class="eyebrow work-eyebrow"><span>${pad(id)} / ${p.tag}</span>${pdfLink}${preprintLink}</div><h3>${p.title}</h3><img class="work-detail-image" src="${p.img}" alt="${p.title} research image"><h4>RESEARCH WORK</h4><p>${p.summary}</p>${summerSchoolNote}<h4>CONNECTION TO THE SETTLEMENT</h4><p>${p.problem}</p><div style="clear:both"></div>`);}
+</script>

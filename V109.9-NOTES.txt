@@ -1,0 +1,2 @@
+V109.9 — Research layout
+Removed stretched dark map-wrapper area. Aligned research works with the page title. Fit the desktop map and eleven navigation rows to available viewport height.

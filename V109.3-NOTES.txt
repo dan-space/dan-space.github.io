@@ -1,0 +1,4 @@
+V109.3
+- Research Work descriptions shortened to approximately two sentences each.
+- Detail images cleaned: removed white background/padding/border styling.
+- No PDFs included.

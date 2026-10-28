@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DAN’S SPACE · V96.3</title>
+<style>
+:root{
+  --cream:#f4eee5; --paper:#fffaf2; --paper2:#faf5ec;
+  --ink:#173d42; --muted:#637674; --teal:#0d7e84; --dark:#075e68;
+  --orange:#e96b32; --sage:#dde8df; --line:rgba(54,74,69,.16);
+  --shadow:0 10px 30px rgba(55,67,61,.065);
+}
+*{box-sizing:border-box}
+html{background:var(--cream);-webkit-text-size-adjust:100%}
+body{
+  margin:0;color:var(--ink);
+  background:
+    radial-gradient(circle at 84% 6%,rgba(113,172,165,.11),transparent 26%),
+    linear-gradient(#faf6ef,#f4eee5);
+  font:16px/1.55 Arial,Helvetica,sans-serif;
+}
+header{
+  height:72px;background:rgba(255,250,242,.96);border-bottom:1px solid var(--line);
+  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
+  padding:0 3vw;position:sticky;top:0;z-index:20;backdrop-filter:blur(10px);
+}
+.brand{font-size:20px;font-weight:900;color:var(--dark);letter-spacing:.04em;white-space:nowrap}
+nav{display:flex;gap:8px;justify-content:center}
+nav a{font-size:14px;font-weight:850;padding:9px 14px;border-radius:999px;color:var(--dark);text-decoration:none;letter-spacing:.04em}
+nav .active{background:var(--teal);color:white}
+.status{text-align:right;font-size:11px;line-height:1.35;letter-spacing:.08em;color:var(--muted)}
+main{width:min(100%,1440px);margin:auto;padding:26px 2.6vw 48px}
+.card{background:rgba(255,250,242,.92);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+.eyebrow{font-size:13px;font-weight:900;letter-spacing:.10em;color:var(--orange);margin:0 0 7px}
+h1,h2,h3{color:var(--dark);margin-top:0}
+h1{font-size:33px;line-height:1.15;margin-bottom:12px}
+h2{font-size:25px;line-height:1.2;margin-bottom:8px}
+h3{font-size:18px;line-height:1.25;margin-bottom:6px}
+p{margin:0 0 11px}.muted{color:var(--muted)}
+
+/* Hero: compact text + wide visual, no empty lower half */
+.hero{display:grid;grid-template-columns:.82fr 1.38fr;gap:18px;align-items:stretch}
+.hero-copy{padding:24px 24px 20px}
+.hero-copy p:last-child{margin-bottom:0}
+.hero-visual{min-height:300px;position:relative;overflow:hidden}
+.hero-visual img{width:100%;height:100%;object-fit:cover;display:block}
+.hero-visual::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(90deg,rgba(255,250,242,.40) 0%,transparent 12%,transparent 87%,rgba(255,250,242,.35) 100%);
+}
+.hero-caption{
+  position:absolute;left:16px;bottom:14px;z-index:2;max-width:440px;
+  padding:10px 12px;border-radius:10px;background:rgba(255,250,242,.88);
+  border:1px solid rgba(54,74,69,.12);font-size:13px;line-height:1.35
+}
+.hero-caption b{color:var(--orange);letter-spacing:.07em;font-size:11px}
+
+/* Question strip */
+.question-strip{display:grid;grid-template-columns:1fr 48px 1fr 1.3fr;gap:10px;margin-top:12px}
+.q{padding:13px 15px}.q small{display:block;color:var(--orange);font-weight:900;letter-spacing:.08em;font-size:11px}.q strong{font-size:18px;color:var(--dark)}
+.arrow{display:flex;align-items:center;justify-content:center;color:var(--orange);font-size:24px;font-weight:900}
+.note{padding:13px 15px;background:var(--sage);border-radius:14px;border:1px solid var(--line);font-size:14px}
+
+/* Four disciplines */
+.section{margin-top:24px}
+.section-head{display:grid;grid-template-columns:.75fr 1.25fr;gap:24px;align-items:end;margin-bottom:11px}
+.section-head p{margin:0}
+.path{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.path-card{padding:16px 16px 15px;position:relative;overflow:hidden;min-height:150px}
+.path-card:before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:var(--teal)}
+.path-card small{font-size:11px;color:var(--orange);font-weight:900;letter-spacing:.08em}
+.path-card p{font-size:14px;color:#536966;margin:0}
+
+/* Two research visuals paired directly with copy */
+.research-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.research-card{overflow:hidden;display:grid;grid-template-columns:1.08fr .92fr;min-height:285px}
+.research-card.reverse{grid-template-columns:.92fr 1.08fr}
+.visual-frame{position:relative;overflow:hidden;background:var(--paper2);min-height:285px}
+.visual-frame img{display:block;width:100%;height:100%;object-fit:cover;object-position:center}
+.visual-frame::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  box-shadow:inset 24px 0 28px rgba(255,250,242,.20),inset -24px 0 28px rgba(255,250,242,.20);
+}
+.research-copy{padding:19px 18px;display:flex;flex-direction:column;justify-content:center}
+.research-copy p{font-size:14px}.research-copy ul{margin:4px 0 0;padding-left:18px;color:#536966;font-size:13.7px}
+.research-copy li{margin:5px 0}
+
+/* Principles compact */
+.principles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.principle{padding:15px 16px}
+.principle b{display:block;color:var(--dark);margin-bottom:4px}
+.principle p{font-size:14px;color:#536966;margin:0}
+
+/* Future: image + quote in one shared card */
+.future{display:grid;grid-template-columns:1.18fr .82fr;overflow:hidden;min-height:315px}
+.future-visual{position:relative;overflow:hidden;min-height:315px}
+.future-visual img{width:100%;height:100%;display:block;object-fit:cover}
+.future-visual::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(90deg,rgba(255,250,242,.12),transparent 22%,transparent 82%,rgba(255,250,242,.30));
+}
+.future-copy{padding:26px 24px;display:flex;flex-direction:column;justify-content:center}
+.future-quote{font-size:22px;line-height:1.38;font-weight:760;color:var(--dark)}
+.future-quote em{font-style:normal;color:var(--orange)}
+
+/* Closing: panoramic image with readable gradient copy */
+.closing{position:relative;overflow:hidden;min-height:250px}
+.closing img{width:100%;height:100%;min-height:250px;object-fit:cover;display:block}
+.closing::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,rgba(255,250,242,.97) 0%,rgba(255,250,242,.88) 28%,rgba(255,250,242,.10) 58%,rgba(255,250,242,.28) 100%);
+}
+.closing-copy{position:absolute;z-index:2;left:24px;top:50%;transform:translateY(-50%);width:min(480px,44%)}
+.closing-copy h2{font-size:27px}.closing-copy p{font-size:14.5px}
+.final-line{margin-top:12px;padding:16px 20px;text-align:center;background:linear-gradient(135deg,#e5efea,#fff8ee)}
+.final-line b{color:var(--dark);font-size:18px}
+footer{margin-top:24px;padding-top:14px;border-top:1px solid var(--line);display:flex;justify-content:space-between;font-size:12px;color:#6b7a78}
+
+@media(max-width:1050px){
+  .hero,.section-head,.future{grid-template-columns:1fr}
+  .question-strip{grid-template-columns:1fr 40px 1fr}.note{grid-column:1/-1}
+  .path{grid-template-columns:repeat(2,1fr)}
+  .research-grid{grid-template-columns:1fr}
+  .research-card,.research-card.reverse{grid-template-columns:1.15fr .85fr}
+  .future-visual{min-height:260px}
+}
+@media(max-width:700px){
+  header{height:auto;grid-template-columns:1fr;padding:12px;gap:8px}.brand,.status{text-align:center}
+  nav{flex-wrap:wrap}.status{display:none}
+  main{padding:18px 14px 36px}
+  h1{font-size:28px}h2{font-size:23px}
+  .hero-visual{min-height:220px}
+  .question-strip{grid-template-columns:1fr}.arrow{transform:rotate(90deg)}
+  .path,.principles{grid-template-columns:1fr}
+  .research-card,.research-card.reverse{grid-template-columns:1fr}
+  .visual-frame{min-height:220px}
+  .closing-copy{width:78%;left:18px}
+  .closing::after{background:linear-gradient(90deg,rgba(255,250,242,.96),rgba(255,250,242,.70) 55%,rgba(255,250,242,.12))}
+  footer{gap:10px;flex-direction:column;text-align:center}
+}
+</style>
+
+<style id="v96-2-question-width-fix">
+.question-strip{
+  grid-template-columns:max-content 38px max-content minmax(280px,1fr) !important;
+  align-items:stretch !important;
+}
+.question-strip .q{
+  width:max-content !important;
+  min-width:0 !important;
+  padding:11px 14px !important;
+  white-space:nowrap !important;
+}
+.question-strip .q small,
+.question-strip .q strong{
+  white-space:nowrap !important;
+}
+@media(max-width:900px){
+  .question-strip{
+    grid-template-columns:1fr !important;
+  }
+  .question-strip .q{
+    width:100% !important;
+    white-space:normal !important;
+  }
+  .question-strip .q small,
+  .question-strip .q strong{
+    white-space:normal !important;
+  }
+}
+</style>
+<style id="v1096-next-two-lines">
+.hero-copy{container-type:inline-size;min-width:0}
+.hero-copy .next-two-lines{font-size:clamp(16px,6.3cqw,33px);line-height:1.18}
+.next-two-lines span{display:block;white-space:nowrap}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">DAN'S SPACE SETTLEMENT</div>
+  <nav>
+    <a href="index.html">HOME</a><a href="settlement.html">SETTLEMENT</a><a href="research.html">RESEARCH</a><a class="active" href="next.html">NEXT</a>
+  </nav>
+  <div class="status">A RECORD OF CHOICES.<br>QUESTIONS FOR WHAT COMES NEXT.</div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="hero-copy card">
+      <p class="eyebrow">NEXT / KEEP BUILDING</p>
+      <h1 class="next-two-lines"><span>The next question is not only</span> <span>whether we can build it.</span></h1>
+      <p>The settlement began as an imagined world, became a systems-design problem, and then generated research questions across physics, computing, engineering, and the human sciences.</p>
+      <p>What comes next is learning how to connect those ways of thinking more deeply — not just to make complex systems work, but to decide what they should work for.</p>
+    </div>
+    <figure class="hero-visual card">
+      <img src="next-hero-regenerative.jpg" alt="Regenerative future environment and sustainable systems">
+      <figcaption class="hero-caption"><b>REGENERATE RATHER THAN REPLACE</b><br>Sustainable systems for a more habitable tomorrow.</figcaption>
+    </figure>
+  </section>
+
+  <div class="question-strip">
+    <div class="q card"><small>ENGINEERING QUESTION</small><strong>CAN WE BUILD IT?</strong></div>
+    <div class="arrow">→</div>
+    <div class="q card"><small>HUMAN QUESTION</small><strong>WHO IS IT FOR?</strong></div>
+    <div class="note">A space settlement is not an escape from Earth. It is a demanding problem about technology, civilization, and responsibility.</div>
+  </div>
+
+  <section class="section">
+    <div class="section-head">
+      <div><p class="eyebrow">THE PATH FORWARD</p><h2>Four ways of asking better questions.</h2></div>
+      <p class="muted">I do not see these fields as separate destinations. Each one adds a different capability to the same larger task: understanding complex systems well enough to build them responsibly.</p>
+    </div>
+    <div class="path">
+      <article class="path-card card"><small>01 / PHYSICS</small><h3>Understand what is possible.</h3><p>Light, matter, forces, signals, uncertainty — the physical rules that every engineered system must obey.</p></article>
+      <article class="path-card card"><small>02 / COMPUTING + AI</small><h3>Make complexity interpretable.</h3><p>Extract information from data, recognize patterns, model uncertainty, and help machines perceive changing environments.</p></article>
+      <article class="path-card card"><small>03 / ENGINEERING</small><h3>Turn knowledge into systems.</h3><p>Connect sensing, communication, control, materials, energy, and people into technologies that can actually operate.</p></article>
+      <article class="path-card card"><small>04 / PHILOSOPHY</small><h3>Keep asking what the system is for.</h3><p>Examine priorities, responsibility, agency, governance, and the values hidden inside technical decisions.</p></article>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div><p class="eyebrow">GUIDING PRINCIPLES</p><h2>What I want to carry forward.</h2></div>
+      <p class="muted">The settlement project changed the way I approach problems: not only whether an idea is technically impressive, but how it behaves inside a larger physical and human system.</p>
+    </div>
+    <div class="principles">
+      <div class="principle card"><b>Build across boundaries.</b><p>Important problems rarely belong to one discipline.</p></div>
+      <div class="principle card"><b>Design for uncertainty.</b><p>Noise, failure, incomplete information, and human unpredictability are part of real systems.</p></div>
+      <div class="principle card"><b>Keep people inside the model.</b><p>Efficiency is not enough if a system reduces dignity, agency, trust, or responsibility.</p></div>
+    </div>
+  </section>
+<section class="section research-grid">
+    <article class="research-card card">
+      <div class="visual-frame"><img src="next-science-optics.jpg" alt="Optical sensing and AI-assisted salinity research"></div>
+      <div class="research-copy">
+        <p class="eyebrow">01 / DEEPER SCIENCE</p>
+        <h2>From light to data to decision.</h2>
+        <p>A physical signal becomes useful only when sensing, computation and interpretation work as one chain.</p>
+        <ul><li>AI-assisted optical sensing</li><li>Portable environmental monitoring</li><li>Water quality, food safety and public health</li></ul>
+      </div>
+    </article>
+    <article class="research-card reverse card">
+      <div class="research-copy">
+        <p class="eyebrow">02 / HUMAN SYSTEMS</p>
+        <h2>Technology should serve human wellbeing.</h2>
+        <p>Performance is only one metric. Education, mental health, social equality and meaning belong inside the system model too.</p>
+        <ul><li>Rethink evaluation beyond ranking</li><li>Study technology + mental health</li><li>Design for human potential</li></ul>
+      </div>
+      <div class="visual-frame"><img src="next-human-systems.jpg" alt="Human-centered systems and wellbeing"></div>
+    </article>
+  </section>
+
+  
+
+  <section class="section future card">
+    <div class="future-visual"><img src="next-space-habitat.jpg" alt="O'Neill cylinder habitat concept"></div>
+    <div class="future-copy">
+      <p class="eyebrow">03 / BEYOND EARTH?</p>
+      <h2>Critical exploration, not blind expansion.</h2>
+      <p class="future-quote">I used to think the hardest question was whether we could build another world. Now I think an equally important question is <em>what kind of world would be worth building.</em></p>
+      <p class="muted">A habitat is not only an engineering object; it is a claim about resources, necessity, and responsibility.</p>
+    </div>
+  </section>
+
+  <section class="section closing card">
+    <img src="next-closing-horizon.jpg" alt="A reflective horizon looking toward a future city">
+    <div class="closing-copy">
+      <p class="eyebrow">A LARGER QUESTION</p>
+      <h2>What does it mean to take responsibility for the future?</h2>
+      <p>Whether we study the oceans, the mind, or the stars, the same question remains: progress matters most when we are willing to ask what it is for.</p>
+    </div>
+  </section>
+
+  <section class="final-line card">
+    <b>The next world begins with the choices we make in this one.</b>
+  </section>
+
+  <footer><span>DAN'S SPACE SETTLEMENT · NEXT</span><span>SCIENCE / PHILOSOPHY / A MORE HUMAN FUTURE</span></footer>
+</main>
+</body>
+</html>
+<style id="v1095-next-title-fix">
+.next-hero-title{
+  max-width:980px!important;
+}
+</style>
